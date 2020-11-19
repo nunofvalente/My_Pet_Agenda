@@ -1,0 +1,47 @@
+<resources>
+    <string name="app_name">My Pet Agenda</string>
+    <string name="title_home">Home</string>
+    <string name="title_gallery">Gallery</string>
+    <string name="title_my_pets">My Pets</string>
+    <string name="title_account">Account</string>
+    <string name="settings">Settings</string>
+
+
+    <!--Slide String -->
+    <string name="welcome_to_my_pet_agenda">Welcome to My Pet Agenda</string>
+    <string name="simple_easy_and_free">Simple, easy and free</string>
+    <string name="don_t_forget_them">Don\'t forget them!</string>
+    <string name="set_reminders_for_your_pets_so_you_don_t_miss_a_moment">Set reminders for your pet daily meals, medications or any other necessary duties.</string>
+    <string name="plan_activities_to_do_with_your_pet_and_make_them_happy_and_healthy">Plan activities to do with your pet and make them healthy and happy.</string>
+    <string name="be_mindful_of_their_exercise">Be mindful of their exercise!</string>
+    <string name="share_the_love">Share the love!</string>
+    <string name="add_people_to_your_account_so_you_can_take_care_of_your_pets_together">Add people to your account so you can take care of your pets together.</string>
+    <string name="join_an_existing_account">Join an Existing Account</string>
+    <string name="create_an_account">Create an account</string>
+    <string name="want_to_join_an_account">Want to join an account?</string>
+    <string name="click_here_to_insert_code">Click here to insert code!</string>
+    <string name="join_existing_account">Join existing account</string>
+    <string name="let_s_take_care_of_our_pets_join_us_and_start_now">Let\'s take care of our pets. Join us and start now!</string>
+    <string name="forgot_your_password">Forgot your password?</string>
+    <string name="or">or</string>
+    <string name="register">Register</string>
+    <string name="cancel">Cancel</string>
+    <string name="name">Name</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="terms_and_conditions">Terms and Conditions</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="verifiation_email">Verification email sent!</string>
+    <string name="code">Code</string>
+    <string name="account_id">Account ID:</string>
+    <string name="register_Account">Register Account</string>
+    <string name="almost_there_one_more_step">Almost there. One more step!</string>
+    <string name="please_verify_your_email_address_and_let_s_get_started">Please verify your email address and let\'s get started!</string>
+    <string name="sign_in">Sign in</string>
+    <string name="happy_cat">Happy Cat</string>
+    <string name="click_here">Click here!</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="emil_sent">Email Sent!</string>
+    <string name="user_not_found">Email not found! Insert a valid email</string>
+    <string name="pref_previously_started">Has previously started</string>
+</resources>

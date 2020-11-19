@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "813224796604",
+    "firebase_url": "https://my-pet-agenda-9b77e.firebaseio.com",
+    "project_id": "my-pet-agenda-9b77e",
+    "storage_bucket": "my-pet-agenda-9b77e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:813224796604:android:637cf5f8bded6920890bb9",
+        "android_client_info": {
+          "package_name": "com.nunovalente.android.mypetagenda"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "813224796604-5a6kivgnkg6crv3c5clm986fmptj3g0b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nunovalente.android.mypetagenda",
+            "certificate_hash": "fbabf915b789d79e4ac630c7185cf51eed75da12"
+          }
+        },
+        {
+          "client_id": "813224796604-kbnc06ce01tfrbbkosv3l57eru0tupiu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA8nNZoaDisE7R61D0ptxUETH4P7YhbOHE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "813224796604-kbnc06ce01tfrbbkosv3l57eru0tupiu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

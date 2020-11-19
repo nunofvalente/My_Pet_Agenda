@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_home">
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.nunovalente.android.mypetagenda.fragments.home.HomeFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/navigation_gallery"
+        android:name="com.nunovalente.android.mypetagenda.fragments.gallery.GalleryFragment"
+        android:label="@string/title_gallery"
+        tools:layout="@layout/fragment_gallery" />
+
+    <fragment
+        android:id="@+id/navigation_account"
+        android:name="com.nunovalente.android.mypetagenda.fragments.account.AccountFragment"
+        android:label="@string/title_account" />
+    <fragment
+        android:id="@+id/navigation_myPets"
+        android:name="com.nunovalente.android.mypetagenda.fragments.mypets.MyPetsFragment"
+        android:label="@string/title_my_pets"
+        tools:layout="@layout/fragment_my_pets" />
+</navigation>
