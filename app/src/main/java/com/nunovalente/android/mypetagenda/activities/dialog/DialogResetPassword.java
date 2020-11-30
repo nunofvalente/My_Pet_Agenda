@@ -14,6 +14,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.transition.MaterialFadeThrough;
 import com.nunovalente.android.mypetagenda.R;
 import com.nunovalente.android.mypetagenda.viewmodel.FirebaseViewModel;
 
@@ -52,6 +53,8 @@ public class DialogResetPassword extends DialogFragment implements View.OnClickL
 
             setListeners();
         }
+
+        this.setEnterTransition(new MaterialFadeThrough().setDuration(getResources().getInteger(R.integer.reply_motion_duration_large)));
 
         return builder.create();
     }

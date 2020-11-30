@@ -4,15 +4,18 @@ import android.app.Application;
 import android.app.Dialog;
 import android.content.Context;
 import android.view.View;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.nunovalente.android.mypetagenda.data.repository.FirebaseRepository;
 import com.nunovalente.android.mypetagenda.model.Owner;
+import com.nunovalente.android.mypetagenda.model.Pet;
 
 public class FirebaseViewModel extends AndroidViewModel {
 
@@ -23,8 +26,8 @@ public class FirebaseViewModel extends AndroidViewModel {
         repository = FirebaseRepository.getRepository();
     }
 
-    public void registerOwner(Owner owner, String accountId, Context context, View view) {
-        repository.registerOwner(owner, accountId, context, view);
+    public void registerOwner(Owner owner, Context context, View view) {
+        repository.registerOwner(owner, context, view);
     }
 
     public void signInOwner(String email, String password, Context context, View view) {
@@ -35,7 +38,23 @@ public class FirebaseViewModel extends AndroidViewModel {
         repository.resetPassword(context, email, dialog);
     }
 
+    public void storeImage(Context context, String userId, String storagePath, String fileName, byte[] imageData) {
+        repository.storeImage(context, userId, storagePath, fileName, imageData);
+    }
+
+    public void storePetImage(Context context, String userId, String storagePath, String fileName, String imageUrl, Pet pet) {
+        repository.storePetImage(context, userId, storagePath, fileName, imageUrl, pet);
+    }
+
+    public void savePet(Pet pet) {
+        repository.savePet(pet);
+    }
+
     public FirebaseAuth getAuth() {
         return repository.getAuthentication();
+    }
+
+    public DatabaseReference getDatabase() {
+        return repository.getDatabaseReference();
     }
 }

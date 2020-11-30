@@ -1,51 +1,38 @@
 package com.nunovalente.android.mypetagenda.model;
 
-import androidx.room.ColumnInfo;
-import androidx.room.Entity;
-import androidx.room.Ignore;
-import androidx.room.PrimaryKey;
-
 import java.io.Serializable;
 
-@Entity(tableName = "pet_database")
 public class Pet implements Serializable {
 
-    @PrimaryKey(autoGenerate = true)
-    private int id;
-
-    @ColumnInfo(name = "name")
+    private String id;
     private String name;
-
-    @ColumnInfo(name = "birthday")
     private String birthday;
-
-    @ColumnInfo(name = "type")
     private String type;
+    private String breed;
+    private String weight;
+    private String notes;
+    private String imagePath;
 
-    @ColumnInfo(name = "weight")
-    private double weight;
+    public Pet() {
 
-    public Pet(int id, String name, String birthday, String type, double weight) {
+    }
+
+    public Pet(String id, String name, String birthday, String type, String breed, String weight, String notes, String imagePath) {
         this.id = id;
         this.name = name;
         this.birthday = birthday;
         this.type = type;
+        this.breed = breed;
         this.weight = weight;
+        this.notes = notes;
+        this.imagePath = imagePath;
     }
 
-    @Ignore
-    public Pet(String name, String birthday, String type, double weight) {
-        this.name = name;
-        this.birthday = birthday;
-        this.type = type;
-        this.weight = weight;
-    }
-
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -73,11 +60,35 @@ public class Pet implements Serializable {
         this.type = type;
     }
 
-    public double getWeight() {
+    public String getWeight() {
         return weight;
     }
 
-    public void setWeight(double weight) {
+    public void setWeight(String weight) {
         this.weight = weight;
+    }
+
+    public String getBreed() {
+        return breed;
+    }
+
+    public void setBreed(String breed) {
+        this.breed = breed;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 }

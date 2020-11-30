@@ -1,17 +1,15 @@
 package com.nunovalente.android.mypetagenda.activities;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import android.transition.Transition;
 import android.view.Menu;
 import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.transition.MaterialFadeThrough;
+import com.google.android.material.transition.platform.MaterialSharedAxis;
 import com.nunovalente.android.mypetagenda.R;
 import com.nunovalente.android.mypetagenda.databinding.ActivityMainBinding;
 import com.nunovalente.android.mypetagenda.viewmodel.FirebaseViewModel;
@@ -26,9 +24,8 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
+@SuppressWarnings( "deprecation" )
 public class MainActivity extends AppCompatActivity {
-
-    String prevStarted = "Started";
 
     private ActivityMainBinding mBinding;
     private FirebaseViewModel firebaseViewModel;
@@ -42,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
         configureToolbar();
         setBottomNavigationBar();
+
     }
 
     private void configureToolbar() {
@@ -72,5 +70,4 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
-
 }

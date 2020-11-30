@@ -32,14 +32,14 @@ public class SlideLoginActivity extends AppCompatActivity implements View.OnClic
 
     private void setListeners() {
         mBinding.buttonLoginSignIn.setOnClickListener(this);
-        mBinding.tvClickResetPassword.setOnClickListener(this);
+        mBinding.loginForgotPassword.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         if(v.getId() == R.id.button_login_sign_in) {
             signIn();
-        } else if (v.getId() == R.id.tv_click_reset_password) {
+        } else if (v.getId() == R.id.login_forgot_password) {
             openDialogResetPassword();
         }
     }

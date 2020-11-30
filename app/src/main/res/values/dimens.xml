@@ -10,10 +10,20 @@
     <dimen name="margin_32">32dp</dimen>
     <dimen name="margin_80">80dp</dimen>
 
+    <dimen name="padding_10dp">10dp</dimen>
 
+    <dimen name="text_size_12">12sp</dimen>
     <dimen name="text_size_14">14sp</dimen>
     <dimen name="text_size_16">16sp</dimen>
+    <dimen name="text_size_18">18sp</dimen>
     <dimen name="text_size_20">20sp</dimen>
     <dimen name="text_size_24">24sp</dimen>
+
+    <dimen name="profile_picture_height">100dp</dimen>
+    <dimen name="profile_picture_width">100dp</dimen>
+    <dimen name="profile_picture_width_adapter">50dp</dimen>
+    <dimen name="profile_picture_height_adapter">50dp</dimen>
+
+    <dimen name="account_recycler_height">100dp</dimen>
 
 </resources>

@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.transition.MaterialFadeThrough;
 import com.nunovalente.android.mypetagenda.R;
 import com.nunovalente.android.mypetagenda.model.Owner;
 import com.nunovalente.android.mypetagenda.viewmodel.FirebaseViewModel;
@@ -64,6 +65,7 @@ public class DialogRegister extends AppCompatDialogFragment implements View.OnCl
 
         setListeners();
 
+        this.setEnterTransition(new MaterialFadeThrough().setDuration(getResources().getInteger(R.integer.reply_motion_duration_large)));
 
         return builder.create();
     }
@@ -86,8 +88,8 @@ public class DialogRegister extends AppCompatDialogFragment implements View.OnCl
                         if (password.equals(confirmPassword)) {
                             if(mCheckBox.isChecked()) {
 
-                                Owner owner = new Owner("", name, email, password, "");
-                                firebaseViewModel.registerOwner(owner, "", getActivity(), mProgressBar);
+                                Owner owner = new Owner("",name, email, password, "", "");
+                                firebaseViewModel.registerOwner(owner, getActivity(), mProgressBar);
 
                             } else {
                                 Toast.makeText(getActivity().getApplicationContext(), "Please confirm Terms and Conditions", Toast.LENGTH_SHORT).show();

@@ -22,7 +22,7 @@
     <string name="click_here_to_insert_code">Click here to insert code!</string>
     <string name="join_existing_account">Join existing account</string>
     <string name="let_s_take_care_of_our_pets_join_us_and_start_now">Let\'s take care of our pets. Join us and start now!</string>
-    <string name="forgot_your_password">Forgot your password?</string>
+    <string name="forgot_your_password">Forgot your password? Click here!</string>
     <string name="or">or</string>
     <string name="register">Register</string>
     <string name="cancel">Cancel</string>
@@ -31,7 +31,7 @@
     <string name="password">Password</string>
     <string name="terms_and_conditions">Terms and Conditions</string>
     <string name="confirm_password">Confirm Password</string>
-    <string name="verifiation_email">Verification email sent!</string>
+    <string name="verification_email">Verification email sent!</string>
     <string name="code">Code</string>
     <string name="account_id">Account ID:</string>
     <string name="register_Account">Register Account</string>
@@ -43,5 +43,31 @@
     <string name="reset_password">Reset Password</string>
     <string name="emil_sent">Email Sent!</string>
     <string name="user_not_found">Email not found! Insert a valid email</string>
+    <string name="open_camera">Open Camera</string>
+    <string name="open_gallery">Open Gallery</string>
+    <string name="account_holders">Account Holders</string>
+    <string name="edit_profile">Profile</string>
+    <string name="support_service">Support</string>
+    <string name="about_us">About Us</string>
+    <string name="add_pet">Add Pet</string>
+
+
     <string name="pref_previously_started">Has previously started</string>
+    <string name="pref_account_id">accountID</string>
+    <string name="change_photo">Change Photo</string>
+    <string name="save_changes">Save Changes</string>
+    <string name="upload_picture">Upload Picture</string>
+    <string name="pet_image">Pet Image</string>
+    <string name="type">Type</string>
+    <string name="birthday">Birthday</string>
+    <string name="dd_mm_yyyy">dd/MM/yyyy</string>
+    <string name="notes">Notes</string>
+    <string name="save">Save</string>
+    <string name="weight">Weight</string>
+    <string name="breed_if_applicable">Breed (If Applicable)</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="reminders">Reminders</string>
+    <string name="activities">Activities</string>
+
 </resources>

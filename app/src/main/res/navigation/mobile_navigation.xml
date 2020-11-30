@@ -7,23 +7,23 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.nunovalente.android.mypetagenda.fragments.home.HomeFragment"
+        android:name="com.nunovalente.android.mypetagenda.fragments.HomeFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/navigation_gallery"
-        android:name="com.nunovalente.android.mypetagenda.fragments.gallery.GalleryFragment"
+        android:name="com.nunovalente.android.mypetagenda.fragments.GalleryFragment"
         android:label="@string/title_gallery"
         tools:layout="@layout/fragment_gallery" />
 
     <fragment
         android:id="@+id/navigation_account"
-        android:name="com.nunovalente.android.mypetagenda.fragments.account.AccountFragment"
+        android:name="com.nunovalente.android.mypetagenda.fragments.AccountFragment"
         android:label="@string/title_account" />
     <fragment
         android:id="@+id/navigation_myPets"
-        android:name="com.nunovalente.android.mypetagenda.fragments.mypets.MyPetsFragment"
+        android:name="com.nunovalente.android.mypetagenda.fragments.MyPetsFragment"
         android:label="@string/title_my_pets"
         tools:layout="@layout/fragment_my_pets" />
 </navigation>

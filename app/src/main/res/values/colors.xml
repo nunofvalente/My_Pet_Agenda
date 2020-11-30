@@ -12,6 +12,7 @@
     <color name="app_primary_dark">#007ac1</color>
     <color name="app_secondary">#f44336</color>
     <color name="app_secondary_light">#ff7961</color>
-    <color name="app_secondary_dark">#ba000d</color>
+    <color name="app_secondary_dark">@android:color/white</color>
     <color name="splash_screen">#5ce1e6</color>
+    <color name="icon_gray">#898989</color>
 </resources>
