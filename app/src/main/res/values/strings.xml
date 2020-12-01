@@ -65,9 +65,24 @@
     <string name="save">Save</string>
     <string name="weight">Weight</string>
     <string name="breed_if_applicable">Breed (If Applicable)</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="reminders">Reminders</string>
     <string name="activities">Activities</string>
+    <string name="title">Title</string>
+    <string name="date">Date</string>
+    <string name="select_date">Select a date</string>
+    <string name="day_s">Day(s)</string>
+    <string name="add_reminder">Add reminder</string>
+
+
+    <!-- Week Days -->
+    <string name="monday">Monday</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="thursday">Thursday</string>
+    <string name="friday">Friday</string>
+    <string name="saturday">Saturday</string>
+    <string name="sunday">Sunday</string>
+    <string name="not_recurring">Not recurring</string>
+    <string name="all_days">All Days</string>
 
 </resources>

@@ -40,10 +40,8 @@ public class MyPetsFragment extends Fragment {
 
     public static final String PET = "pet";
 
-    private FirebaseViewModel firebaseViewModel;
     private DatabaseReference databaseReference;
     private FragmentMyPetsBinding mBinding;
-    private MyPetFragmentClickHandler mHandlers;
     private ValueEventListener valueEventListener;
     private final List<Pet> mPetList = new ArrayList<>();
 
@@ -52,10 +50,10 @@ public class MyPetsFragment extends Fragment {
 
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_my_pets, container, false);
 
-        firebaseViewModel = new ViewModelProvider(this).get(FirebaseViewModel.class);
+        FirebaseViewModel firebaseViewModel = new ViewModelProvider(this).get(FirebaseViewModel.class);
         databaseReference = firebaseViewModel.getDatabase();
 
-        mHandlers = new MyPetFragmentClickHandler(getContext());
+        MyPetFragmentClickHandler mHandlers = new MyPetFragmentClickHandler(getContext());
         mBinding.setClickHandler(mHandlers);
 
         setListeners();
@@ -166,5 +164,11 @@ public class MyPetsFragment extends Fragment {
     public void onResume() {
         super.onResume();
         getPets();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        databaseReference.removeEventListener(valueEventListener);
     }
 }

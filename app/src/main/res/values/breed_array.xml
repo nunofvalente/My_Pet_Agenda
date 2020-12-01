@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="animal_type">
+        <item>Dog</item>
+        <item>Cat</item>
+        <item>Rabbit</item>
+        <item>Fish</item>
+        <item>Horse</item>
+        <item>Duck</item>
+        <item>Rat</item>
+        <item>Ferret</item>
+        <item>Amphibian</item>
+        <item>Reptile</item>
+        <item>Bird</item>
+        <item>Guinea Pig</item>
+        <item>Insect</item>
+        <item>Other</item>
+    </string-array>
+</resources>

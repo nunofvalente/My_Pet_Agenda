@@ -1,6 +1,7 @@
 package com.nunovalente.android.mypetagenda.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class Pet implements Serializable {
 
@@ -10,14 +11,14 @@ public class Pet implements Serializable {
     private String type;
     private String breed;
     private String weight;
-    private String notes;
+    private List<String> notes;
     private String imagePath;
 
     public Pet() {
 
     }
 
-    public Pet(String id, String name, String birthday, String type, String breed, String weight, String notes, String imagePath) {
+    public Pet(String id, String name, String birthday, String type, String breed, String weight, List<String> notes, String imagePath) {
         this.id = id;
         this.name = name;
         this.birthday = birthday;
@@ -76,11 +77,11 @@ public class Pet implements Serializable {
         this.breed = breed;
     }
 
-    public String getNotes() {
+    public List<String> getNotes() {
         return notes;
     }
 
-    public void setNotes(String notes) {
+    public void setNotes(List<String> notes) {
         this.notes = notes;
     }
 

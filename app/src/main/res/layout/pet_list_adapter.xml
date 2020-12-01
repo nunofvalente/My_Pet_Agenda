@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="pet"
+            type="com.nunovalente.android.mypetagenda.model.Pet" />
+
+        <variable
+            name="imageUrlPet"
+            type="String" />
+    </data>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="@dimen/margin_16">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/recycler_pet_image"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:padding="10dp"
+            android:transitionName="@string/pet_image"
+            app:imageUrlPet="@{pet.imagePath}"
+            tools:src="@drawable/default_image" />
+
+        <TextView
+            android:id="@+id/recycler_pet_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{pet.name}"
+            tools:text="Balto"
+            android:layout_gravity="center"
+            android:textSize="@dimen/text_size_16"
+            android:textStyle="bold"/>
+
+
+    </LinearLayout>
+</layout>

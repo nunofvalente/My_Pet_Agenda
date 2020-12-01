@@ -40,6 +40,7 @@ import com.nunovalente.android.mypetagenda.activities.SlideLoginActivity;
 import com.nunovalente.android.mypetagenda.activities.MainActivity;
 import com.nunovalente.android.mypetagenda.model.Owner;
 import com.nunovalente.android.mypetagenda.model.Pet;
+import com.nunovalente.android.mypetagenda.model.Reminder;
 import com.nunovalente.android.mypetagenda.util.Base64Custom;
 import com.nunovalente.android.mypetagenda.util.Constants;
 import com.nunovalente.android.mypetagenda.util.StringGenerator;
@@ -316,40 +317,10 @@ public class FirebaseRepository {
         });
     }
 
-  /*  public void updatePetImage(Uri url, Context context) {
-        boolean updated = FirebaseHelper.updateUserPhoto(url);
-        Owner loggedOwner = FirebaseHelper.getLoggedUserData();
-        databaseReference.child(Constants.USERS).child(loggedOwner.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Owner owner = snapshot.getValue(Owner.class);
-                if (updated) {
-                    loggedOwner.setImagePath(url.toString());
-                    loggedOwner.setAccountId(owner.getAccountId());
-                    loggedOwner.updateUser();
-                    Toast.makeText(context, "Photo Updated!", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }*/
-
-    public void addPet(Pet pet, Context context, View view) {
-        ProgressBar progressBar = view.findViewById(R.id.progress_add_pet);
-        progressBar.setVisibility(View.VISIBLE);
-        FirebaseUser user = authentication.getCurrentUser();
-
-    /*    if (user != null) {
-            //Saves owner to the pet branch. Pet id is his name in Base64
-            DatabaseReference path = databaseReference.child(Constants.PETS).child(FirebaseHelper.getAccountId());
-            String petId = Base64Custom.encodeString(pet.getName());
-            path.child(petId).setValue(pet);
-            progressBar.setVisibility(View.INVISIBLE);
-        }*/
+    public void saveReminder(Reminder reminder, String accountId, String petId) {
+            //Saves reminder to reminder branch
+            DatabaseReference pathReminder = databaseReference.child(Constants.REMINDERS).child(accountId).child(petId).push();
+            pathReminder.setValue(reminder);
     }
 
     public FirebaseAuth getAuthentication() {

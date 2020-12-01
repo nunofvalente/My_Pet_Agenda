@@ -16,6 +16,7 @@ import com.google.firebase.storage.StorageReference;
 import com.nunovalente.android.mypetagenda.data.repository.FirebaseRepository;
 import com.nunovalente.android.mypetagenda.model.Owner;
 import com.nunovalente.android.mypetagenda.model.Pet;
+import com.nunovalente.android.mypetagenda.model.Reminder;
 
 public class FirebaseViewModel extends AndroidViewModel {
 
@@ -44,6 +45,10 @@ public class FirebaseViewModel extends AndroidViewModel {
 
     public void storePetImage(Context context, String userId, String storagePath, String fileName, String imageUrl, Pet pet) {
         repository.storePetImage(context, userId, storagePath, fileName, imageUrl, pet);
+    }
+
+    public void saveReminder(Reminder reminder, String accountId, String petId) {
+        repository.saveReminder(reminder, accountId, petId);
     }
 
     public void savePet(Pet pet) {
