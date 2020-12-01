@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -23,6 +25,8 @@ import static com.nunovalente.android.mypetagenda.fragments.PetProfileFragment.P
 
 public class PetProfileActivity extends AppCompatActivity {
 
+    private Pet pet;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +39,7 @@ public class PetProfileActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             fragmentShareViewModel.selectPet((Pet) bundle.getSerializable(PET));
+            pet = (Pet) bundle.getSerializable(PET);
         }
     }
 }

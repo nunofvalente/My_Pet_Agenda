@@ -42,7 +42,6 @@ public class PetRemindersFragment extends Fragment {
 
     private FirebaseViewModel firebaseViewModel;
     private DatabaseReference databaseReference;
-    private FragmentShareViewModel fragmentShareViewModel;
     private ValueEventListener valueEventListener;
 
     private final List<Reminder> mReminderList = new ArrayList<>();
@@ -54,7 +53,7 @@ public class PetRemindersFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        fragmentShareViewModel = new ViewModelProvider(requireActivity()).get(FragmentShareViewModel.class);
+        FragmentShareViewModel fragmentShareViewModel = new ViewModelProvider(requireActivity()).get(FragmentShareViewModel.class);
         fragmentShareViewModel.getSelectedPet().observe(getViewLifecycleOwner(), this::retrieveReminders);
     }
 
@@ -71,12 +70,14 @@ public class PetRemindersFragment extends Fragment {
     }
 
     private void retrieveReminders(Pet pet) {
+        mBinding.progressReminders.setVisibility(View.VISIBLE);
         DatabaseReference databaseReference = firebaseViewModel.getDatabase();
-        databaseReference.child(Constants.USERS).child(FirebaseHelper.getUserId()).addListenerForSingleValueEvent(new ValueEventListener() {
+        valueEventListener = databaseReference.child(Constants.USERS).child(FirebaseHelper.getUserId()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                mBinding.progressReminders.setVisibility(View.VISIBLE);
                 Owner owner = snapshot.getValue(Owner.class);
-               loadRecyclerView(owner.getAccountId(), pet);
+                loadRecyclerView(owner.getAccountId(), pet);
             }
 
             @Override
@@ -84,10 +85,11 @@ public class PetRemindersFragment extends Fragment {
                 error.getMessage();
             }
         });
+        mBinding.progressReminders.setVisibility(View.INVISIBLE);
     }
 
     private void loadRecyclerView(String accountId, Pet pet) {
-        valueEventListener = databaseReference.child(Constants.REMINDERS).child(accountId).child(pet.getId()).addValueEventListener(new ValueEventListener() {
+        databaseReference.child(Constants.REMINDERS).child(accountId).child(pet.getId()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 mReminderList.clear();
@@ -99,11 +101,13 @@ public class PetRemindersFragment extends Fragment {
                 }
 
                 setRecyclerView(mReminderList);
+                mBinding.progressReminders.setVisibility(View.INVISIBLE);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                error.getMessage();
+                mBinding.progressReminders.setVisibility(View.INVISIBLE);
             }
         });
     }
@@ -114,5 +118,11 @@ public class PetRemindersFragment extends Fragment {
         mBinding.recyclerReminders.setHasFixedSize(true);
         RecyclerAddReminderAdapter adapter = new RecyclerAddReminderAdapter(reminderList);
         mBinding.recyclerReminders.setAdapter(adapter);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        databaseReference.removeEventListener(valueEventListener);
     }
 }

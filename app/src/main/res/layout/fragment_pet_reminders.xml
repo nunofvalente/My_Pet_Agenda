@@ -19,5 +19,15 @@
         android:layout_gravity="center"
         android:visibility="invisible"/>
 
+    <TextView
+        android:id="@+id/tv_no_reminders"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textSize="@dimen/text_size_24"
+        android:text="@string/no_reminders_to_display"
+        tools:text="No reminders have been set!"
+        android:visibility="gone"/>
+
 </FrameLayout>
 </layout>

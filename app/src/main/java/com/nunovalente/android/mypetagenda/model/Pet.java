@@ -11,21 +11,19 @@ public class Pet implements Serializable {
     private String type;
     private String breed;
     private String weight;
-    private List<String> notes;
     private String imagePath;
 
     public Pet() {
 
     }
 
-    public Pet(String id, String name, String birthday, String type, String breed, String weight, List<String> notes, String imagePath) {
+    public Pet(String id, String name, String birthday, String type, String breed, String weight, String imagePath) {
         this.id = id;
         this.name = name;
         this.birthday = birthday;
         this.type = type;
         this.breed = breed;
         this.weight = weight;
-        this.notes = notes;
         this.imagePath = imagePath;
     }
 
@@ -75,14 +73,6 @@ public class Pet implements Serializable {
 
     public void setBreed(String breed) {
         this.breed = breed;
-    }
-
-    public List<String> getNotes() {
-        return notes;
-    }
-
-    public void setNotes(List<String> notes) {
-        this.notes = notes;
     }
 
     public String getImagePath() {

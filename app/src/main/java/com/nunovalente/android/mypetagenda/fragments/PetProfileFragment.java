@@ -15,6 +15,8 @@ import android.view.ViewGroup;;
 
 import com.nunovalente.android.mypetagenda.R;
 import com.nunovalente.android.mypetagenda.activities.AddReminderActivity;
+import com.nunovalente.android.mypetagenda.activities.dialog.DialogNote;
+import com.nunovalente.android.mypetagenda.activities.dialog.DialogRegister;
 import com.nunovalente.android.mypetagenda.databinding.FragmentPetProfileBinding;
 import com.nunovalente.android.mypetagenda.model.Pet;
 import com.nunovalente.android.mypetagenda.viewmodel.FragmentShareViewModel;
@@ -23,9 +25,9 @@ import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
 
 public class PetProfileFragment extends Fragment {
 
-    private FragmentPetProfileBinding mBinding;
+    private static final String TAG = PetProfileFragment.class.getSimpleName();
 
-    private FragmentShareViewModel fragmentShareViewModel;
+    private FragmentPetProfileBinding mBinding;
 
     public static final String PET = "pet";
     private Pet mPet = null;
@@ -36,10 +38,9 @@ public class PetProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        fragmentShareViewModel = new ViewModelProvider(requireActivity()).get(FragmentShareViewModel.class);
+        FragmentShareViewModel fragmentShareViewModel = new ViewModelProvider(requireActivity()).get(FragmentShareViewModel.class);
         fragmentShareViewModel.getSelectedPet().observe(getViewLifecycleOwner(), pet -> {
             mBinding.setPet(pet);
-            mPet = pet;
         });
     }
 
@@ -50,16 +51,10 @@ public class PetProfileFragment extends Fragment {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_pet_profile, container, false);
         View root = mBinding.getRoot();
 
-      /*  Bundle bundle = this.getArguments();
-        if (bundle != null) {
-            pet = (Pet) bundle.getSerializable(PET);
-            mBinding.setPet(pet);
-        }*/
-
         FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(
                 getParentFragmentManager(), FragmentPagerItems.with(getContext())
                 .add(R.string.reminders, PetRemindersFragment.class)
-                .add(R.string.activities, PetNotesFragment.class)
+                .add(R.string.notes, PetNotesFragment.class)
                 .add(R.string.edit_profile, PetInformationFragment.class)
                 .create());
 
@@ -81,7 +76,12 @@ public class PetProfileFragment extends Fragment {
             Intent intent = new Intent(getContext(), AddReminderActivity.class);
             intent.putExtra(PET, mPet);
             startActivity(intent);
-            getActivity().finish();
+        }
+
+        public void openNoteDialog(View view) {
+            DialogNote dialogNote = new DialogNote();
+            dialogNote.setCancelable(false);
+            dialogNote.show(getParentFragmentManager(), TAG);
         }
 
     }

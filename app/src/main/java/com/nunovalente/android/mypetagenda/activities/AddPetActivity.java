@@ -62,7 +62,7 @@ public class AddPetActivity extends AppCompatActivity {
     private final List<String> mNotesList = new ArrayList<>();
 
 
-    private final Pet pet = new Pet("", "", "", "", "", "", mNotesList , "");
+    private final Pet pet = new Pet("", "", "", "", "", "", "");
     private final Calendar mCalendar = Calendar.getInstance();
 
     private final String[] permissions = {
@@ -154,15 +154,12 @@ public class AddPetActivity extends AppCompatActivity {
         String weight = mBinding.editPetWeight.getText().toString();
         String birthday = mBinding.editPetBirthday.getText().toString();
         String breed = mBinding.editPetBreed.getText().toString();
-        String notes = mBinding.editPetNotes.getText().toString();
-        mNotesList.add(notes);
 
         pet.setName(name);
         pet.setType(type);
         pet.setWeight(weight);
         pet.setBirthday(birthday);
         pet.setBreed(breed);
-        pet.setNotes(mNotesList);
 
         outState.putSerializable(PET, pet);
 
@@ -219,8 +216,6 @@ public class AddPetActivity extends AppCompatActivity {
             String weight = mBinding.editPetWeight.getText().toString();
             String birthday = mBinding.editPetBirthday.getText().toString();
             String breed = mBinding.editPetBreed.getText().toString();
-            String notes = mBinding.editPetNotes.getText().toString();
-            mNotesList.add(notes);
 
             if (!birthday.isEmpty()) {
                 if (!name.isEmpty()) {
@@ -229,7 +224,6 @@ public class AddPetActivity extends AppCompatActivity {
                     pet.setWeight(weight);
                     pet.setBirthday(birthday);
                     pet.setBreed(breed);
-                    pet.setNotes(mNotesList);
                     pet.setId(Base64Custom.encodeString(name));
 
 

@@ -62,9 +62,6 @@ public class AddReminderActivity extends AppCompatActivity {
 
         mBinding.reminderTimePicker.setIs24HourView(true);
         mBinding.toolbarReminder.setNavigationOnClickListener(v -> {
-            Intent intent = new Intent(AddReminderActivity.this, PetProfileActivity.class);
-            intent.putExtra(PET, pet);
-            startActivity(intent);
             finish();
         });
     }
@@ -101,10 +98,6 @@ public class AddReminderActivity extends AppCompatActivity {
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     Owner owner = snapshot.getValue(Owner.class);
                     firebaseViewModel.saveReminder(reminder, owner.getAccountId(), pet.getId());
-
-                    Intent intent = new Intent(AddReminderActivity.this, PetProfileActivity.class);
-                    intent.putExtra(PET, pet);
-                    startActivity(intent);
                     finish();
                 }
 
@@ -193,4 +186,9 @@ public class AddReminderActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 }

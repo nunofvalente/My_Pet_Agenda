@@ -122,8 +122,7 @@
             fab:menu_labels_singleLine="false"
             fab:menu_labels_textColor="#FFFFFF"
             fab:menu_labels_textSize="14sp"
-            fab:menu_openDirection="up"
-            fab:menu_shadowColor="#66000000">
+            fab:menu_openDirection="up">
 
             <com.github.clans.fab.FloatingActionButton
                 android:id="@+id/fab_pet_profile"
@@ -141,8 +140,9 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_note"
                 app:fab_colorNormal="@color/app_primary"
-                fab:fab_label="Activity"
+                fab:fab_label="@string/fab_note"
                 fab:fab_size="mini"
+                android:onClick="@{clickHandler::openNoteDialog}"
                 tools:ignore="VectorDrawableCompat" />
 
             <com.github.clans.fab.FloatingActionButton
