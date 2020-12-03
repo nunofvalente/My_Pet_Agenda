@@ -23,4 +23,8 @@ public class StringGenerator {
     public static String getReminderTimeStringBuilder(String hours, String minutes) {
         return (hours + ":" + minutes);
     }
+
+    public static String getPetWeightBuilder(String weight) {
+        return (weight + " Kg");
+    }
 }

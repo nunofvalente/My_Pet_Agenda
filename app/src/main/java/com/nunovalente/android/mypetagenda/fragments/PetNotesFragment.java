@@ -35,7 +35,6 @@ import java.util.List;
 
 public class PetNotesFragment extends Fragment {
 
-    private FirebaseViewModel firebaseViewModel;
     private DatabaseReference databaseReference;
     private ValueEventListener valueEventListener;
     private FragmentPetNotesBinding mBinding;
@@ -57,7 +56,7 @@ public class PetNotesFragment extends Fragment {
                              Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_pet_notes, container, false);
 
-        firebaseViewModel = new ViewModelProvider(getActivity()).get(FirebaseViewModel.class);
+        FirebaseViewModel firebaseViewModel = new ViewModelProvider(getActivity()).get(FirebaseViewModel.class);
         databaseReference = firebaseViewModel.getDatabase();
 
 

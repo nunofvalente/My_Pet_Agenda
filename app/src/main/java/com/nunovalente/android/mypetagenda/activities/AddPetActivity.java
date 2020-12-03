@@ -16,21 +16,15 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.ImageDecoder;
 import android.graphics.Typeface;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.google.firebase.database.DatabaseReference;
 import com.nunovalente.android.mypetagenda.R;
 import com.nunovalente.android.mypetagenda.data.repository.FirebaseHelper;
 import com.nunovalente.android.mypetagenda.databinding.ActivityAddPetBinding;
@@ -40,14 +34,12 @@ import com.nunovalente.android.mypetagenda.util.Constants;
 import com.nunovalente.android.mypetagenda.util.Permission;
 import com.nunovalente.android.mypetagenda.viewmodel.FirebaseViewModel;
 
-import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -59,8 +51,6 @@ public class AddPetActivity extends AppCompatActivity {
     private ActivityAddPetBinding mBinding;
 
     private final List<String> photoList = new ArrayList<>();
-    private final List<String> mNotesList = new ArrayList<>();
-
 
     private final Pet pet = new Pet("", "", "", "", "", "", "");
     private final Calendar mCalendar = Calendar.getInstance();
@@ -225,7 +215,6 @@ public class AddPetActivity extends AppCompatActivity {
                     pet.setBirthday(birthday);
                     pet.setBreed(breed);
                     pet.setId(Base64Custom.encodeString(name));
-
 
                     firebaseViewModel.storePetImage(AddPetActivity.this, FirebaseHelper.getUserId(), Constants.PET_PIC, pet.getName(), photoList.get(0), pet);
                     finish();

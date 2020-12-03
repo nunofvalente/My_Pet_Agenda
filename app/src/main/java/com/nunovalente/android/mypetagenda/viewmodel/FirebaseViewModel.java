@@ -47,12 +47,12 @@ public class FirebaseViewModel extends AndroidViewModel {
         repository.storePetImage(context, userId, storagePath, fileName, imageUrl, pet);
     }
 
-    public void saveReminder(Reminder reminder, String accountId, String petId) {
-        repository.saveReminder(reminder, accountId, petId);
+    public void updatePetInfo(Context context, String userId, String storagePath, String fileName, String imageUrl, Pet pet) {
+        repository.updatePetInfo(context, userId, storagePath, fileName, imageUrl, pet);
     }
 
-    public void savePet(Pet pet) {
-        repository.savePet(pet);
+    public void saveReminder(Reminder reminder, String accountId, String petId) {
+        repository.saveReminder(reminder, accountId, petId);
     }
 
     public FirebaseAuth getAuth() {

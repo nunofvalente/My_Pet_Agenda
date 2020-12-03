@@ -15,6 +15,7 @@ import android.view.ViewGroup;;
 
 import com.nunovalente.android.mypetagenda.R;
 import com.nunovalente.android.mypetagenda.activities.AddReminderActivity;
+import com.nunovalente.android.mypetagenda.activities.EditProfilePetActivity;
 import com.nunovalente.android.mypetagenda.activities.dialog.DialogNote;
 import com.nunovalente.android.mypetagenda.activities.dialog.DialogRegister;
 import com.nunovalente.android.mypetagenda.databinding.FragmentPetProfileBinding;
@@ -41,6 +42,7 @@ public class PetProfileFragment extends Fragment {
         FragmentShareViewModel fragmentShareViewModel = new ViewModelProvider(requireActivity()).get(FragmentShareViewModel.class);
         fragmentShareViewModel.getSelectedPet().observe(getViewLifecycleOwner(), pet -> {
             mBinding.setPet(pet);
+            mPet = pet;
         });
     }
 
@@ -82,6 +84,12 @@ public class PetProfileFragment extends Fragment {
             DialogNote dialogNote = new DialogNote();
             dialogNote.setCancelable(false);
             dialogNote.show(getParentFragmentManager(), TAG);
+        }
+
+        public void editProfile(View view) {
+            Intent intent = new Intent(getContext(), EditProfilePetActivity.class);
+            intent.putExtra(PET, mPet);
+            startActivity(intent);
         }
 
     }

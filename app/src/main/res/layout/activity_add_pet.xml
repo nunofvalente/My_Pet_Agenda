@@ -68,15 +68,15 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/image_add_pet"
-                android:layout_width="0dp"
-                android:layout_height="125dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:layout_marginStart="80dp"
                 android:layout_marginLeft="80dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="80dp"
                 android:layout_marginRight="80dp"
                 android:contentDescription="@string/pet_image"
-                android:src="@drawable/default_image"
+                app:imageUrlPet="@{pet.imagePath}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/appBarLayout2"
@@ -207,6 +207,7 @@
 
 
             <Button
+                android:id="@+id/add_pet_save"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="102dp"
@@ -245,6 +246,7 @@
                 android:ems="10"
                 android:text="@{pet.weight}"
                 android:inputType="numberDecimal"
+                android:gravity="center"
                 android:padding="8dp"
                 app:layout_constraintEnd_toStartOf="@+id/edit_pet_birthday"
                 app:layout_constraintHorizontal_bias="0.5"

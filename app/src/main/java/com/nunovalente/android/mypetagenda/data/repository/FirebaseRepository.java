@@ -10,7 +10,6 @@ import android.graphics.ImageDecoder;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
-import android.renderscript.Sampler;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -46,9 +45,8 @@ import com.nunovalente.android.mypetagenda.util.Constants;
 import com.nunovalente.android.mypetagenda.util.StringGenerator;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.Objects;
 
+@SuppressWarnings( "deprecation" )
 public class FirebaseRepository {
 
     private static final String TAG = FirebaseRepository.class.getSimpleName();
@@ -120,8 +118,7 @@ public class FirebaseRepository {
     }
 
     public void signInOwner(String email, String password, Context context, View view) {
-        ProgressBar progressBar = view.findViewById(R.id.progress_login_activity);
-        progressBar.setVisibility(View.VISIBLE);
+        view.setVisibility(View.VISIBLE);
         if (!email.equals("")) {
             if (!password.equals("")) {
                 authentication.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -129,7 +126,7 @@ public class FirebaseRepository {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             if (isEmailVerified()) {
-                                progressBar.setVisibility(View.GONE);
+                                view.setVisibility(View.GONE);
 
                                 SharedPreferences sharedpreferences = context.getSharedPreferences(context.getString(R.string.app_name), Context.MODE_PRIVATE);
                                 if (!sharedpreferences.getBoolean(context.getString(R.string.pref_previously_started), false)) {
@@ -142,7 +139,7 @@ public class FirebaseRepository {
                                 context.startActivity(i);
                             } else if (!isEmailVerified()) {
                                 Toast.makeText(context, "Please verify your email!", Toast.LENGTH_SHORT).show();
-                                progressBar.setVisibility(View.GONE);
+                                view.setVisibility(View.GONE);
                             }
                         } else {
                             String exception;
@@ -157,7 +154,7 @@ public class FirebaseRepository {
                                 e.printStackTrace();
                             }
                             Toast.makeText(context, exception, Toast.LENGTH_SHORT).show();
-                            progressBar.setVisibility(View.INVISIBLE);
+                            view.setVisibility(View.INVISIBLE);
                         }
                     }
                 });
@@ -193,6 +190,7 @@ public class FirebaseRepository {
                 Owner owner = snapshot.getValue(Owner.class);
                 DatabaseReference path = databaseReference.child(Constants.PETS).child(owner.getAccountId()).child(pet.getId());
                 path.setValue(pet);
+                pet.setAccountId(owner.getAccountId());
             }
 
             @Override
@@ -293,6 +291,69 @@ public class FirebaseRepository {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void updatePetInfo(Context context, String userId, String storagePath, String fileName, String imageUrl, Pet pet) {
+        Bitmap image = null;
+        if(!imageUrl.equals("")) {
+            try {
+                Uri imagePath = Uri.parse(imageUrl);
+                if (Build.VERSION.SDK_INT < 28) {
+                    image = MediaStore.Images.Media.getBitmap(context.getContentResolver(), imagePath);
+                } else {
+                    image = ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.getContentResolver(), imagePath));
+                }
+
+                if (image != null) {
+
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    byte[] imageData = baos.toByteArray();
+
+                    StorageReference imageRef = storageReference
+                            .child(Constants.IMAGES)
+                            .child(storagePath)
+                            .child(userId)
+                            .child(fileName);
+
+                    UploadTask uploadTask = imageRef.putBytes(imageData);
+
+                    Task<Uri> urlTask = uploadTask.continueWithTask(task -> {
+                        if (!task.isSuccessful()) {
+                            throw task.getException();
+                        }
+                        return imageRef.getDownloadUrl();
+                    }).addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Uri downloadUri = task.getResult();
+                            String url = downloadUri.toString();
+                            pet.setImagePath(url);
+                            updatePetDB(pet);
+                        }
+                    });
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            updatePetDB(pet);
+        }
+    }
+
+    private void updatePetDB(Pet pet) {
+        databaseReference.child(Constants.USERS).child(FirebaseHelper.getUserId()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Owner owner = snapshot.getValue(Owner.class);
+                pet.updatePet(owner.getAccountId(), pet.getId());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     public void updateUserImage(Uri url, Context context) {

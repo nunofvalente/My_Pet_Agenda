@@ -1,6 +1,10 @@
 package com.nunovalente.android.mypetagenda.model;
 
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -15,26 +19,48 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+@Entity(tableName = "owner_database")
 public class Owner implements Serializable {
 
-    private final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
-
-    @Exclude
+    @NonNull
+    @PrimaryKey
+    @ColumnInfo(name = "id")
     private String id;
+
+    @ColumnInfo(name = "name")
     private String name;
+
+    @ColumnInfo(name = "email")
     private String email;
+
+    @ColumnInfo(name = "password")
     private String password;
+
+    @ColumnInfo(name = "imagePath")
     private String imagePath;
+
+    @ColumnInfo(name = "accountId")
     private String accountId;
 
+    @Ignore
     public Owner() {
+        id = null;
     }
 
+    @Ignore
     public Owner(String id, String name, String email, String password, String imagePath, String accountId) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
+        this.imagePath = imagePath;
+        this.accountId = accountId;
+    }
+
+    public Owner(String id, String name, String email, String imagePath, String accountId) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
         this.imagePath = imagePath;
         this.accountId = accountId;
     }
@@ -86,6 +112,7 @@ public class Owner implements Serializable {
 
 
     public void updateUser() {
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
         String userId = FirebaseHelper.getUserId();
         Map<String, Object> userValues = convertToMap();
 
@@ -96,6 +123,7 @@ public class Owner implements Serializable {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Owner owner = snapshot.getValue(Owner.class);
+                assert owner != null;
                 DatabaseReference accountPath = database.child(Constants.ACCOUNT).child(owner.getAccountId()).child(userId);
                 accountPath.updateChildren(userValues);
 

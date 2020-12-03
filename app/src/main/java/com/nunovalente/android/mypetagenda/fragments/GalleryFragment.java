@@ -8,15 +8,22 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.transition.MaterialFadeThrough;
 import com.nunovalente.android.mypetagenda.R;
+import com.nunovalente.android.mypetagenda.databinding.FragmentGalleryBinding;
+import com.nunovalente.android.mypetagenda.util.NetworkUtils;
 import com.nunovalente.android.mypetagenda.viewmodel.FirebaseViewModel;
 
+import java.util.Objects;
+
 public class GalleryFragment extends Fragment {
+
+    private FragmentGalleryBinding mBinding;
 
     private FirebaseViewModel firebaseViewModel;
 
@@ -25,7 +32,14 @@ public class GalleryFragment extends Fragment {
 
         firebaseViewModel = new ViewModelProvider(this).get(FirebaseViewModel.class);
 
-        View root = inflater.inflate(R.layout.fragment_gallery, container, false);
+       mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_gallery, container, false);
+       View root = mBinding.getRoot();
+
+        if (!NetworkUtils.checkConnectivity(requireActivity().getApplication())) {
+            mBinding.textNoNetworkGallery.setVisibility(View.VISIBLE);
+        } else {
+            //TODO
+        }
 
 
 

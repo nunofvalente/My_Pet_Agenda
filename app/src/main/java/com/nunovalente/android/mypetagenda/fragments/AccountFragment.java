@@ -29,8 +29,10 @@ import com.nunovalente.android.mypetagenda.activities.ProfileActivity;
 import com.nunovalente.android.mypetagenda.adapters.RecyclerAccountAdapter;
 import com.nunovalente.android.mypetagenda.data.repository.FirebaseHelper;
 import com.nunovalente.android.mypetagenda.databinding.FragmentAccountBinding;
+import com.nunovalente.android.mypetagenda.databinding.FragmentAccountOfflineBinding;
 import com.nunovalente.android.mypetagenda.model.Owner;
 import com.nunovalente.android.mypetagenda.util.Constants;
+import com.nunovalente.android.mypetagenda.util.NetworkUtils;
 import com.nunovalente.android.mypetagenda.util.Permission;
 import com.nunovalente.android.mypetagenda.viewmodel.FirebaseViewModel;
 
@@ -42,24 +44,33 @@ public class AccountFragment extends Fragment {
     private static final String TAG = "account_fragment";
 
     private FragmentAccountBinding mBinding;
+    private FragmentAccountOfflineBinding mBindingOffline;
     private DatabaseReference databaseReference;
     private ValueEventListener valueEventListener;
+    private View root;
 
     private final ArrayList<Owner> mAccountHoldersList = new ArrayList<>();
 
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+       if(NetworkUtils.checkConnectivity(requireActivity().getApplication())) {
+           mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_account, container, false);
+           root = mBinding.getRoot();
 
-        FirebaseViewModel firebaseViewModel = new ViewModelProvider(this).get(FirebaseViewModel.class);
-        databaseReference = firebaseViewModel.getDatabase();
+           FirebaseViewModel firebaseViewModel = new ViewModelProvider(this).get(FirebaseViewModel.class);
+           databaseReference = firebaseViewModel.getDatabase();
 
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_account, container, false);
-        View root = mBinding.getRoot();
+           AccountFragmentClickHandler mHandlers = new AccountFragmentClickHandler(getContext());
+           mBinding.setClickHandler(mHandlers);
 
-        AccountFragmentClickHandler mHandlers = new AccountFragmentClickHandler(getContext());
-        mBinding.setClickHandler(mHandlers);
+           getUserInformation();
+       } else {
+           mBindingOffline = DataBindingUtil.inflate(inflater, R.layout.fragment_account_offline, container, false);
+           root = mBindingOffline.getRoot();
 
-        getUserInformation();
+           mBindingOffline.textNoNetworkAccount.setVisibility(View.VISIBLE);
+       }
+
 
         this.setExitTransition(new MaterialFadeThrough().setDuration(getResources().getInteger(R.integer.reply_motion_duration_large)));
         return root;
@@ -72,6 +83,7 @@ public class AccountFragment extends Fragment {
                 Owner owner = snapshot.getValue(Owner.class);
                 mBinding.setOwner(owner);
 
+                assert owner != null;
                 String accountId = owner.getAccountId();
                 showAccountHoldersIfMoreThanOne(accountId);
             }
@@ -95,13 +107,13 @@ public class AccountFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 mAccountHoldersList.clear();
 
-                for(DataSnapshot data: snapshot.getChildren()) {
+                for (DataSnapshot data : snapshot.getChildren()) {
                     Owner owner = data.getValue(Owner.class);
 
                     mAccountHoldersList.add(owner);
                 }
 
-                if(mAccountHoldersList.size() <= 1) {
+                if (mAccountHoldersList.size() <= 1) {
                     mBinding.accountHoldersLinear.setVisibility(View.GONE);
                 } else {
                     mBinding.accountHoldersLinear.setVisibility(View.VISIBLE);
@@ -151,12 +163,16 @@ public class AccountFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        configureRecyclerView();
+        if (NetworkUtils.checkConnectivity(requireActivity().getApplication())) {
+            configureRecyclerView();
+        }
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        databaseReference.removeEventListener(valueEventListener);
+        if (NetworkUtils.checkConnectivity(requireActivity().getApplication())) {
+            databaseReference.removeEventListener(valueEventListener);
+        }
     }
 }

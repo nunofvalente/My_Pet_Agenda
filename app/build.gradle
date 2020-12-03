@@ -98,4 +98,13 @@ dependencies {
 
     implementation "androidx.preference:preference:1.1.1"
 
+    //Room
+    def room_version = "2.2.5"
+
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
+
+    // https://mvnrepository.com/artifact/org.antlr/antlr4
+    implementation group: 'org.antlr', name: 'antlr4', version: '4.7.1'
+
 }

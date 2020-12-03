@@ -19,6 +19,8 @@
     <dimen name="text_size_20">20sp</dimen>
     <dimen name="text_size_24">24sp</dimen>
 
+    <dimen name="logo_image_width">200dp</dimen>
+    <dimen name="logo_image_height">215dp</dimen>
     <dimen name="profile_picture_height">100dp</dimen>
     <dimen name="profile_picture_width">100dp</dimen>
     <dimen name="profile_picture_width_adapter">50dp</dimen>

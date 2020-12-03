@@ -33,6 +33,7 @@ import com.nunovalente.android.mypetagenda.databinding.FragmentMyPetsBinding;
 import com.nunovalente.android.mypetagenda.model.Owner;
 import com.nunovalente.android.mypetagenda.model.Pet;
 import com.nunovalente.android.mypetagenda.util.Constants;
+import com.nunovalente.android.mypetagenda.util.NetworkUtils;
 import com.nunovalente.android.mypetagenda.viewmodel.FirebaseViewModel;
 
 import java.util.ArrayList;
@@ -52,16 +53,20 @@ public class MyPetsFragment extends Fragment {
 
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_my_pets, container, false);
 
-        FirebaseViewModel firebaseViewModel = new ViewModelProvider(this).get(FirebaseViewModel.class);
-        databaseReference = firebaseViewModel.getDatabase();
+        if (!NetworkUtils.checkConnectivity(requireActivity().getApplication())) {
+            mBinding.textNoNetworkMyPets.setVisibility(View.VISIBLE);
+        } else {
+            mBinding.textNoNetworkMyPets.setVisibility(View.INVISIBLE);
 
-        MyPetFragmentClickHandler mHandlers = new MyPetFragmentClickHandler(getContext());
-        mBinding.setClickHandler(mHandlers);
+            FirebaseViewModel firebaseViewModel = new ViewModelProvider(this).get(FirebaseViewModel.class);
+            databaseReference = firebaseViewModel.getDatabase();
+            MyPetFragmentClickHandler mHandlers = new MyPetFragmentClickHandler(getContext());
+            mBinding.setClickHandler(mHandlers);
+            setListeners();
 
-        setListeners();
 
-
-        this.setExitTransition(new MaterialFadeThrough().setDuration(getResources().getInteger(R.integer.reply_motion_duration_large)));
+            this.setExitTransition(new MaterialFadeThrough().setDuration(getResources().getInteger(R.integer.reply_motion_duration_large)));
+        }
         return mBinding.getRoot();
     }
 
@@ -73,7 +78,7 @@ public class MyPetsFragment extends Fragment {
                 Intent intent = new Intent(getContext(), PetProfileActivity.class);
                 intent.putExtra(PET, pet);
 
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireActivity());
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString(getString(R.string.selected_pet_id), pet.getId());
                 editor.apply();
@@ -106,6 +111,7 @@ public class MyPetsFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Owner ownerDb = snapshot.getValue(Owner.class);
+                assert ownerDb != null;
                 getPetsFromDb(ownerDb.getAccountId());
             }
 
@@ -144,7 +150,7 @@ public class MyPetsFragment extends Fragment {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 3);
         mBinding.recyclerMyPets.setLayoutManager(gridLayoutManager);
         mBinding.recyclerMyPets.setHasFixedSize(true);
-        RecyclerPetAdapter adapter = new RecyclerPetAdapter(getContext() ,list);
+        RecyclerPetAdapter adapter = new RecyclerPetAdapter(getContext(), list);
         mBinding.recyclerMyPets.setAdapter(adapter);
     }
 
@@ -165,12 +171,16 @@ public class MyPetsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        getPets();
+        if(NetworkUtils.checkConnectivity(requireActivity().getApplication())) {
+            getPets();
+        }
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        databaseReference.removeEventListener(valueEventListener);
+        if(NetworkUtils.checkConnectivity(requireActivity().getApplication())) {
+            databaseReference.removeEventListener(valueEventListener);
+        }
     }
 }

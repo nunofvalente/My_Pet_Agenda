@@ -24,203 +24,201 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="?actionBarSize"
-        android:layout_marginTop="?actionBarSize">
+        android:layout_marginTop="?actionBarSize"
+        android:layout_marginBottom="?actionBarSize">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:context=".fragments.AccountFragment">
-
-            <ImageButton
-                android:id="@+id/account_copy_text"
-                android:layout_width="0dp"
-                android:layout_height="22dp"
-                android:layout_marginTop="@dimen/margin_8"
-                android:layout_marginEnd="@dimen/margin_16"
-                android:layout_marginRight="@dimen/margin_16"
-                android:background="@color/white"
-                android:onClick="@{clickHandler::copyText}"
-                android:src="@drawable/ic_copy_button"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/account_owner_name"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
-                android:gravity="center"
-                android:text="@{owner.name}"
-                android:textSize="@dimen/text_size_16"
-                android:textStyle="bold"
-                tools:text="User Name"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/account_owner_image" />
-
-            <TextView
-                android:id="@+id/account_unique_id"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/margin_8"
-                android:layout_marginRight="@dimen/margin_8"
-                android:text="@{StringGenerator.getAccountIdStringBuilder(owner.accountId)}"
-                android:textColor="@android:color/darker_gray"
-                app:layout_constraintBottom_toBottomOf="@+id/account_copy_text"
-                app:layout_constraintEnd_toStartOf="@+id/account_copy_text"
-                app:layout_constraintTop_toTopOf="@+id/account_copy_text" />
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/account_owner_image"
-                android:layout_width="@dimen/profile_picture_width"
-                android:layout_height="@dimen/profile_picture_height"
-                android:layout_marginStart="85dp"
-                android:layout_marginLeft="85dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="85dp"
-                android:layout_marginRight="85dp"
-                app:imageUrl="@{owner.imagePath}"
-                tools:src="@drawable/default_account"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/guideline4" />
-
-            <LinearLayout
-                android:id="@+id/account_holders_linear"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
-                android:orientation="vertical"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/account_owner_name">
+                android:layout_marginBottom="@dimen/margin_16"
+                tools:context=".fragments.AccountFragment">
+
+                <ImageButton
+                    android:id="@+id/account_copy_text"
+                    android:layout_width="0dp"
+                    android:layout_height="22dp"
+                    android:layout_marginTop="@dimen/margin_8"
+                    android:layout_marginEnd="@dimen/margin_16"
+                    android:background="@color/white"
+                    android:onClick="@{clickHandler::copyText}"
+                    android:src="@drawable/ic_copy_button"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:contentDescription="@string/copy_text" />
 
                 <TextView
+                    android:id="@+id/account_owner_name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginRight="16dp"
+                    android:gravity="center"
+                    android:text="@{owner.name}"
+                    android:textSize="@dimen/text_size_16"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/account_owner_image"
+                    tools:text="User Name" />
+
+                <TextView
+                    android:id="@+id/account_unique_id"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_16"
-                    android:layout_marginLeft="@dimen/margin_16"
-                    android:layout_marginBottom="@dimen/margin_8"
-                    android:text="@string/account_holders"
-                    android:textSize="@dimen/text_size_14"
-                    android:textStyle="bold" />
+                    android:layout_marginEnd="@dimen/margin_8"
+                    android:text="@{StringGenerator.getAccountIdStringBuilder(owner.accountId)}"
+                    android:textColor="@android:color/darker_gray"
+                    app:layout_constraintBottom_toBottomOf="@+id/account_copy_text"
+                    app:layout_constraintEnd_toStartOf="@+id/account_copy_text"
+                    app:layout_constraintTop_toTopOf="@+id/account_copy_text" />
 
-                <View
-                    android:id="@+id/view"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginStart="@dimen/margin_16"
-                    android:layout_marginLeft="@dimen/margin_16"
-                    android:layout_marginEnd="@dimen/margin_16"
-                    android:layout_marginRight="@dimen/margin_16"
-                    android:background="@color/black" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycler_account_holders"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/account_recycler_height"
-                    android:layout_marginStart="@dimen/margin_16"
-                    android:layout_marginLeft="@dimen/margin_16"
-                    android:layout_marginEnd="@dimen/margin_16"
-                    android:layout_marginRight="@dimen/margin_16" />
-
-                <View
-
-                    android:id="@+id/view2"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginStart="@dimen/margin_16"
-                    android:layout_marginLeft="@dimen/margin_16"
-                    android:layout_marginEnd="@dimen/margin_16"
-                    android:layout_marginRight="@dimen/margin_16"
-                    android:background="@color/black" />
-
-            </LinearLayout>
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.08" />
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="@dimen/margin_16"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginBottom="?actionBarSize"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/account_holders_linear">
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/account_owner_image"
+                    android:layout_width="@dimen/profile_picture_width"
+                    android:layout_height="@dimen/profile_picture_height"
+                    android:layout_marginStart="85dp"
+                    android:layout_marginLeft="85dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="85dp"
+                    android:layout_marginRight="85dp"
+                    app:imageUrl="@{owner.imagePath}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/guideline4"
+                    tools:src="@drawable/default_account" />
 
                 <LinearLayout
+                    android:id="@+id/account_holders_linear"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginRight="16dp"
                     android:orientation="vertical"
-                    android:layout_marginBottom="16dp">
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/account_owner_name">
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:drawablePadding="@dimen/margin_8"
-                        android:gravity="center_vertical"
-                        android:padding="@dimen/padding_10dp"
-                        android:text="@string/edit_profile"
-                        android:textColor="@color/icon_gray"
-                        android:onClick="@{clickHandler::openEditProfileActivity}"
-                        android:textSize="@dimen/text_size_16"
-                        app:drawableLeftCompat="@drawable/ic_account" />
+                        android:layout_marginStart="@dimen/margin_16"
+                        android:layout_marginBottom="@dimen/margin_8"
+                        android:text="@string/account_holders"
+                        android:textSize="@dimen/text_size_14"
+                        android:textStyle="bold" />
 
-                    <TextView
+                    <View
+                        android:id="@+id/view"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:drawablePadding="@dimen/margin_8"
-                        android:gravity="center_vertical"
-                        android:padding="@dimen/padding_10dp"
-                        android:text="@string/settings"
-                        android:textColor="@color/icon_gray"
-                        android:textSize="@dimen/text_size_16"
-                        app:drawableLeftCompat="@drawable/ic_settings" />
+                        android:layout_height="1dp"
+                        android:layout_marginStart="@dimen/margin_16"
+                        android:layout_marginLeft="@dimen/margin_16"
+                        android:layout_marginEnd="@dimen/margin_16"
+                        android:layout_marginRight="@dimen/margin_16"
+                        android:background="@color/black" />
 
-                    <TextView
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_account_holders"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:drawablePadding="@dimen/margin_8"
-                        android:gravity="center_vertical"
-                        android:padding="@dimen/padding_10dp"
-                        android:text="@string/support_service"
-                        android:textColor="@color/icon_gray"
-                        android:textSize="@dimen/text_size_16"
-                        app:drawableLeftCompat="@drawable/ic_customer_service"
-                        app:drawableStartCompat="@drawable/ic_customer_service" />
+                        android:layout_height="@dimen/account_recycler_height"
+                        android:layout_marginStart="@dimen/margin_16"
+                        android:layout_marginLeft="@dimen/margin_16"
+                        android:layout_marginEnd="@dimen/margin_16"
+                        android:layout_marginRight="@dimen/margin_16" />
 
-                    <TextView
+                    <View
+
+                        android:id="@+id/view2"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:drawablePadding="@dimen/margin_8"
-                        android:gravity="center_vertical"
-                        android:padding="@dimen/padding_10dp"
-                        android:text="@string/about_us"
-                        android:textColor="@color/icon_gray"
-                        android:textSize="@dimen/text_size_16"
-                        app:drawableLeftCompat="@drawable/ic_info" />
+                        android:layout_height="1dp"
+                        android:layout_marginStart="@dimen/margin_16"
+                        android:layout_marginLeft="@dimen/margin_16"
+                        android:layout_marginEnd="@dimen/margin_16"
+                        android:layout_marginRight="@dimen/margin_16"
+                        android:background="@color/black" />
 
                 </LinearLayout>
-            </androidx.cardview.widget.CardView>
-        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintGuide_percent="0.08" />
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="@dimen/margin_16"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginRight="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/account_holders_linear">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="16dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawablePadding="@dimen/margin_8"
+                            android:gravity="center_vertical"
+                            android:onClick="@{clickHandler::openEditProfileActivity}"
+                            android:padding="@dimen/padding_10dp"
+                            android:text="@string/edit_profile"
+                            android:textColor="@color/icon_gray"
+                            android:textSize="@dimen/text_size_16"
+                            app:drawableLeftCompat="@drawable/ic_account" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawablePadding="@dimen/margin_8"
+                            android:gravity="center_vertical"
+                            android:padding="@dimen/padding_10dp"
+                            android:text="@string/settings"
+                            android:textColor="@color/icon_gray"
+                            android:textSize="@dimen/text_size_16"
+                            app:drawableLeftCompat="@drawable/ic_settings" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawablePadding="@dimen/margin_8"
+                            android:gravity="center_vertical"
+                            android:padding="@dimen/padding_10dp"
+                            android:text="@string/support_service"
+                            android:textColor="@color/icon_gray"
+                            android:textSize="@dimen/text_size_16"
+                            app:drawableLeftCompat="@drawable/ic_customer_service"
+                            app:drawableStartCompat="@drawable/ic_customer_service" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawablePadding="@dimen/margin_8"
+                            android:gravity="center_vertical"
+                            android:padding="@dimen/padding_10dp"
+                            android:text="@string/about_us"
+                            android:textColor="@color/icon_gray"
+                            android:textSize="@dimen/text_size_16"
+                            app:drawableLeftCompat="@drawable/ic_info" />
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 </layout>

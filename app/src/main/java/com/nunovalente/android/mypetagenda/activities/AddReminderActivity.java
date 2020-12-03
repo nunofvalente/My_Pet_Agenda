@@ -35,6 +35,7 @@ import java.util.Locale;
 
 import static com.nunovalente.android.mypetagenda.fragments.MyPetsFragment.PET;
 
+@SuppressWarnings( "deprecation" )
 public class AddReminderActivity extends AppCompatActivity {
 
     private ActivityAddReminderBinding mBinding;

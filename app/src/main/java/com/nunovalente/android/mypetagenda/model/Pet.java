@@ -1,22 +1,58 @@
 package com.nunovalente.android.mypetagenda.model;
 
-import java.io.Serializable;
-import java.util.List;
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Exclude;
+import com.google.firebase.database.FirebaseDatabase;
+import com.nunovalente.android.mypetagenda.util.Constants;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+
+@Entity(tableName = "pet_table")
 public class Pet implements Serializable {
 
+    @NonNull
+    @PrimaryKey
+    @ColumnInfo(name = "id")
     private String id;
+
+    @ColumnInfo(name = "accountId")
+    @Exclude
+    private String accountId;
+
+    @ColumnInfo(name = "name")
     private String name;
+
+    @ColumnInfo(name = "birthday")
     private String birthday;
+
+    @ColumnInfo(name = "type")
     private String type;
+
+    @ColumnInfo(name = "breed")
     private String breed;
+
+    @ColumnInfo(name = "weight")
     private String weight;
+
+    @ColumnInfo(name = "imagePath")
     private String imagePath;
 
+    @Ignore
     public Pet() {
-
+        id = null;
     }
 
+    @Ignore
     public Pet(String id, String name, String birthday, String type, String breed, String weight, String imagePath) {
         this.id = id;
         this.name = name;
@@ -27,6 +63,18 @@ public class Pet implements Serializable {
         this.imagePath = imagePath;
     }
 
+    public Pet(@NotNull String id, String accountId, String name, String birthday, String type, String breed, String weight, String imagePath) {
+        this.id = id;
+        this.accountId = accountId;
+        this.name = name;
+        this.birthday = birthday;
+        this.type = type;
+        this.breed = breed;
+        this.weight = weight;
+        this.imagePath = imagePath;
+    }
+
+    @NotNull
     public String getId() {
         return id;
     }
@@ -81,5 +129,37 @@ public class Pet implements Serializable {
 
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
+    }
+
+    @Exclude
+    public String getAccountId() {
+        return accountId;
+    }
+
+    @Exclude
+    public void setAccountId(String accountId) {
+        this.accountId = accountId;
+    }
+
+    public void updatePet(String accountId, String petId) {
+        Map<String, Object> petValues = convertToMap();
+
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference path = database.child(Constants.PETS).child(accountId).child(petId);
+        path.updateChildren(petValues);
+    }
+
+    @Exclude
+    private Map<String, Object> convertToMap() {
+        HashMap<String, Object> petMap = new HashMap<>();
+
+        petMap.put("name", this.name);
+        petMap.put("birthday", this.birthday);
+        petMap.put("type", this.type);
+        petMap.put("breed", this.breed);
+        petMap.put("weight", this.weight);
+        petMap.put("imagePath", this.imagePath);
+
+        return petMap;
     }
 }

@@ -47,6 +47,7 @@
     <string name="open_gallery">Open Gallery</string>
     <string name="account_holders">Account Holders</string>
     <string name="edit_profile">Profile</string>
+    <string name="edit_pet_profile">Edit Pet</string>
     <string name="support_service">Support</string>
     <string name="about_us">About Us</string>
     <string name="add_pet">Add Pet</string>
@@ -75,6 +76,7 @@
     <string name="note">Note...</string>
     <string name="fab_note">Note</string>
     <string name="selected_pet_id">petId</string>
+    <string name="accountId">accountId</string>
     <string name="please_add_a_note">Please add a note!</string>
     <string name="pref_pet">prefPet</string>
     <string name="no_notes_to_display">No notes to display!</string>
@@ -91,5 +93,13 @@
     <string name="sunday">Sunday</string>
     <string name="not_recurring">Not recurring</string>
     <string name="all_days">All Days</string>
+    <string name="age">Age</string>
+    <string name="breed">Breed</string>
+    <string name="change_picture">Change Picture</string>
+    <string name="update">Update</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="no_network_connection">No network connection</string>
+    <string name="user_image">User Image</string>
+    <string name="copy_text">Copy Text</string>
 
 </resources>

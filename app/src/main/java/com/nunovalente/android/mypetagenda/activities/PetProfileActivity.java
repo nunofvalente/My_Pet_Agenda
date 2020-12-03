@@ -23,6 +23,7 @@ import com.nunovalente.android.mypetagenda.viewmodel.FragmentShareViewModel;
 
 import static com.nunovalente.android.mypetagenda.fragments.PetProfileFragment.PET;
 
+@SuppressWarnings( "deprecation" )
 public class PetProfileActivity extends AppCompatActivity {
 
     private Pet pet;
