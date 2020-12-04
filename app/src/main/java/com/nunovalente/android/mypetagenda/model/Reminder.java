@@ -17,6 +17,12 @@ public class Reminder implements Serializable {
     @ColumnInfo(name = "id")
     private int id;
 
+    @ColumnInfo(name = "petId")
+    private String petId;
+
+    @ColumnInfo(name = "accountId")
+    private String accountId;
+
     @ColumnInfo(name = "title")
     private String title;
 
@@ -29,31 +35,18 @@ public class Reminder implements Serializable {
     @ColumnInfo(name = "date")
     private String date;
 
-    @Ignore
-    private List<String> days;
-
     @ColumnInfo(name = "days")
-    private String roomDays;
+    private String days;
 
     @ColumnInfo(name = "isActive")
-    private boolean isActive;
+    private String isActive;
 
     @Ignore
     public Reminder() {
     }
 
-    public Reminder(int id, String title, String hour, String minutes, String date, String roomDays, boolean isActive) {
+    public Reminder(int id, String title, String hour, String minutes, String date, String days, String isActive) {
         this.id = id;
-        this.title = title;
-        this.hour = hour;
-        this.minutes = minutes;
-        this.date = date;
-        this.roomDays = roomDays;
-        this.isActive = isActive;
-    }
-
-    @Ignore
-    public Reminder(String title, String hour, String minutes, String date, List<String> days, boolean isActive) {
         this.title = title;
         this.hour = hour;
         this.minutes = minutes;
@@ -86,19 +79,11 @@ public class Reminder implements Serializable {
         this.minutes = minutes;
     }
 
-    public List<String> getDays() {
-        return days;
-    }
-
-    public void setDays(List<String> days) {
-        this.days = days;
-    }
-
-    public boolean getIsActive() {
+    public String getIsActive() {
         return isActive;
     }
 
-    public void setIsActive(boolean isActive) {
+    public void setIsActive(String isActive) {
         this.isActive = isActive;
     }
 
@@ -110,7 +95,6 @@ public class Reminder implements Serializable {
         this.date = date;
     }
 
-    @Exclude
     public int getId() {
         return id;
     }
@@ -119,20 +103,27 @@ public class Reminder implements Serializable {
         this.id = id;
     }
 
-    @Exclude
-    public String getRoomDays() {
-        return roomDays;
+    public String getDays() {
+        return days;
     }
 
-    public void setRoomDays(String roomDays) {
-        this.roomDays = roomDays;
+    public void setDays(String days) {
+        this.days = days;
     }
 
-    public boolean isActive() {
-        return isActive;
+    public String getPetId() {
+        return petId;
     }
 
-    public void setActive(boolean active) {
-        isActive = active;
+    public void setPetId(String petId) {
+        this.petId = petId;
+    }
+
+    public String getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(String accountId) {
+        this.accountId = accountId;
     }
 }

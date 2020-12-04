@@ -37,19 +37,7 @@ public class RecyclerAddReminderAdapter extends RecyclerView.Adapter<RecyclerAdd
     public void onBindViewHolder(@NonNull AddReminderViewHolder holder, int position) {
         Reminder reminder = mReminderList.get(position);
         mBinding.setReminder(reminder);
-        mBinding.switchReminder.setChecked(reminder.getIsActive());
-
-        if(reminder.getDays() != null) {
-            if(reminder.getDays().size() != 7) {
-                for (String day : reminder.getDays()) {
-                    mBinding.reminderDays.append(day + " ");
-                }
-            } else {
-                mBinding.reminderDays.setText(R.string.all_days);
-            }
-        } else {
-            mBinding.reminderDays.setText(R.string.not_recurring);
-        }
+        //TODO
     }
 
     @Override
