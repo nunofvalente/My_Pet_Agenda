@@ -11,15 +11,17 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;;
+import android.view.ViewGroup;
+import android.widget.Toast;;
 
 import com.nunovalente.android.mypetagenda.R;
 import com.nunovalente.android.mypetagenda.activities.AddReminderActivity;
 import com.nunovalente.android.mypetagenda.activities.EditProfilePetActivity;
 import com.nunovalente.android.mypetagenda.activities.dialog.DialogNote;
-import com.nunovalente.android.mypetagenda.activities.dialog.DialogRegister;
+import com.nunovalente.android.mypetagenda.data.repository.FirebaseHelper;
 import com.nunovalente.android.mypetagenda.databinding.FragmentPetProfileBinding;
 import com.nunovalente.android.mypetagenda.model.Pet;
+import com.nunovalente.android.mypetagenda.util.NetworkUtils;
 import com.nunovalente.android.mypetagenda.viewmodel.FragmentShareViewModel;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
@@ -81,15 +83,23 @@ public class PetProfileFragment extends Fragment {
         }
 
         public void openNoteDialog(View view) {
-            DialogNote dialogNote = new DialogNote();
-            dialogNote.setCancelable(false);
-            dialogNote.show(getParentFragmentManager(), TAG);
+            if(NetworkUtils.checkConnectivity(requireActivity().getApplication()) && FirebaseHelper.getCurrentOwner() != null) {
+                DialogNote dialogNote = new DialogNote();
+                dialogNote.setCancelable(false);
+                dialogNote.show(getParentFragmentManager(), TAG);
+            } else {
+                Toast.makeText(getContext(), getString(R.string.please_sign_in_to_add_note), Toast.LENGTH_SHORT).show();
+            }
         }
 
         public void editProfile(View view) {
+            if(NetworkUtils.checkConnectivity(requireActivity().getApplication()) && FirebaseHelper.getCurrentOwner() != null) {
             Intent intent = new Intent(getContext(), EditProfilePetActivity.class);
             intent.putExtra(PET, mPet);
             startActivity(intent);
+            } else {
+                Toast.makeText(getContext(), getString(R.string.please_sign_in_to_edit_profile), Toast.LENGTH_SHORT).show();
+            }
         }
 
     }

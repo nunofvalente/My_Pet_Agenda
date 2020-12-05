@@ -5,7 +5,7 @@ import java.util.Random;
 public class StringGenerator {
 
     public static String getRandomString() {
-        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890-!_.";
+        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890-!_";
         StringBuilder builder = new StringBuilder();
         Random rnd = new Random();
         while (builder.length() < 10) {
@@ -20,7 +20,7 @@ public class StringGenerator {
         return ("Account Code: " + text);
     }
 
-    public static String getReminderTimeStringBuilder(String hours, String minutes) {
+    public static String getReminderTimeStringBuilder(int hours, int minutes) {
         return (hours + ":" + minutes);
     }
 

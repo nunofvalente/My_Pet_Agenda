@@ -136,6 +136,7 @@
             android:layout_gravity="bottom|right"
             android:layout_margin="@dimen/margin_16"
             app:fab_size="normal"
+            android:onClick="@{clickHandler::saveReminder}"
             android:src="@drawable/ic_check"
             android:contentDescription="@string/add_reminder"/>
 

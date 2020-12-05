@@ -1,5 +1,6 @@
 package com.nunovalente.android.mypetagenda.fragments;
 
+import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
@@ -19,6 +20,7 @@ import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.google.android.material.transition.MaterialFadeThrough;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,6 +37,7 @@ import com.nunovalente.android.mypetagenda.model.Pet;
 import com.nunovalente.android.mypetagenda.util.Constants;
 import com.nunovalente.android.mypetagenda.util.NetworkUtils;
 import com.nunovalente.android.mypetagenda.viewmodel.FirebaseViewModel;
+import com.nunovalente.android.mypetagenda.viewmodel.RoomViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,31 +46,48 @@ public class MyPetsFragment extends Fragment {
 
     public static final String PET = "pet";
 
+    private RoomViewModel roomViewModel;
+
+    private FirebaseViewModel firebaseViewModel;
+    private FirebaseAuth auth;
+
     private DatabaseReference databaseReference;
     private FragmentMyPetsBinding mBinding;
     private ValueEventListener valueEventListener;
-    private final List<Pet> mPetList = new ArrayList<>();
+    private List<Pet> mPetList = new ArrayList<>();
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_my_pets, container, false);
+        roomViewModel = new ViewModelProvider(this).get(RoomViewModel.class);
+        firebaseViewModel = new ViewModelProvider(this).get(FirebaseViewModel.class);
+        auth = firebaseViewModel.getAuth();
 
-        if (!NetworkUtils.checkConnectivity(requireActivity().getApplication())) {
-            mBinding.textNoNetworkMyPets.setVisibility(View.VISIBLE);
+        if (!NetworkUtils.checkConnectivity(requireActivity().getApplication()) || auth.getCurrentUser() == null) {
+            SharedPreferences sharedPreferences = getContext().getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
+            String accountId = sharedPreferences.getString(getString(R.string.pref_account_id), "");
+            loadRecyclerView(accountId);
         } else {
-            mBinding.textNoNetworkMyPets.setVisibility(View.INVISIBLE);
-
             FirebaseViewModel firebaseViewModel = new ViewModelProvider(this).get(FirebaseViewModel.class);
             databaseReference = firebaseViewModel.getDatabase();
             MyPetFragmentClickHandler mHandlers = new MyPetFragmentClickHandler(getContext());
             mBinding.setClickHandler(mHandlers);
-            setListeners();
-
-
-            this.setExitTransition(new MaterialFadeThrough().setDuration(getResources().getInteger(R.integer.reply_motion_duration_large)));
         }
+
+        setListeners();
+
+
+        this.setExitTransition(new MaterialFadeThrough().setDuration(getResources().getInteger(R.integer.reply_motion_duration_large)));
         return mBinding.getRoot();
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private void loadRecyclerView(String accountId) {
+        roomViewModel.getAllPets(accountId).observe(requireActivity(), pets -> {
+            mPetList = pets;
+            setRecyclerView(mPetList);
+        });
     }
 
     private void setListeners() {
@@ -129,18 +149,12 @@ public class MyPetsFragment extends Fragment {
 
                 for (DataSnapshot data : snapshot.getChildren()) {
                     Pet pet = data.getValue(Pet.class);
-
                     mPetList.add(pet);
                 }
-
                 setRecyclerView(mPetList);
-
-
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
         mBinding.progressMyPets.setVisibility(View.GONE);
@@ -171,7 +185,7 @@ public class MyPetsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if(NetworkUtils.checkConnectivity(requireActivity().getApplication())) {
+        if (NetworkUtils.checkConnectivity(requireActivity().getApplication()) && auth.getCurrentUser() != null) {
             getPets();
         }
     }
@@ -179,7 +193,7 @@ public class MyPetsFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        if(NetworkUtils.checkConnectivity(requireActivity().getApplication())) {
+        if(valueEventListener != null) {
             databaseReference.removeEventListener(valueEventListener);
         }
     }

@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <import type="com.nunovalente.android.mypetagenda.util.StringGenerator"/>
 
         <variable
@@ -35,6 +34,7 @@
             android:layout_height="wrap_content"
             android:maxLines="2"
             android:textSize="@dimen/text_size_14"
+            android:text="@{reminder.days}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_reminder_title"

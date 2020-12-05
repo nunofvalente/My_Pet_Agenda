@@ -27,7 +27,9 @@ public abstract class OwnerDatabase extends RoomDatabase {
         if (sInstance == null) {
             synchronized (LOCK) {
                 Log.d(TAG, "Creating Database instance");
-                sInstance = Room.databaseBuilder(context.getApplicationContext(), OwnerDatabase.class, DATABASE_NAME).build();
+                sInstance = Room.databaseBuilder(context.getApplicationContext(), OwnerDatabase.class, DATABASE_NAME).
+                        fallbackToDestructiveMigration()
+                        .build();
             }
         }
         Log.d(TAG, "Getting database Instance");

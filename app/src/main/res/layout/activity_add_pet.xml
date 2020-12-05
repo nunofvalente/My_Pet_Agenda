@@ -201,7 +201,8 @@
                     android:layout_height="wrap_content"
                     android:background="@color/white"
                     android:hint="@string/breed_if_applicable"
-                    android:text="@{pet.breed}" />
+                    android:text="@{pet.breed}"
+                    android:inputType="text"/>
             </com.google.android.material.textfield.TextInputLayout>
 
 

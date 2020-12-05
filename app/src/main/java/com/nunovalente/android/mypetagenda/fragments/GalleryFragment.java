@@ -38,7 +38,7 @@ public class GalleryFragment extends Fragment {
         if (!NetworkUtils.checkConnectivity(requireActivity().getApplication())) {
             mBinding.textNoNetworkGallery.setVisibility(View.VISIBLE);
         } else {
-            //TODO
+            mBinding.textNoNetworkGallery.setVisibility(View.INVISIBLE);
         }
 
 

@@ -16,6 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.room.Room;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -37,12 +38,14 @@ import com.google.firebase.storage.UploadTask;
 import com.nunovalente.android.mypetagenda.R;
 import com.nunovalente.android.mypetagenda.activities.SlideLoginActivity;
 import com.nunovalente.android.mypetagenda.activities.MainActivity;
+import com.nunovalente.android.mypetagenda.data.repository.FirebaseHelper;
 import com.nunovalente.android.mypetagenda.model.Owner;
 import com.nunovalente.android.mypetagenda.model.Pet;
 import com.nunovalente.android.mypetagenda.model.Reminder;
 import com.nunovalente.android.mypetagenda.util.Base64Custom;
 import com.nunovalente.android.mypetagenda.util.Constants;
 import com.nunovalente.android.mypetagenda.util.StringGenerator;
+import com.nunovalente.android.mypetagenda.viewmodel.RoomViewModel;
 
 import java.io.ByteArrayOutputStream;
 
@@ -66,7 +69,7 @@ public class FirebaseRepository {
         return repository;
     }
 
-    public void sendConfirmationEmail(Context context) {
+    public void sendConfirmationEmail(Context context, Owner authenticatedOwner) {
 
         FirebaseUser owner = authentication.getCurrentUser();
         owner.sendEmailVerification().addOnCompleteListener((Activity) context, task -> {
@@ -85,10 +88,9 @@ public class FirebaseRepository {
                 Log.d(TAG, "User created with success");
                 FirebaseHelper.updateOwnerName(authenticatedOwner.getName());
 
-                authenticatedOwner.setId(Base64Custom.encodeString(authenticatedOwner.getEmail()));
-
                 saveOwner(authenticatedOwner);
-                sendConfirmationEmail(context);
+
+                sendConfirmationEmail(context, authenticatedOwner);
 
             } else {
 
@@ -135,6 +137,8 @@ public class FirebaseRepository {
                                     editor.apply();
                                 }
 
+                                saveAccountIdInPrefs(context);
+
                                 Intent i = new Intent(context, MainActivity.class);
                                 context.startActivity(i);
                             } else if (!isEmailVerified()) {
@@ -166,23 +170,40 @@ public class FirebaseRepository {
         }
     }
 
+    private void saveAccountIdInPrefs(Context context) {
+        databaseReference.child(Constants.USERS).child(FirebaseHelper.getUserId()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Owner owner = snapshot.getValue(Owner.class);
+                SharedPreferences sharedpreferences = context.getSharedPreferences(context.getString(R.string.app_name), Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedpreferences.edit();
+                    editor.putString(context.getString(R.string.pref_account_id), owner.getAccountId());
+                    editor.putString(context.getString(R.string.pref_user_id), owner.getId());
+                    editor.apply();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
     private void saveOwner(Owner owner) {
         FirebaseUser user = authentication.getCurrentUser();
         if (user != null) {
-            String accountId = StringGenerator.getRandomString();
-            Owner newOwner = new Owner(owner.getId(), owner.getName(), owner.getEmail(), owner.getPassword(), owner.getImagePath(), accountId);
 
             //Saves account to account branch
-            DatabaseReference pathAccount = databaseReference.child(Constants.ACCOUNT).child(accountId);
-            pathAccount.child(newOwner.getId()).setValue(newOwner);
+            DatabaseReference pathAccount = databaseReference.child(Constants.ACCOUNT).child(owner.getAccountId());
+            pathAccount.child(owner.getId()).setValue(owner);
 
             //Saves owner to the owner branch
             DatabaseReference path = databaseReference.child(Constants.USERS);
-            path.child(newOwner.getId()).setValue(newOwner);
+            path.child(owner.getId()).setValue(owner);
         }
     }
 
-    public void savePet(Pet pet) {
+    public void savePet(Pet pet, String imageUrl, RoomViewModel roomViewModel) {
         //Saves Pet to the pet branch
         databaseReference.child(Constants.USERS).child(FirebaseHelper.getUserId()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -191,6 +212,8 @@ public class FirebaseRepository {
                 DatabaseReference path = databaseReference.child(Constants.PETS).child(owner.getAccountId()).child(pet.getId());
                 path.setValue(pet);
                 pet.setAccountId(owner.getAccountId());
+                pet.setImagePath(imageUrl);
+                roomViewModel.insertPet(pet);
             }
 
             @Override
@@ -249,7 +272,7 @@ public class FirebaseRepository {
         });
     }
 
-    public void storePetImage(Context context, String userId, String storagePath, String fileName, String imageUrl, Pet pet) {
+    public void storePetImage(Context context, String userId, String storagePath, String fileName, String imageUrl, Pet pet, RoomViewModel roomViewModel) {
         Bitmap image = null;
         try {
             Uri imagePath = Uri.parse(imageUrl);
@@ -283,7 +306,7 @@ public class FirebaseRepository {
                         Uri downloadUri = task.getResult();
                         String url = downloadUri.toString();
                         pet.setImagePath(url);
-                        savePet(pet);
+                        savePet(pet, imageUrl, roomViewModel);
                     }
                 });
             }

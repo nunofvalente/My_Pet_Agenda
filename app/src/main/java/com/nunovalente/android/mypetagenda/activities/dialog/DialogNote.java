@@ -26,11 +26,13 @@ import com.nunovalente.android.mypetagenda.model.Note;
 import com.nunovalente.android.mypetagenda.model.Owner;
 import com.nunovalente.android.mypetagenda.util.Constants;
 import com.nunovalente.android.mypetagenda.viewmodel.FirebaseViewModel;
+import com.nunovalente.android.mypetagenda.viewmodel.RoomViewModel;
 
 public class DialogNote extends AppCompatDialogFragment implements View.OnClickListener {
 
     private DatabaseReference databaseReference;
     private ValueEventListener valueEventListener;
+    private RoomViewModel roomViewModel;
 
     private TextView mCancel, mAddNote, mError;
     private EditText mNote;
@@ -49,6 +51,7 @@ public class DialogNote extends AppCompatDialogFragment implements View.OnClickL
 
         FirebaseViewModel firebaseViewModel = new ViewModelProvider(this).get(FirebaseViewModel.class);
         databaseReference = firebaseViewModel.getDatabase();
+        roomViewModel = new ViewModelProvider(requireActivity()).get(RoomViewModel.class);
 
         mCancel = view.findViewById(R.id.tv_note_cancel);
         mAddNote = view.findViewById(R.id.tv_add_note);
@@ -104,6 +107,11 @@ public class DialogNote extends AppCompatDialogFragment implements View.OnClickL
             String key = path.getKey();
             note.setId(key);
             path.setValue(note);
+
+            Note roomNote = new Note(key, accountId, petId, noteText);
+            roomViewModel.insertNote(roomNote);
+        } else {
+            mError.setVisibility(View.VISIBLE);
         }
     }
 

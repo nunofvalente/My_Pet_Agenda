@@ -25,6 +25,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.nunovalente.android.mypetagenda.R;
 import com.nunovalente.android.mypetagenda.data.repository.FirebaseHelper;
 import com.nunovalente.android.mypetagenda.databinding.ActivityAddPetBinding;
@@ -32,7 +33,9 @@ import com.nunovalente.android.mypetagenda.model.Pet;
 import com.nunovalente.android.mypetagenda.util.Base64Custom;
 import com.nunovalente.android.mypetagenda.util.Constants;
 import com.nunovalente.android.mypetagenda.util.Permission;
+import com.nunovalente.android.mypetagenda.util.StringGenerator;
 import com.nunovalente.android.mypetagenda.viewmodel.FirebaseViewModel;
+import com.nunovalente.android.mypetagenda.viewmodel.RoomViewModel;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -49,6 +52,7 @@ public class AddPetActivity extends AppCompatActivity {
 
     private FirebaseViewModel firebaseViewModel;
     private ActivityAddPetBinding mBinding;
+    private RoomViewModel roomViewModel;
 
     private final List<String> photoList = new ArrayList<>();
 
@@ -67,6 +71,7 @@ public class AddPetActivity extends AppCompatActivity {
         Permission.validatePermissions(new ArrayList<>(Arrays.asList(permissions)), this, 1);
 
         firebaseViewModel = new ViewModelProvider(this).get(FirebaseViewModel.class);
+        roomViewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication())).get(RoomViewModel.class);
 
         setSpinner();
 
@@ -121,18 +126,10 @@ public class AddPetActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == Activity.RESULT_OK) {
+            Uri imageSelected = data.getData();
+            Glide.with(this).load(imageSelected).into(mBinding.imageAddPet);
 
-            try {
-                Uri imageSelected = data.getData();
-                InputStream imageStream = getContentResolver().openInputStream(imageSelected);
-                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-
-                mBinding.imageAddPet.setImageBitmap(selectedImage);
-
-                photoList.add(imageSelected.toString());
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+            photoList.add(imageSelected.toString());
         }
     }
 
@@ -159,7 +156,7 @@ public class AddPetActivity extends AppCompatActivity {
     public void onRestoreInstanceState(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
         super.onRestoreInstanceState(savedInstanceState, persistentState);
 
-        if(savedInstanceState != null) {
+        if (savedInstanceState != null) {
             Pet pet = (Pet) savedInstanceState.getSerializable(PET);
             mBinding.setPet(pet);
         }
@@ -214,9 +211,9 @@ public class AddPetActivity extends AppCompatActivity {
                     pet.setWeight(weight);
                     pet.setBirthday(birthday);
                     pet.setBreed(breed);
-                    pet.setId(Base64Custom.encodeString(name));
+                    pet.setId(StringGenerator.getRandomString());
 
-                    firebaseViewModel.storePetImage(AddPetActivity.this, FirebaseHelper.getUserId(), Constants.PET_PIC, pet.getName(), photoList.get(0), pet);
+                    firebaseViewModel.storePetImage(AddPetActivity.this, FirebaseHelper.getUserId(), Constants.PET_PIC, pet.getName(), photoList.get(0), pet, roomViewModel);
                     finish();
                 } else {
                     Toast.makeText(AddPetActivity.this, "Please type the pet name!", Toast.LENGTH_SHORT).show();

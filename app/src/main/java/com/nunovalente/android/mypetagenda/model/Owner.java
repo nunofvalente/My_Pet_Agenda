@@ -34,6 +34,7 @@ public class Owner implements Serializable {
     private String email;
 
     @ColumnInfo(name = "password")
+    @Ignore
     private String password;
 
     @ColumnInfo(name = "imagePath")
@@ -90,10 +91,12 @@ public class Owner implements Serializable {
     }
 
     @Exclude
+    @Ignore
     public String getPassword() {
         return password;
     }
 
+    @Ignore
     public void setPassword(String password) {
         this.password = password;
     }

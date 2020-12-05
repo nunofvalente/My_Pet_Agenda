@@ -8,6 +8,7 @@ import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.room.Room;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -43,8 +44,8 @@ public class FirebaseViewModel extends AndroidViewModel {
         repository.storeImage(context, userId, storagePath, fileName, imageData);
     }
 
-    public void storePetImage(Context context, String userId, String storagePath, String fileName, String imageUrl, Pet pet) {
-        repository.storePetImage(context, userId, storagePath, fileName, imageUrl, pet);
+    public void storePetImage(Context context, String userId, String storagePath, String fileName, String imageUrl, Pet pet, RoomViewModel roomViewModel) {
+        repository.storePetImage(context, userId, storagePath, fileName, imageUrl, pet, roomViewModel);
     }
 
     public void updatePetInfo(Context context, String userId, String storagePath, String fileName, String imageUrl, Pet pet) {

@@ -37,21 +37,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
-        checkIfOffline();
-
         configureToolbar();
         setBottomNavigationBar();
 
-        checkIfOffline();
 
-    }
-
-    private void checkIfOffline() {
-        if(!NetworkUtils.checkConnectivity(getApplication()) || FirebaseHelper.getCurrentOwner() == null) {
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
-            finish();
-        }
     }
 
     private void configureToolbar() {
@@ -85,11 +74,14 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        if(auth.getCurrentUser() != null) {
+        if(auth.getCurrentUser() != null && NetworkUtils.checkConnectivity(getApplication())) {
             menu.setGroupVisible(R.id.group_loggedIn, true);
+            menu.setGroupVisible(R.id.group_loggedOut, false);
         } else {
-            supportInvalidateOptionsMenu();
+            menu.setGroupVisible(R.id.group_loggedIn, false);
+            menu.setGroupVisible(R.id.group_loggedOut, true);
         }
+        invalidateOptionsMenu();
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -98,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
         if(item.getItemId() == R.id.main_signOut) {
             FirebaseAuth auth = FirebaseAuth.getInstance();
             auth.signOut();
+        } else if(item.getItemId() == R.id.main_login) {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
             finish();
@@ -108,6 +101,5 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        checkIfOffline();
     }
 }

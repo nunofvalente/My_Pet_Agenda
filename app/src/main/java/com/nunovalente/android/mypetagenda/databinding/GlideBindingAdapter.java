@@ -15,14 +15,14 @@ public class GlideBindingAdapter {
     public static void setImageResource(ImageView view, String imageUrl) {
         Context context = view.getContext();
 
-        RequestOptions options = new RequestOptions()
+   /*    RequestOptions options = new RequestOptions()
                 .dontAnimate()
                 .placeholder(R.drawable.default_account)
-                .error(R.drawable.default_account);
+                .error(R.drawable.default_account);*/
 
-        Glide.with(context)
-                .setDefaultRequestOptions(options)
+        GlideApp.with(context)
                 .load(imageUrl)
+                .placeholder(R.drawable.default_account)
                 .into(view);
     }
 
@@ -30,14 +30,14 @@ public class GlideBindingAdapter {
     public static void setImageResourcePet(ImageView view, String imageUrl) {
         Context context = view.getContext();
 
-        RequestOptions options = new RequestOptions()
+      /*  RequestOptions options = new RequestOptions()
                 .dontAnimate()
                 .placeholder(R.drawable.default_image)
-                .error(R.drawable.default_image);
+                .error(R.drawable.default_image);*/
 
-        Glide.with(context)
-                .setDefaultRequestOptions(options)
+        GlideApp.with(context)
                 .load(imageUrl)
+                .placeholder(R.drawable.default_image)
                 .into(view);
     }
 }

@@ -15,11 +15,11 @@ public interface OwnerDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertOwner(Owner owner);
 
-    @Update
-    void updateOwner(Owner owner);
-
     @Delete
     void deleteOwner(Owner owner);
+
+    @Query("UPDATE owner_database SET name=:nameOwner WHERE id = :id")
+    void updateOwner(String nameOwner, String id);
 
     @Query("SELECT * FROM owner_database WHERE id = :id")
     Owner getOwner(String id);

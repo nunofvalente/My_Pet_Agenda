@@ -1,5 +1,7 @@
 package com.nunovalente.android.mypetagenda.fragments;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -32,6 +34,7 @@ import com.nunovalente.android.mypetagenda.model.Reminder;
 import com.nunovalente.android.mypetagenda.util.Constants;
 import com.nunovalente.android.mypetagenda.viewmodel.FirebaseViewModel;
 import com.nunovalente.android.mypetagenda.viewmodel.FragmentShareViewModel;
+import com.nunovalente.android.mypetagenda.viewmodel.RoomViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,12 +42,11 @@ import java.util.List;
 public class PetRemindersFragment extends Fragment {
 
     private FragmentPetRemindersBinding mBinding;
-
-    private FirebaseViewModel firebaseViewModel;
-    private DatabaseReference databaseReference;
     private ValueEventListener valueEventListener;
 
-    private final List<Reminder> mReminderList = new ArrayList<>();
+    private RoomViewModel roomViewModel;
+
+    private List<Reminder> mReminderList = new ArrayList<>();
 
     public PetRemindersFragment() {
         // Required empty public constructor
@@ -62,53 +64,18 @@ public class PetRemindersFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_pet_reminders, container, false);
+        roomViewModel = new ViewModelProvider(this).get(RoomViewModel.class);
 
-        firebaseViewModel = new ViewModelProvider(getActivity()).get(FirebaseViewModel.class);
-        databaseReference = firebaseViewModel.getDatabase();
 
         return mBinding.getRoot();
     }
 
     private void retrieveReminders(Pet pet) {
-        mBinding.progressReminders.setVisibility(View.VISIBLE);
-        DatabaseReference databaseReference = firebaseViewModel.getDatabase();
-        valueEventListener = databaseReference.child(Constants.USERS).child(FirebaseHelper.getUserId()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                mBinding.progressReminders.setVisibility(View.VISIBLE);
-                Owner owner = snapshot.getValue(Owner.class);
-                loadRecyclerView(owner.getAccountId(), pet);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                error.getMessage();
-            }
-        });
-        mBinding.progressReminders.setVisibility(View.INVISIBLE);
-    }
-
-    private void loadRecyclerView(String accountId, Pet pet) {
-        databaseReference.child(Constants.REMINDERS).child(accountId).child(pet.getId()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                mReminderList.clear();
-
-                for(DataSnapshot data: snapshot.getChildren()) {
-                    Reminder reminder = data.getValue(Reminder.class);
-
-                    mReminderList.add(reminder);
-                }
-
-                setRecyclerView(mReminderList);
-                mBinding.progressReminders.setVisibility(View.INVISIBLE);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                error.getMessage();
-                mBinding.progressReminders.setVisibility(View.INVISIBLE);
-            }
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
+        String accountId = sharedPreferences.getString(getString(R.string.pref_account_id), "");
+        roomViewModel.getAllReminders(accountId).observe(this, reminders -> {
+            mReminderList = reminders;
+            setRecyclerView(mReminderList);
         });
     }
 
@@ -118,11 +85,5 @@ public class PetRemindersFragment extends Fragment {
         mBinding.recyclerReminders.setHasFixedSize(true);
         RecyclerAddReminderAdapter adapter = new RecyclerAddReminderAdapter(reminderList);
         mBinding.recyclerReminders.setAdapter(adapter);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        databaseReference.removeEventListener(valueEventListener);
     }
 }

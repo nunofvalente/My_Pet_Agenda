@@ -1,5 +1,7 @@
 package com.nunovalente.android.mypetagenda.fragments;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -27,8 +29,10 @@ import com.nunovalente.android.mypetagenda.model.Note;
 import com.nunovalente.android.mypetagenda.model.Owner;
 import com.nunovalente.android.mypetagenda.model.Pet;
 import com.nunovalente.android.mypetagenda.util.Constants;
+import com.nunovalente.android.mypetagenda.util.NetworkUtils;
 import com.nunovalente.android.mypetagenda.viewmodel.FirebaseViewModel;
 import com.nunovalente.android.mypetagenda.viewmodel.FragmentShareViewModel;
+import com.nunovalente.android.mypetagenda.viewmodel.RoomViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +42,8 @@ public class PetNotesFragment extends Fragment {
     private DatabaseReference databaseReference;
     private ValueEventListener valueEventListener;
     private FragmentPetNotesBinding mBinding;
+
+    private RoomViewModel roomViewModel;
 
     private final List<Note> mNoteList = new ArrayList<>();
 
@@ -59,16 +65,38 @@ public class PetNotesFragment extends Fragment {
         FirebaseViewModel firebaseViewModel = new ViewModelProvider(getActivity()).get(FirebaseViewModel.class);
         databaseReference = firebaseViewModel.getDatabase();
 
+        roomViewModel = new ViewModelProvider(requireActivity()).get(RoomViewModel.class);
+
 
         return mBinding.getRoot();
     }
 
     private void getNotes(Pet pet) {
+        if (NetworkUtils.checkConnectivity(getActivity().getApplication()) && FirebaseHelper.getCurrentOwner() != null) {
+            loadOnlineNotes(pet);
+        } else {
+            loadOfflineNotes(pet);
+        }
+    }
+
+    private void loadOfflineNotes(Pet pet) {
+        mBinding.progressNotes.setVisibility(View.VISIBLE);
+        roomViewModel.getAllNotes(pet.getId()).observe(getViewLifecycleOwner(), notes -> {
+            if(notes != null) {
+                setRecyclerView(notes);
+            } else {
+                mBinding.progressNotes.setVisibility(View.INVISIBLE);
+                mBinding.tvNoNotes.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+    private void loadOnlineNotes(Pet pet) {
         mBinding.progressNotes.setVisibility(View.VISIBLE);
         valueEventListener = databaseReference.child(Constants.USERS).child(FirebaseHelper.getUserId()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Owner owner= snapshot.getValue(Owner.class);
+                Owner owner = snapshot.getValue(Owner.class);
                 retrieveNotes(owner.getAccountId(), pet);
             }
 
@@ -80,31 +108,31 @@ public class PetNotesFragment extends Fragment {
     }
 
     private void retrieveNotes(String accountId, Pet pet) {
-       databaseReference.child(Constants.NOTES).child(accountId).child(pet.getId()).addValueEventListener(new ValueEventListener() {
-           @Override
-           public void onDataChange(@NonNull DataSnapshot snapshot) {
-               mNoteList.clear();
+        databaseReference.child(Constants.NOTES).child(accountId).child(pet.getId()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                mNoteList.clear();
 
-               for(DataSnapshot data: snapshot.getChildren()) {
-                   Note note = data.getValue(Note.class);
+                for (DataSnapshot data : snapshot.getChildren()) {
+                    Note note = data.getValue(Note.class);
 
-                   mNoteList.add(note);
-               }
+                    mNoteList.add(note);
+                }
 
-               if(mNoteList.isEmpty()) {
-                   mBinding.tvNoNotes.setVisibility(View.VISIBLE);
-               } else {
-                   setRecyclerView(mNoteList);
-                   mBinding.tvNoNotes.setVisibility(View.INVISIBLE);
-               }
-               mBinding.progressNotes.setVisibility(View.INVISIBLE);
-           }
+                if (mNoteList.isEmpty()) {
+                    mBinding.tvNoNotes.setVisibility(View.VISIBLE);
+                } else {
+                    setRecyclerView(mNoteList);
+                    mBinding.tvNoNotes.setVisibility(View.INVISIBLE);
+                }
+                mBinding.progressNotes.setVisibility(View.INVISIBLE);
+            }
 
-           @Override
-           public void onCancelled(@NonNull DatabaseError error) {
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
                 error.getMessage();
-           }
-       });
+            }
+        });
     }
 
     private void setRecyclerView(List<Note> mNoteList) {
@@ -113,12 +141,14 @@ public class PetNotesFragment extends Fragment {
         mBinding.recyclerNotes.setLayoutManager(linearLayoutManager);
         mBinding.recyclerNotes.setAdapter(adapter);
         mBinding.recyclerNotes.setHasFixedSize(true);
-
+        mBinding.progressNotes.setVisibility(View.INVISIBLE);
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        databaseReference.removeEventListener(valueEventListener);
+        if (valueEventListener != null) {
+            databaseReference.removeEventListener(valueEventListener);
+        }
     }
 }

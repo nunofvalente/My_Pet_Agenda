@@ -55,6 +55,9 @@
 
     <string name="pref_previously_started">Has previously started</string>
     <string name="pref_account_id">accountID</string>
+    <string name="pref_user_id">userId</string>
+    <string name="pref_pet">prefPet</string>
+
     <string name="change_photo">Change Photo</string>
     <string name="save_changes">Save Changes</string>
     <string name="upload_picture">Upload Picture</string>
@@ -78,7 +81,6 @@
     <string name="selected_pet_id">petId</string>
     <string name="accountId">accountId</string>
     <string name="please_add_a_note">Please add a note!</string>
-    <string name="pref_pet">prefPet</string>
     <string name="no_notes_to_display">No notes to display!</string>
     <string name="no_reminders_to_display">No reminders to display!</string>
 
@@ -101,5 +103,9 @@
     <string name="no_network_connection">No network connection</string>
     <string name="user_image">User Image</string>
     <string name="copy_text">Copy Text</string>
+    <string name="internet_connection_required_to_make_changes">Internet connection required to make changes!</string>
+    <string name="plrease_sign_in_to_make_changes">Please sign in to make changes.</string>
+    <string name="please_sign_in_to_add_note">Please sign in to add new notes.</string>
+    <string name="please_sign_in_to_edit_profile">Please sign in to edit pet profile.</string>
 
 </resources>

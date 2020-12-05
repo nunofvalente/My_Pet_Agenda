@@ -17,4 +17,13 @@
         android:icon="@drawable/ic_settings"
         app:showAsAction="never"/>
     </group>
+
+    <group android:id="@+id/group_loggedOut" android:visible="false">
+        <item
+            android:id="@+id/main_login"
+            android:title="@string/sign_in"
+            android:orderInCategory="100"
+            android:icon="@drawable/ic_settings"
+            app:showAsAction="never"/>
+    </group>
 </menu>

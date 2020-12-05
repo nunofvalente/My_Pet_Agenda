@@ -5,6 +5,8 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -16,6 +18,7 @@ import com.nunovalente.android.mypetagenda.fragments.PetProfileFragment;
 import com.nunovalente.android.mypetagenda.model.Pet;
 import com.nunovalente.android.mypetagenda.model.Reminder;
 import com.nunovalente.android.mypetagenda.viewmodel.FirebaseViewModel;
+import com.nunovalente.android.mypetagenda.viewmodel.RoomViewModel;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -27,11 +30,12 @@ import java.util.Locale;
 public class AddReminderActivity extends AppCompatActivity {
 
     private ActivityAddReminderBinding mBinding;
-    private FirebaseViewModel firebaseViewModel;
 
     private final Calendar mCalendar = Calendar.getInstance();
     private final Reminder reminder = new Reminder();
     private final List<String> mDaysList = new ArrayList<>();
+
+    private RoomViewModel roomViewModel;
 
     private Pet pet;
 
@@ -40,7 +44,8 @@ public class AddReminderActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_add_reminder);
 
-        firebaseViewModel = new ViewModelProvider(this).get(FirebaseViewModel.class);
+        roomViewModel = new ViewModelProvider(this).get(RoomViewModel.class);
+
         AddReminderClickHandler mHandler = new AddReminderClickHandler();
         mBinding.setClickHandler(mHandler);
 
@@ -58,6 +63,22 @@ public class AddReminderActivity extends AppCompatActivity {
     public class AddReminderClickHandler {
 
         public AddReminderClickHandler() {
+        }
+
+        public void saveReminder(View view) {
+            validateCheckboxes();
+            validateTime();
+
+            SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
+            String accountId = sharedPreferences.getString(getString(R.string.pref_account_id), "");
+
+            reminder.setPetId(pet.getId());
+            reminder.setAccountId(accountId);
+            reminder.setTitle(mBinding.editReminderTitle.getText().toString());
+            reminder.setIsActive("false");
+
+            roomViewModel.insertReminder(reminder);
+            finish();
         }
 
         public void chooseReminderDate(View view) {
@@ -119,6 +140,12 @@ public class AddReminderActivity extends AppCompatActivity {
             if (sundayCheckBox.isChecked()) {
                 mDaysList.add(sundayCheckBox.getText().toString());
             }
+
+            StringBuilder days = new StringBuilder();
+            for(String day: mDaysList) {
+                days.append(day).append(" ");
+            }
+            reminder.setDays(days.toString());
         }
 
         private void validateTime() {
@@ -131,8 +158,8 @@ public class AddReminderActivity extends AppCompatActivity {
                 minute = mBinding.reminderTimePicker.getCurrentMinute();
             }
 
-            reminder.setHour(String.valueOf(hour));
-            reminder.setMinutes(String.valueOf(minute));
+            reminder.setHour(hour);
+            reminder.setMinutes(minute);
         }
     }
 

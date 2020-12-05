@@ -2,6 +2,8 @@ package com.nunovalente.android.mypetagenda.activities.dialog;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +24,10 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.transition.MaterialFadeThrough;
 import com.nunovalente.android.mypetagenda.R;
 import com.nunovalente.android.mypetagenda.model.Owner;
+import com.nunovalente.android.mypetagenda.util.Base64Custom;
+import com.nunovalente.android.mypetagenda.util.StringGenerator;
 import com.nunovalente.android.mypetagenda.viewmodel.FirebaseViewModel;
+import com.nunovalente.android.mypetagenda.viewmodel.RoomViewModel;
 
 import static com.nunovalente.android.mypetagenda.R.id.button_register;
 import static com.nunovalente.android.mypetagenda.R.id.tv_cancel_register;
@@ -37,6 +42,7 @@ public class DialogRegister extends AppCompatDialogFragment implements View.OnCl
     private CheckBox mCheckBox;
 
     private FirebaseViewModel firebaseViewModel;
+    private RoomViewModel roomViewModel;
 
     @NonNull
     @Override
@@ -51,6 +57,7 @@ public class DialogRegister extends AppCompatDialogFragment implements View.OnCl
 
 
         firebaseViewModel = new ViewModelProvider(this).get(FirebaseViewModel.class);
+        roomViewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(this.getActivity().getApplication())).get(RoomViewModel.class);
 
 
         mName = view.findViewById(R.id.owner_name);
@@ -89,7 +96,17 @@ public class DialogRegister extends AppCompatDialogFragment implements View.OnCl
                             if(mCheckBox.isChecked()) {
 
                                 Owner owner = new Owner("",name, email, password, "", "");
+                                String accountId = StringGenerator.getRandomString();
+                                owner.setAccountId(accountId);
+                                owner.setId(Base64Custom.encodeString(email));
                                 firebaseViewModel.registerOwner(owner, getActivity(), mProgressBar);
+                                roomViewModel.insertOwner(owner);
+
+                                SharedPreferences sharedpreferences = getActivity().getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedpreferences.edit();
+                                editor.putString(getString(R.string.pref_account_id), owner.getAccountId());
+                                editor.putString(getString(R.string.pref_user_id), owner.getId());
+                                editor.apply();
 
                             } else {
                                 Toast.makeText(getActivity().getApplicationContext(), "Please confirm Terms and Conditions", Toast.LENGTH_SHORT).show();

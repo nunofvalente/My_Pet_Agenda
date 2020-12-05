@@ -27,10 +27,10 @@ public class Reminder implements Serializable {
     private String title;
 
     @ColumnInfo(name = "hour")
-    private String hour;
+    private int hour;
 
     @ColumnInfo(name = "minutes")
-    private String minutes;
+    private int minutes;
 
     @ColumnInfo(name = "date")
     private String date;
@@ -45,7 +45,7 @@ public class Reminder implements Serializable {
     public Reminder() {
     }
 
-    public Reminder(int id, String title, String hour, String minutes, String date, String days, String isActive) {
+    public Reminder(int id, String title, int hour, int minutes, String date, String days, String isActive) {
         this.id = id;
         this.title = title;
         this.hour = hour;
@@ -63,19 +63,19 @@ public class Reminder implements Serializable {
         this.title = title;
     }
 
-    public String getHour() {
+    public int getHour() {
         return hour;
     }
 
-    public void setHour(String hour) {
+    public void setHour(int hour) {
         this.hour = hour;
     }
 
-    public String getMinutes() {
+    public int getMinutes() {
         return minutes;
     }
 
-    public void setMinutes(String minutes) {
+    public void setMinutes(int minutes) {
         this.minutes = minutes;
     }
 

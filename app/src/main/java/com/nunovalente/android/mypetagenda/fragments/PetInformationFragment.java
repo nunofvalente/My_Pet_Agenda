@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -23,7 +24,10 @@ import com.nunovalente.android.mypetagenda.databinding.FragmentPetInformationBin
 import com.nunovalente.android.mypetagenda.model.Owner;
 import com.nunovalente.android.mypetagenda.model.Pet;
 import com.nunovalente.android.mypetagenda.util.Constants;
+import com.nunovalente.android.mypetagenda.util.NetworkUtils;
 import com.nunovalente.android.mypetagenda.viewmodel.FirebaseViewModel;
+import com.nunovalente.android.mypetagenda.viewmodel.FragmentShareViewModel;
+import com.nunovalente.android.mypetagenda.viewmodel.RoomViewModel;
 
 import java.util.Calendar;
 
@@ -31,6 +35,7 @@ public class PetInformationFragment extends Fragment {
 
     private FragmentPetInformationBinding mBinding;
 
+    private RoomViewModel roomViewModel;
     private DatabaseReference databaseReference;
     private ValueEventListener valueEventListener;
 
@@ -38,6 +43,16 @@ public class PetInformationFragment extends Fragment {
 
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        FragmentShareViewModel fragmentShareViewModel = new ViewModelProvider(requireActivity()).get(FragmentShareViewModel.class);
+        fragmentShareViewModel.getSelectedPet().observe(getViewLifecycleOwner(), pet -> {
+            mBinding.setPet(pet);
+            int age = getAge(pet.getBirthday());
+            mBinding.tvPetAge.setText(String.valueOf(age));
+        });
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -48,48 +63,10 @@ public class PetInformationFragment extends Fragment {
 
         FirebaseViewModel firebaseViewModel = new ViewModelProvider(getActivity()).get(FirebaseViewModel.class);
         databaseReference = firebaseViewModel.getDatabase();
+        roomViewModel = new ViewModelProvider(this).get(RoomViewModel.class);
 
-        retrievePetInformation();
 
         return root;
-    }
-
-    private void retrievePetInformation() {
-        valueEventListener = databaseReference.child(Constants.USERS).child(FirebaseHelper.getUserId()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                mBinding.progressPetInformation.setVisibility(View.VISIBLE);
-                Owner owner = snapshot.getValue(Owner.class);
-                getPet(owner.getAccountId());
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                error.getMessage();
-                mBinding.progressPetInformation.setVisibility(View.INVISIBLE);
-            }
-        });
-    }
-
-    private void getPet(String accountId) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String petId = prefs.getString(getString(R.string.selected_pet_id), "");
-        databaseReference.child(Constants.PETS).child(accountId).child(petId).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Pet pet = snapshot.getValue(Pet.class);
-                mBinding.setPet(pet);
-                mBinding.progressPetInformation.setVisibility(View.INVISIBLE);
-                int age = getAge(pet.getBirthday());
-                mBinding.tvPetAge.setText(String.valueOf(age));
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                error.getMessage();
-                mBinding.progressPetInformation.setVisibility(View.INVISIBLE);
-            }
-        });
     }
 
     private int getAge(String birthday) {
@@ -103,6 +80,8 @@ public class PetInformationFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        databaseReference.removeEventListener(valueEventListener);
+        if(valueEventListener != null) {
+            databaseReference.removeEventListener(valueEventListener);
+        }
     }
 }

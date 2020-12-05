@@ -18,16 +18,6 @@
         android:layout_marginBottom="?actionBarSize"
         android:layout_marginTop="?actionBarSize">
 
-        <TextView
-            android:id="@+id/text_no_network_my_pets"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_16"
-            android:text="@string/no_network_connection"
-            android:layout_gravity="center"
-            android:visibility="invisible"
-            android:textSize="20sp"/>
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_myPets"
             android:layout_width="match_parent"

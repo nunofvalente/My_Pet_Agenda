@@ -11,12 +11,15 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.ImageDecoder;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -34,8 +37,10 @@ import com.nunovalente.android.mypetagenda.data.repository.FirebaseHelper;
 import com.nunovalente.android.mypetagenda.databinding.ActivityProfileBinding;
 import com.nunovalente.android.mypetagenda.model.Owner;
 import com.nunovalente.android.mypetagenda.util.Constants;
+import com.nunovalente.android.mypetagenda.util.NetworkUtils;
 import com.nunovalente.android.mypetagenda.util.Permission;
 import com.nunovalente.android.mypetagenda.viewmodel.FirebaseViewModel;
+import com.nunovalente.android.mypetagenda.viewmodel.RoomViewModel;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -46,6 +51,9 @@ public class ProfileActivity extends AppCompatActivity {
 
     private ActivityProfileBinding mBinding;
     private FirebaseViewModel firebaseViewModel;
+    private RoomViewModel roomViewModel;
+
+    private String userId;
 
     private final String[] permissions = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -57,18 +65,45 @@ public class ProfileActivity extends AppCompatActivity {
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_profile);
         configureToolbar();
 
-        Permission.validatePermissions(new ArrayList<>(Arrays.asList(permissions)), this, 1);
-
         firebaseViewModel = new ViewModelProvider(this).get(FirebaseViewModel.class);
+        roomViewModel = new ViewModelProvider(this).get(RoomViewModel.class);
+
+        Permission.validatePermissions(new ArrayList<>(Arrays.asList(permissions)), this, 1);
 
         ProfileActivityClickHandler mHandler = new ProfileActivityClickHandler();
         mBinding.setClickHandler(mHandler);
 
-        loadUserData();
+        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
+        userId = sharedPreferences.getString(getString(R.string.pref_user_id), "");
+
+        if(NetworkUtils.checkConnectivity(getApplication()) && FirebaseHelper.getCurrentOwner() != null) {
+            loadUserData();
+        } else {
+            loadOfflineUserData();
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setEnterTransition(new MaterialSharedAxis(MaterialSharedAxis.X, true));
         }
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private void loadOfflineUserData() {
+        AsyncTask<String , Void, Owner> task = new AsyncTask<String, Void, Owner>() {
+            @Override
+            protected Owner doInBackground(String... strings) {
+                return roomViewModel.getOwner(strings[0]);
+            }
+
+            @Override
+            protected void onPostExecute(Owner owner) {
+                super.onPostExecute(owner);
+                mBinding.setOwner(owner);
+                mBinding.editProfileName.setFocusable(false);
+            }
+        };
+
+        task.execute(userId);
     }
 
     private void loadUserData() {
@@ -165,23 +200,39 @@ public class ProfileActivity extends AppCompatActivity {
 
         @SuppressLint("QueryPermissionsNeeded")
         public void openGallery(View view) {
-            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            if (intent.resolveActivity(getPackageManager()) != null) {
-                startActivityForResult(intent, Constants.REQUEST_CODE_GALLERY);
+            if(NetworkUtils.checkConnectivity(getApplication()) && FirebaseHelper.getCurrentOwner() != null) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                if (intent.resolveActivity(getPackageManager()) != null) {
+                    startActivityForResult(intent, Constants.REQUEST_CODE_GALLERY);
+                }
+            } else {
+                mBinding.tvNetworkErrorAccount.setVisibility(View.VISIBLE);
             }
         }
 
         public void updateProfile(View view) {
-            String name = mBinding.editProfileName.getText().toString();
-            boolean displayName = FirebaseHelper.updateOwnerName(name);
+            if(NetworkUtils.checkConnectivity(getApplication()) && FirebaseHelper.getCurrentOwner() != null) {
+                String name = mBinding.editProfileName.getText().toString();
+                boolean displayName = FirebaseHelper.updateOwnerName(name);
 
-            if (displayName) {
-                Owner owner = FirebaseHelper.getLoggedUserData();
-                owner.setName(name);
-                owner.updateUser();
-                mBinding.notifyChange();
+                if (displayName) {
+                    Owner owner = FirebaseHelper.getLoggedUserData();
+                    owner.setName(name);
+                    owner.updateUser();
+                    mBinding.notifyChange();
+
+                    //SQL
+                    roomViewModel.updateOwner(name, userId);
+                }
+                finish();
+            } else {
+                if(!NetworkUtils.checkConnectivity(getApplication())) {
+                    mBinding.tvNetworkErrorAccount.setVisibility(View.VISIBLE);
+                } else {
+                    mBinding.tvNetworkErrorAccount.setVisibility(View.VISIBLE);
+                    mBinding.tvNetworkErrorAccount.setText(R.string.plrease_sign_in_to_make_changes);
+                }
             }
-            finish();
         }
     }
 }
