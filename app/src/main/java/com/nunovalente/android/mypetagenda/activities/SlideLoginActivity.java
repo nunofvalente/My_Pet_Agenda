@@ -12,7 +12,6 @@ import com.nunovalente.android.mypetagenda.R;
 import com.nunovalente.android.mypetagenda.activities.dialog.DialogResetPassword;
 import com.nunovalente.android.mypetagenda.databinding.ActivityLoginBinding;
 import com.nunovalente.android.mypetagenda.viewmodel.FirebaseViewModel;
-import com.nunovalente.android.mypetagenda.viewmodel.RoomViewModel;
 
 public class SlideLoginActivity extends AppCompatActivity implements View.OnClickListener{
 

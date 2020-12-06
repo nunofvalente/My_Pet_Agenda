@@ -41,9 +41,9 @@ public class DialogNote extends AppCompatDialogFragment implements View.OnClickL
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
 
-        LayoutInflater inflater = getActivity().getLayoutInflater();
+        LayoutInflater inflater = requireActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_notes, null);
 
         builder.setView(view)
@@ -58,7 +58,7 @@ public class DialogNote extends AppCompatDialogFragment implements View.OnClickL
         mNote = view.findViewById(R.id.edit_dialog_note);
         mError = view.findViewById(R.id.tv_note_error);
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(requireActivity());
         petId = preferences.getString(getString(R.string.selected_pet_id), "");
 
 
@@ -77,10 +77,14 @@ public class DialogNote extends AppCompatDialogFragment implements View.OnClickL
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.tv_note_cancel) {
-            getDialog().dismiss();
+            if (getDialog() != null) {
+                getDialog().dismiss();
+            }
         } else if (view.getId() == R.id.tv_add_note) {
             addNote();
-            getDialog().dismiss();
+            if (getDialog() != null) {
+                getDialog().dismiss();
+            }
         }
     }
 
@@ -89,6 +93,7 @@ public class DialogNote extends AppCompatDialogFragment implements View.OnClickL
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Owner owner = snapshot.getValue(Owner.class);
+                assert owner != null;
                 validateNote(owner.getAccountId());
             }
 
@@ -108,6 +113,7 @@ public class DialogNote extends AppCompatDialogFragment implements View.OnClickL
             note.setId(key);
             path.setValue(note);
 
+            assert key != null;
             Note roomNote = new Note(key, accountId, petId, noteText);
             roomViewModel.insertNote(roomNote);
         } else {
@@ -115,4 +121,11 @@ public class DialogNote extends AppCompatDialogFragment implements View.OnClickL
         }
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        if(valueEventListener != null) {
+            databaseReference.removeEventListener(valueEventListener);
+        }
+    }
 }

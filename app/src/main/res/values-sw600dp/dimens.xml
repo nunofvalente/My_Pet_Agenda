@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="activity_horizontal_margin">24dp</dimen>
-    <dimen name="activity_vertical_margin">24dp</dimen>
     <dimen name="toolbar_elevation">4dp</dimen>
-    <dimen name="button_round_edges">10dp</dimen>
 
     <dimen name="margin_8">16dp</dimen>
     <dimen name="margin_16">24dp</dimen>
     <dimen name="margin_32">40dp</dimen>
-    <dimen name="margin_80">88dp</dimen>
 
     <dimen name="padding_10dp">20dp</dimen>
 

@@ -8,33 +8,23 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import android.renderscript.Sampler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.nunovalente.android.mypetagenda.R;
 import com.nunovalente.android.mypetagenda.adapters.RecyclerAddReminderAdapter;
-import com.nunovalente.android.mypetagenda.adapters.RecyclerPetAdapter;
-import com.nunovalente.android.mypetagenda.data.repository.FirebaseHelper;
 import com.nunovalente.android.mypetagenda.databinding.FragmentPetRemindersBinding;
-import com.nunovalente.android.mypetagenda.model.Owner;
 import com.nunovalente.android.mypetagenda.model.Pet;
 import com.nunovalente.android.mypetagenda.model.Reminder;
-import com.nunovalente.android.mypetagenda.util.Constants;
-import com.nunovalente.android.mypetagenda.viewmodel.FirebaseViewModel;
 import com.nunovalente.android.mypetagenda.viewmodel.FragmentShareViewModel;
 import com.nunovalente.android.mypetagenda.viewmodel.RoomViewModel;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,8 +32,6 @@ import java.util.List;
 public class PetRemindersFragment extends Fragment {
 
     private FragmentPetRemindersBinding mBinding;
-    private ValueEventListener valueEventListener;
-
     private RoomViewModel roomViewModel;
 
     private List<Reminder> mReminderList = new ArrayList<>();
@@ -60,7 +48,7 @@ public class PetRemindersFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_pet_reminders, container, false);
@@ -71,7 +59,7 @@ public class PetRemindersFragment extends Fragment {
     }
 
     private void retrieveReminders(Pet pet) {
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         String accountId = sharedPreferences.getString(getString(R.string.pref_account_id), "");
         roomViewModel.getAllReminders(accountId).observe(this, reminders -> {
             mReminderList = reminders;

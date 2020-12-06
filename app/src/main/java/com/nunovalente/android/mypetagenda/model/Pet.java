@@ -49,11 +49,11 @@ public class Pet implements Serializable {
 
     @Ignore
     public Pet() {
-        id = null;
+        id = "";
     }
 
     @Ignore
-    public Pet(String id, String name, String birthday, String type, String breed, String weight, String imagePath) {
+    public Pet(@NotNull String id, String name, String birthday, String type, String breed, String weight, String imagePath) {
         this.id = id;
         this.name = name;
         this.birthday = birthday;
@@ -79,7 +79,7 @@ public class Pet implements Serializable {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(@NotNull String id) {
         this.id = id;
     }
 

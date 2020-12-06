@@ -16,7 +16,7 @@ public class Note {
     @NonNull
     @PrimaryKey
     @ColumnInfo(name = "id")
-    private String id;
+    private final String id;
 
     @ColumnInfo(name = "accountId")
     private String accountId;
@@ -29,6 +29,7 @@ public class Note {
 
     @Ignore
     public Note() {
+        id = "";
     }
 
     @Ignore

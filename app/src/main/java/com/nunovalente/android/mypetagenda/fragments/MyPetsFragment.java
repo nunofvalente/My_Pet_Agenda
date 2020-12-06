@@ -48,7 +48,6 @@ public class MyPetsFragment extends Fragment {
 
     private RoomViewModel roomViewModel;
 
-    private FirebaseViewModel firebaseViewModel;
     private FirebaseAuth auth;
 
     private DatabaseReference databaseReference;
@@ -61,11 +60,11 @@ public class MyPetsFragment extends Fragment {
 
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_my_pets, container, false);
         roomViewModel = new ViewModelProvider(this).get(RoomViewModel.class);
-        firebaseViewModel = new ViewModelProvider(this).get(FirebaseViewModel.class);
-        auth = firebaseViewModel.getAuth();
+        FirebaseViewModel firebaseViewModel1 = new ViewModelProvider(this).get(FirebaseViewModel.class);
+        auth = firebaseViewModel1.getAuth();
 
         if (!NetworkUtils.checkConnectivity(requireActivity().getApplication()) || auth.getCurrentUser() == null) {
-            SharedPreferences sharedPreferences = getContext().getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
+            SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
             String accountId = sharedPreferences.getString(getString(R.string.pref_account_id), "");
             loadRecyclerView(accountId);
         } else {
@@ -170,7 +169,7 @@ public class MyPetsFragment extends Fragment {
 
     public class MyPetFragmentClickHandler {
 
-        Context context;
+        final Context context;
 
         public MyPetFragmentClickHandler(Context context) {
             this.context = context;

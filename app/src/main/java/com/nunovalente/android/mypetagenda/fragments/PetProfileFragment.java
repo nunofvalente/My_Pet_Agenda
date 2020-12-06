@@ -12,7 +12,7 @@ import androidx.lifecycle.ViewModelProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;;
+import android.widget.Toast;
 
 import com.nunovalente.android.mypetagenda.R;
 import com.nunovalente.android.mypetagenda.activities.AddReminderActivity;
@@ -25,6 +25,8 @@ import com.nunovalente.android.mypetagenda.util.NetworkUtils;
 import com.nunovalente.android.mypetagenda.viewmodel.FragmentShareViewModel;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
+
+import org.jetbrains.annotations.NotNull;
 
 public class PetProfileFragment extends Fragment {
 
@@ -49,7 +51,7 @@ public class PetProfileFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_pet_profile, container, false);
@@ -97,6 +99,7 @@ public class PetProfileFragment extends Fragment {
             Intent intent = new Intent(getContext(), EditProfilePetActivity.class);
             intent.putExtra(PET, mPet);
             startActivity(intent);
+            requireActivity().finish();
             } else {
                 Toast.makeText(getContext(), getString(R.string.please_sign_in_to_edit_profile), Toast.LENGTH_SHORT).show();
             }

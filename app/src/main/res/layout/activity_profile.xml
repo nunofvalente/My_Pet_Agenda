@@ -100,14 +100,15 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginRight="16dp"
-                android:drawableLeft="@drawable/ic_account"
+                android:drawableStart="@drawable/ic_account"
                 android:drawablePadding="@dimen/margin_8"
                 android:hint="@string/name"
                 android:inputType="text"
                 android:text="@{owner.name}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textChangeProfilePhoto" />
+                app:layout_constraintTop_toBottomOf="@+id/textChangeProfilePhoto"
+                android:autofillHints="@string/name" />
 
             <EditText
                 android:id="@+id/edit_profile_email"
@@ -127,7 +128,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/edit_profile_name" />
+                app:layout_constraintTop_toBottomOf="@+id/edit_profile_name"
+                android:autofillHints="" />
 
             <Button
                 android:id="@+id/button_save_profile"

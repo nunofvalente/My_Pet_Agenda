@@ -42,7 +42,8 @@
             android:src="@drawable/slide_logo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/appBarLayout2" />
+            app:layout_constraintTop_toBottomOf="@+id/appBarLayout2"
+            android:contentDescription="@string/app_name"/>
 
         <TextView
             android:id="@+id/tv_network_error_main"

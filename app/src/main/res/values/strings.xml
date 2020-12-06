@@ -16,10 +16,7 @@
     <string name="be_mindful_of_their_exercise">Be mindful of their exercise!</string>
     <string name="share_the_love">Share the love!</string>
     <string name="add_people_to_your_account_so_you_can_take_care_of_your_pets_together">Add people to your account so you can take care of your pets together.</string>
-    <string name="join_an_existing_account">Join an Existing Account</string>
     <string name="create_an_account">Create an account</string>
-    <string name="want_to_join_an_account">Want to join an account?</string>
-    <string name="click_here_to_insert_code">Click here to insert code!</string>
     <string name="join_existing_account">Join existing account</string>
     <string name="let_s_take_care_of_our_pets_join_us_and_start_now">Let\'s take care of our pets. Join us and start now!</string>
     <string name="forgot_your_password">Forgot your password? Click here!</string>
@@ -39,24 +36,20 @@
     <string name="please_verify_your_email_address_and_let_s_get_started">Please verify your email address and let\'s get started!</string>
     <string name="sign_in">Sign in</string>
     <string name="happy_cat">Happy Cat</string>
-    <string name="click_here">Click here!</string>
     <string name="reset_password">Reset Password</string>
     <string name="emil_sent">Email Sent!</string>
-    <string name="user_not_found">Email not found! Insert a valid email</string>
-    <string name="open_camera">Open Camera</string>
-    <string name="open_gallery">Open Gallery</string>
     <string name="account_holders">Account Holders</string>
     <string name="edit_profile">Profile</string>
-    <string name="edit_pet_profile">Edit Pet</string>
     <string name="support_service">Support</string>
     <string name="about_us">About Us</string>
     <string name="add_pet">Add Pet</string>
+
+    <string name="PET">pet</string>
 
 
     <string name="pref_previously_started">Has previously started</string>
     <string name="pref_account_id">accountID</string>
     <string name="pref_user_id">userId</string>
-    <string name="pref_pet">prefPet</string>
 
     <string name="change_photo">Change Photo</string>
     <string name="save_changes">Save Changes</string>
@@ -64,7 +57,6 @@
     <string name="pet_image">Pet Image</string>
     <string name="type">Type</string>
     <string name="birthday">Birthday</string>
-    <string name="dd_mm_yyyy">dd/MM/yyyy</string>
     <string name="notes">Notes</string>
     <string name="save">Save</string>
     <string name="weight">Weight</string>
@@ -76,10 +68,8 @@
     <string name="day_s">Day(s)</string>
     <string name="add_reminder">Add reminder</string>
     <string name="add_note">Add Note</string>
-    <string name="note">Note...</string>
     <string name="fab_note">Note</string>
     <string name="selected_pet_id">petId</string>
-    <string name="accountId">accountId</string>
     <string name="please_add_a_note">Please add a note!</string>
     <string name="no_notes_to_display">No notes to display!</string>
     <string name="no_reminders_to_display">No reminders to display!</string>
@@ -101,11 +91,14 @@
     <string name="update">Update</string>
     <string name="sign_out">Sign Out</string>
     <string name="no_network_connection">No network connection</string>
-    <string name="user_image">User Image</string>
     <string name="copy_text">Copy Text</string>
     <string name="internet_connection_required_to_make_changes">Internet connection required to make changes!</string>
     <string name="plrease_sign_in_to_make_changes">Please sign in to make changes.</string>
     <string name="please_sign_in_to_add_note">Please sign in to add new notes.</string>
     <string name="please_sign_in_to_edit_profile">Please sign in to edit pet profile.</string>
+    <string name="please_upload_a_picture">Please upload a picture for your pet!</string>
+    <string name="slide_image">Slide Image</string>
+    <string name="kg">Kg</string>
+    <string name="_22_04_2013">22/04/2013</string>
 
 </resources>

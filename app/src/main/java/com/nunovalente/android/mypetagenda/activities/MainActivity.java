@@ -12,7 +12,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.transition.MaterialFadeThrough;
 import com.google.firebase.auth.FirebaseAuth;
 import com.nunovalente.android.mypetagenda.R;
-import com.nunovalente.android.mypetagenda.data.repository.FirebaseHelper;
 import com.nunovalente.android.mypetagenda.databinding.ActivityMainBinding;
 import com.nunovalente.android.mypetagenda.util.NetworkUtils;
 
@@ -26,7 +25,6 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
-@SuppressWarnings( "deprecation" )
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding mBinding;
@@ -45,7 +43,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void configureToolbar() {
         setSupportActionBar(mBinding.toolbarCustom);
-        getSupportActionBar().setTitle("");
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("");
+        }
         Typeface typeface = ResourcesCompat.getFont(this, R.font.lobster_regular);
         mBinding.toolbarTitle.setTypeface(typeface);
         mBinding.toolbarTitle.setText(R.string.app_name);
@@ -96,10 +96,5 @@ public class MainActivity extends AppCompatActivity {
             finish();
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
     }
 }

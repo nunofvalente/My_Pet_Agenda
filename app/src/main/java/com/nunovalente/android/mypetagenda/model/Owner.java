@@ -15,6 +15,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.nunovalente.android.mypetagenda.data.repository.FirebaseHelper;
 import com.nunovalente.android.mypetagenda.util.Constants;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -45,11 +47,11 @@ public class Owner implements Serializable {
 
     @Ignore
     public Owner() {
-        id = null;
+        id = "";
     }
 
     @Ignore
-    public Owner(String id, String name, String email, String password, String imagePath, String accountId) {
+    public Owner(@NotNull String id, String name, String email, String password, String imagePath, String accountId) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -58,7 +60,7 @@ public class Owner implements Serializable {
         this.accountId = accountId;
     }
 
-    public Owner(String id, String name, String email, String imagePath, String accountId) {
+    public Owner(@NotNull String id, String name, String email, String imagePath, String accountId) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -66,11 +68,12 @@ public class Owner implements Serializable {
         this.accountId = accountId;
     }
 
+    @NotNull
     public String getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(@NotNull String id) {
         this.id = id;
     }
 

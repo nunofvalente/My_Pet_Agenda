@@ -5,10 +5,7 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-import com.google.firebase.database.Exclude;
-
 import java.io.Serializable;
-import java.util.List;
 
 @Entity(tableName = "reminder_database")
 public class Reminder implements Serializable {

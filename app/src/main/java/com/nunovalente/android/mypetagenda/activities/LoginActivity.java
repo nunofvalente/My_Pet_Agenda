@@ -9,7 +9,6 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ProgressBar;
 
 import com.nunovalente.android.mypetagenda.R;
 import com.nunovalente.android.mypetagenda.activities.dialog.DialogResetPassword;
@@ -54,7 +53,9 @@ public class LoginActivity extends AppCompatActivity {
 
     private void setToolbar() {
         setSupportActionBar(mBinding.toolbarLoginMain);
-        getSupportActionBar().setTitle("");
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("");
+        }
         Typeface typeface = ResourcesCompat.getFont(this, R.font.lobster_regular);
         mBinding.toolbarLoginMainTitle.setTypeface(typeface);
         mBinding.toolbarLoginMainTitle.setText(R.string.app_name);

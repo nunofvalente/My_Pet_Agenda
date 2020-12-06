@@ -1,11 +1,14 @@
 package com.nunovalente.android.mypetagenda.fragments;
 
 
+import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
 import android.content.ClipboardManager;
 import android.content.Context;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,7 +21,6 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
-
 import com.google.android.material.transition.MaterialFadeThrough;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -29,46 +31,42 @@ import com.nunovalente.android.mypetagenda.activities.ProfileActivity;
 import com.nunovalente.android.mypetagenda.adapters.RecyclerAccountAdapter;
 import com.nunovalente.android.mypetagenda.data.repository.FirebaseHelper;
 import com.nunovalente.android.mypetagenda.databinding.FragmentAccountBinding;
-import com.nunovalente.android.mypetagenda.databinding.FragmentAccountOfflineBinding;
 import com.nunovalente.android.mypetagenda.model.Owner;
 import com.nunovalente.android.mypetagenda.util.Constants;
 import com.nunovalente.android.mypetagenda.util.NetworkUtils;
-import com.nunovalente.android.mypetagenda.util.Permission;
 import com.nunovalente.android.mypetagenda.viewmodel.FirebaseViewModel;
+import com.nunovalente.android.mypetagenda.viewmodel.RoomViewModel;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class AccountFragment extends Fragment {
 
     private static final String TAG = "account_fragment";
 
     private FragmentAccountBinding mBinding;
-    private FragmentAccountOfflineBinding mBindingOffline;
     private DatabaseReference databaseReference;
     private ValueEventListener valueEventListener;
-    private View root;
+    private RoomViewModel roomViewModel;
 
     private final ArrayList<Owner> mAccountHoldersList = new ArrayList<>();
 
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-       if(NetworkUtils.checkConnectivity(requireActivity().getApplication())) {
-           mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_account, container, false);
-           root = mBinding.getRoot();
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_account, container, false);
+        View root = mBinding.getRoot();
 
-           FirebaseViewModel firebaseViewModel = new ViewModelProvider(this).get(FirebaseViewModel.class);
+        FirebaseViewModel firebaseViewModel = new ViewModelProvider(this).get(FirebaseViewModel.class);
+        roomViewModel = new ViewModelProvider(this).get(RoomViewModel.class);
+
+        AccountFragmentClickHandler mHandlers = new AccountFragmentClickHandler(getContext());
+        mBinding.setClickHandler(mHandlers);
+
+       if(NetworkUtils.checkConnectivity(requireActivity().getApplication()) && FirebaseHelper.getCurrentOwner() != null) {
            databaseReference = firebaseViewModel.getDatabase();
-
-           AccountFragmentClickHandler mHandlers = new AccountFragmentClickHandler(getContext());
-           mBinding.setClickHandler(mHandlers);
-
            getUserInformation();
-       } else {
-           mBindingOffline = DataBindingUtil.inflate(inflater, R.layout.fragment_account_offline, container, false);
-           root = mBindingOffline.getRoot();
-
-           mBindingOffline.textNoNetworkAccount.setVisibility(View.VISIBLE);
+       }
+       else {
+           getOfflineUserInformation();
        }
 
 
@@ -76,8 +74,29 @@ public class AccountFragment extends Fragment {
         return root;
     }
 
+    @SuppressLint("StaticFieldLeak")
+    private void getOfflineUserInformation() {
+        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
+        String userId = sharedPreferences.getString(getString(R.string.pref_user_id), "");
+
+        AsyncTask<String , Void, Owner> task = new AsyncTask<String, Void, Owner>() {
+            @Override
+            protected Owner doInBackground(String... strings) {
+                return roomViewModel.getOwner(strings[0]);
+            }
+
+            @Override
+            protected void onPostExecute(Owner owner) {
+                super.onPostExecute(owner);
+                mBinding.setOwner(owner);
+            }
+        };
+
+        task.execute(userId);
+    }
+
     private void getUserInformation() {
-        databaseReference.child(Constants.USERS).child(FirebaseHelper.getUserId()).addListenerForSingleValueEvent(new ValueEventListener() {
+        valueEventListener = databaseReference.child(Constants.USERS).child(FirebaseHelper.getUserId()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Owner owner = snapshot.getValue(Owner.class);
@@ -102,7 +121,7 @@ public class AccountFragment extends Fragment {
     }
 
     public void showAccountHoldersIfMoreThanOne(String accountId) {
-        valueEventListener = databaseReference.child(Constants.ACCOUNT).child(accountId).addValueEventListener(new ValueEventListener() {
+        databaseReference.child(Constants.ACCOUNT).child(accountId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 mAccountHoldersList.clear();
@@ -138,7 +157,7 @@ public class AccountFragment extends Fragment {
 
     public class AccountFragmentClickHandler {
 
-        Context context;
+        private final Context context;
 
         public AccountFragmentClickHandler(Context context) {
             this.context = context;
@@ -163,7 +182,7 @@ public class AccountFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (NetworkUtils.checkConnectivity(requireActivity().getApplication())) {
+        if (NetworkUtils.checkConnectivity(requireActivity().getApplication()) && FirebaseHelper.getCurrentOwner() != null) {
             configureRecyclerView();
         }
     }
@@ -171,7 +190,7 @@ public class AccountFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        if (NetworkUtils.checkConnectivity(requireActivity().getApplication())) {
+        if (valueEventListener != null) {
             databaseReference.removeEventListener(valueEventListener);
         }
     }

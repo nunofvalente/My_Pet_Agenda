@@ -17,7 +17,7 @@ public class RecyclerAccountAdapter extends RecyclerView.Adapter<RecyclerAccount
 
     private AccountListAdapterBinding mBinding;
 
-    private List<Owner> mOwnerList;
+    private final List<Owner> mOwnerList;
 
     public RecyclerAccountAdapter(List<Owner> mOwnerList) {
         this.mOwnerList = mOwnerList;
@@ -46,11 +46,8 @@ public class RecyclerAccountAdapter extends RecyclerView.Adapter<RecyclerAccount
 
     public static class MyAccountViewHolder extends RecyclerView.ViewHolder {
 
-        private AccountListAdapterBinding mBinding;
-
         public MyAccountViewHolder(@NonNull AccountListAdapterBinding binding) {
             super(binding.getRoot());
-            this.mBinding = binding;
         }
     }
 }

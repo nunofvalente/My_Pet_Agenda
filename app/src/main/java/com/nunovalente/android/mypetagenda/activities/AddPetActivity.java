@@ -14,8 +14,6 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -30,15 +28,12 @@ import com.nunovalente.android.mypetagenda.R;
 import com.nunovalente.android.mypetagenda.data.repository.FirebaseHelper;
 import com.nunovalente.android.mypetagenda.databinding.ActivityAddPetBinding;
 import com.nunovalente.android.mypetagenda.model.Pet;
-import com.nunovalente.android.mypetagenda.util.Base64Custom;
 import com.nunovalente.android.mypetagenda.util.Constants;
 import com.nunovalente.android.mypetagenda.util.Permission;
 import com.nunovalente.android.mypetagenda.util.StringGenerator;
 import com.nunovalente.android.mypetagenda.viewmodel.FirebaseViewModel;
 import com.nunovalente.android.mypetagenda.viewmodel.RoomViewModel;
 
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -126,10 +121,13 @@ public class AddPetActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == Activity.RESULT_OK) {
+            assert data != null;
             Uri imageSelected = data.getData();
             Glide.with(this).load(imageSelected).into(mBinding.imageAddPet);
 
+
             photoList.add(imageSelected.toString());
+
         }
     }
 
@@ -206,15 +204,19 @@ public class AddPetActivity extends AppCompatActivity {
 
             if (!birthday.isEmpty()) {
                 if (!name.isEmpty()) {
-                    pet.setType(type);
-                    pet.setName(name);
-                    pet.setWeight(weight);
-                    pet.setBirthday(birthday);
-                    pet.setBreed(breed);
-                    pet.setId(StringGenerator.getRandomString());
+                    if(photoList.size() != 0) {
+                        pet.setType(type);
+                        pet.setName(name);
+                        pet.setWeight(weight);
+                        pet.setBirthday(birthday);
+                        pet.setBreed(breed);
+                        pet.setId(StringGenerator.getRandomString());
 
-                    firebaseViewModel.storePetImage(AddPetActivity.this, FirebaseHelper.getUserId(), Constants.PET_PIC, pet.getName(), photoList.get(0), pet, roomViewModel);
-                    finish();
+                        firebaseViewModel.storePetImage(AddPetActivity.this, FirebaseHelper.getUserId(), Constants.PET_PIC, pet.getName(), photoList.get(0), pet, roomViewModel);
+                        finish();
+                    } else {
+                        Toast.makeText(AddPetActivity.this, getString(R.string.please_upload_a_picture), Toast.LENGTH_SHORT).show();
+                    }
                 } else {
                     Toast.makeText(AddPetActivity.this, "Please type the pet name!", Toast.LENGTH_SHORT).show();
                 }

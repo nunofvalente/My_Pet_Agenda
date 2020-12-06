@@ -16,7 +16,6 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.room.Room;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -38,18 +37,15 @@ import com.google.firebase.storage.UploadTask;
 import com.nunovalente.android.mypetagenda.R;
 import com.nunovalente.android.mypetagenda.activities.SlideLoginActivity;
 import com.nunovalente.android.mypetagenda.activities.MainActivity;
-import com.nunovalente.android.mypetagenda.data.repository.FirebaseHelper;
 import com.nunovalente.android.mypetagenda.model.Owner;
 import com.nunovalente.android.mypetagenda.model.Pet;
 import com.nunovalente.android.mypetagenda.model.Reminder;
-import com.nunovalente.android.mypetagenda.util.Base64Custom;
 import com.nunovalente.android.mypetagenda.util.Constants;
-import com.nunovalente.android.mypetagenda.util.StringGenerator;
 import com.nunovalente.android.mypetagenda.viewmodel.RoomViewModel;
 
 import java.io.ByteArrayOutputStream;
+import java.util.Objects;
 
-@SuppressWarnings( "deprecation" )
 public class FirebaseRepository {
 
     private static final String TAG = FirebaseRepository.class.getSimpleName();
@@ -69,15 +65,17 @@ public class FirebaseRepository {
         return repository;
     }
 
-    public void sendConfirmationEmail(Context context, Owner authenticatedOwner) {
+    public void sendConfirmationEmail(Context context) {
 
         FirebaseUser owner = authentication.getCurrentUser();
-        owner.sendEmailVerification().addOnCompleteListener((Activity) context, task -> {
-            if (task.isSuccessful()) {
-                Toast.makeText(context, context.getResources().getString(R.string.verification_email), Toast.LENGTH_SHORT).show();
-                context.startActivity(new Intent(context, SlideLoginActivity.class));
-            }
-        });
+        if(owner != null) {
+            owner.sendEmailVerification().addOnCompleteListener((Activity) context, task -> {
+                if (task.isSuccessful()) {
+                    Toast.makeText(context, context.getResources().getString(R.string.verification_email), Toast.LENGTH_SHORT).show();
+                    context.startActivity(new Intent(context, SlideLoginActivity.class));
+                }
+            });
+        }
     }
 
     public void registerOwner(Owner authenticatedOwner, Context context, View view) {
@@ -90,13 +88,13 @@ public class FirebaseRepository {
 
                 saveOwner(authenticatedOwner);
 
-                sendConfirmationEmail(context, authenticatedOwner);
+                sendConfirmationEmail(context);
 
             } else {
 
                 String exception;
                 try {
-                    throw authTask.getException();
+                    throw Objects.requireNonNull(authTask.getException());
                 } catch (FirebaseAuthWeakPasswordException e) {
                     exception = "Please enter a stronger password!";
                 } catch (FirebaseAuthInvalidCredentialsException f) {
@@ -116,50 +114,51 @@ public class FirebaseRepository {
     }
 
     private boolean isEmailVerified() {
-        return authentication.getCurrentUser().isEmailVerified();
+        boolean isEmailVerified = false;
+        if(authentication.getCurrentUser() != null) {
+            isEmailVerified = authentication.getCurrentUser().isEmailVerified();
+        }
+        return isEmailVerified;
     }
 
     public void signInOwner(String email, String password, Context context, View view) {
         view.setVisibility(View.VISIBLE);
         if (!email.equals("")) {
             if (!password.equals("")) {
-                authentication.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            if (isEmailVerified()) {
-                                view.setVisibility(View.GONE);
+                authentication.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        if (isEmailVerified()) {
+                            view.setVisibility(View.GONE);
 
-                                SharedPreferences sharedpreferences = context.getSharedPreferences(context.getString(R.string.app_name), Context.MODE_PRIVATE);
-                                if (!sharedpreferences.getBoolean(context.getString(R.string.pref_previously_started), false)) {
-                                    SharedPreferences.Editor editor = sharedpreferences.edit();
-                                    editor.putBoolean(context.getString(R.string.pref_previously_started), Boolean.TRUE);
-                                    editor.apply();
-                                }
-
-                                saveAccountIdInPrefs(context);
-
-                                Intent i = new Intent(context, MainActivity.class);
-                                context.startActivity(i);
-                            } else if (!isEmailVerified()) {
-                                Toast.makeText(context, "Please verify your email!", Toast.LENGTH_SHORT).show();
-                                view.setVisibility(View.GONE);
+                            SharedPreferences sharedpreferences = context.getSharedPreferences(context.getString(R.string.app_name), Context.MODE_PRIVATE);
+                            if (!sharedpreferences.getBoolean(context.getString(R.string.pref_previously_started), false)) {
+                                SharedPreferences.Editor editor = sharedpreferences.edit();
+                                editor.putBoolean(context.getString(R.string.pref_previously_started), Boolean.TRUE);
+                                editor.apply();
                             }
-                        } else {
-                            String exception;
-                            try {
-                                throw task.getException();
-                            } catch (FirebaseAuthInvalidUserException e) {
-                                exception = "Email address does not exist!";
-                            } catch (FirebaseAuthInvalidCredentialsException e) {
-                                exception = "Password does not match with email!";
-                            } catch (Exception e) {
-                                exception = "Error logging in: " + e.getMessage();
-                                e.printStackTrace();
-                            }
-                            Toast.makeText(context, exception, Toast.LENGTH_SHORT).show();
-                            view.setVisibility(View.INVISIBLE);
+
+                            saveAccountIdInPrefs(context);
+
+                            Intent i = new Intent(context, MainActivity.class);
+                            context.startActivity(i);
+                        } else if (!isEmailVerified()) {
+                            Toast.makeText(context, "Please verify your email!", Toast.LENGTH_SHORT).show();
+                            view.setVisibility(View.GONE);
                         }
+                    } else {
+                        String exception;
+                        try {
+                            throw Objects.requireNonNull(task.getException());
+                        } catch (FirebaseAuthInvalidUserException e) {
+                            exception = "Email address does not exist!";
+                        } catch (FirebaseAuthInvalidCredentialsException e) {
+                            exception = "Password does not match with email!";
+                        } catch (Exception e) {
+                            exception = "Error logging in: " + e.getMessage();
+                            e.printStackTrace();
+                        }
+                        Toast.makeText(context, exception, Toast.LENGTH_SHORT).show();
+                        view.setVisibility(View.INVISIBLE);
                     }
                 });
             } else {
@@ -177,7 +176,8 @@ public class FirebaseRepository {
                 Owner owner = snapshot.getValue(Owner.class);
                 SharedPreferences sharedpreferences = context.getSharedPreferences(context.getString(R.string.app_name), Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedpreferences.edit();
-                    editor.putString(context.getString(R.string.pref_account_id), owner.getAccountId());
+                assert owner != null;
+                editor.putString(context.getString(R.string.pref_account_id), owner.getAccountId());
                     editor.putString(context.getString(R.string.pref_user_id), owner.getId());
                     editor.apply();
             }
@@ -209,6 +209,7 @@ public class FirebaseRepository {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Owner owner = snapshot.getValue(Owner.class);
+                assert owner != null;
                 DatabaseReference path = databaseReference.child(Constants.PETS).child(owner.getAccountId()).child(pet.getId());
                 path.setValue(pet);
                 pet.setAccountId(owner.getAccountId());
@@ -232,7 +233,7 @@ public class FirebaseRepository {
                 } else {
                     String exception;
                     try {
-                        throw task.getException();
+                        throw Objects.requireNonNull(task.getException());
                     } catch (FirebaseAuthInvalidUserException e) {
                         exception = "Email address does not exist!";
                     } catch (FirebaseAuthInvalidCredentialsException f) {
@@ -258,7 +259,7 @@ public class FirebaseRepository {
 
         Task<Uri> urlTask = uploadTask.continueWithTask(task -> {
             if (!task.isSuccessful()) {
-                throw task.getException();
+                throw Objects.requireNonNull(task.getException());
             }
             return imageRef.getDownloadUrl();
         }).addOnCompleteListener(task -> {
@@ -273,7 +274,7 @@ public class FirebaseRepository {
     }
 
     public void storePetImage(Context context, String userId, String storagePath, String fileName, String imageUrl, Pet pet, RoomViewModel roomViewModel) {
-        Bitmap image = null;
+        Bitmap image;
         try {
             Uri imagePath = Uri.parse(imageUrl);
             if (Build.VERSION.SDK_INT < 28) {
@@ -298,7 +299,7 @@ public class FirebaseRepository {
 
                 Task<Uri> urlTask = uploadTask.continueWithTask(task -> {
                     if (!task.isSuccessful()) {
-                        throw task.getException();
+                        throw Objects.requireNonNull(task.getException());
                     }
                     return imageRef.getDownloadUrl();
                 }).addOnCompleteListener(task -> {
@@ -317,7 +318,7 @@ public class FirebaseRepository {
     }
 
     public void updatePetInfo(Context context, String userId, String storagePath, String fileName, String imageUrl, Pet pet) {
-        Bitmap image = null;
+        Bitmap image;
         if(!imageUrl.equals("")) {
             try {
                 Uri imagePath = Uri.parse(imageUrl);
@@ -343,7 +344,7 @@ public class FirebaseRepository {
 
                     Task<Uri> urlTask = uploadTask.continueWithTask(task -> {
                         if (!task.isSuccessful()) {
-                            throw task.getException();
+                            throw Objects.requireNonNull(task.getException());
                         }
                         return imageRef.getDownloadUrl();
                     }).addOnCompleteListener(task -> {
@@ -369,6 +370,7 @@ public class FirebaseRepository {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Owner owner = snapshot.getValue(Owner.class);
+                assert owner != null;
                 pet.updatePet(owner.getAccountId(), pet.getId());
             }
 
@@ -388,6 +390,7 @@ public class FirebaseRepository {
                 Owner owner = snapshot.getValue(Owner.class);
                 if (updated) {
                     loggedOwner.setImagePath(url.toString());
+                    assert owner != null;
                     loggedOwner.setAccountId(owner.getAccountId());
                     loggedOwner.updateUser();
                     Toast.makeText(context, "Photo Updated!", Toast.LENGTH_SHORT).show();

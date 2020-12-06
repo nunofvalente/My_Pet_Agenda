@@ -1,5 +1,6 @@
 package com.nunovalente.android.mypetagenda.activities.dialog;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -64,6 +65,7 @@ public class DialogResetPassword extends DialogFragment implements View.OnClickL
         mCancel.setOnClickListener(this);
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View view) {
         switch(view.getId()) {
@@ -71,7 +73,9 @@ public class DialogResetPassword extends DialogFragment implements View.OnClickL
                 sendResetEmail();
                 break;
             case tv_cancel_reset_password:
-                getDialog().dismiss();
+                if(getDialog() != null) {
+                    getDialog().dismiss();
+                }
                 break;
         }
     }

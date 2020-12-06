@@ -12,8 +12,7 @@ public class StringGenerator {
             int index = (int) (rnd.nextFloat() * chars.length());
             builder.append(chars.charAt(index));
         }
-        String code = builder.toString();
-        return code;
+        return builder.toString();
     }
 
     public static String getAccountIdStringBuilder(String text) {

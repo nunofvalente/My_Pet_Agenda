@@ -12,8 +12,6 @@ import com.nunovalente.android.mypetagenda.R;
 import com.nunovalente.android.mypetagenda.databinding.ReminderListAdapterBinding;
 import com.nunovalente.android.mypetagenda.model.Reminder;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class RecyclerAddReminderAdapter extends RecyclerView.Adapter<RecyclerAddReminderAdapter.AddReminderViewHolder> {
@@ -32,7 +30,7 @@ public class RecyclerAddReminderAdapter extends RecyclerView.Adapter<RecyclerAdd
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         mBinding = DataBindingUtil.inflate(inflater, R.layout.reminder_list_adapter, parent, false);
 
-        return new RecyclerAddReminderAdapter.AddReminderViewHolder(mBinding.getRoot());
+        return new AddReminderViewHolder(mBinding.getRoot());
     }
 
     @Override
@@ -47,7 +45,7 @@ public class RecyclerAddReminderAdapter extends RecyclerView.Adapter<RecyclerAdd
         return mReminderList.size();
     }
 
-    public class AddReminderViewHolder extends RecyclerView.ViewHolder {
+    public static class AddReminderViewHolder extends RecyclerView.ViewHolder {
 
         public AddReminderViewHolder(@NonNull View itemView) {
             super(itemView);

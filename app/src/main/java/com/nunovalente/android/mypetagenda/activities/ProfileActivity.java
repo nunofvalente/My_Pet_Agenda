@@ -23,15 +23,9 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.transition.Transition;
 import android.view.View;
 
-import com.google.android.material.transition.platform.MaterialFadeThrough;
 import com.google.android.material.transition.platform.MaterialSharedAxis;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
 import com.nunovalente.android.mypetagenda.R;
 import com.nunovalente.android.mypetagenda.data.repository.FirebaseHelper;
 import com.nunovalente.android.mypetagenda.databinding.ActivityProfileBinding;
@@ -113,7 +107,9 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void configureToolbar() {
         setSupportActionBar(mBinding.toolbarEditProfile);
-        getSupportActionBar().setTitle("");
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("");
+        }
         Typeface typeface = ResourcesCompat.getFont(this, R.font.lobster_regular);
         mBinding.toolbarTitle.setTypeface(typeface);
         mBinding.toolbarTitle.setText(getString(R.string.edit_profile));

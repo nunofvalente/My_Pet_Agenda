@@ -8,7 +8,6 @@ import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.os.Build;
 
-@SuppressWarnings( "deprecation" )
 public class NetworkUtils {
 
     public static boolean checkConnectivity(Application application) {

@@ -17,7 +17,6 @@ import com.nunovalente.android.mypetagenda.databinding.ActivityAddReminderBindin
 import com.nunovalente.android.mypetagenda.fragments.PetProfileFragment;
 import com.nunovalente.android.mypetagenda.model.Pet;
 import com.nunovalente.android.mypetagenda.model.Reminder;
-import com.nunovalente.android.mypetagenda.viewmodel.FirebaseViewModel;
 import com.nunovalente.android.mypetagenda.viewmodel.RoomViewModel;
 
 import java.text.SimpleDateFormat;
@@ -26,7 +25,6 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-@SuppressWarnings( "deprecation" )
 public class AddReminderActivity extends AppCompatActivity {
 
     private ActivityAddReminderBinding mBinding;
@@ -55,9 +53,7 @@ public class AddReminderActivity extends AppCompatActivity {
         }
 
         mBinding.reminderTimePicker.setIs24HourView(true);
-        mBinding.toolbarReminder.setNavigationOnClickListener(v -> {
-            finish();
-        });
+        mBinding.toolbarReminder.setNavigationOnClickListener(v -> finish());
     }
 
     public class AddReminderClickHandler {

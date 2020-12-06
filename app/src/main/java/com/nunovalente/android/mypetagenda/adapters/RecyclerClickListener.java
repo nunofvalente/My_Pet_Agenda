@@ -8,10 +8,12 @@ import android.widget.AdapterView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.jetbrains.annotations.NotNull;
+
 public class RecyclerClickListener implements RecyclerView.OnItemTouchListener {
 
-    private OnItemClickListener mListener;
-    GestureDetector mGestureDetector;
+    private final OnItemClickListener mListener;
+    final GestureDetector mGestureDetector;
 
     @Override
     public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
@@ -24,7 +26,7 @@ public class RecyclerClickListener implements RecyclerView.OnItemTouchListener {
     }
 
     @Override
-    public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+    public void onTouchEvent(@NotNull RecyclerView rv, @NotNull MotionEvent e) {
 
     }
 
@@ -34,9 +36,9 @@ public class RecyclerClickListener implements RecyclerView.OnItemTouchListener {
     }
 
     public interface OnItemClickListener extends AdapterView.OnItemClickListener {
-        public void onItemClick(View view, int position);
+         void onItemClick(View view, int position);
 
-        public void onLongItemClick(View view, int position);
+         void onLongItemClick(View view, int position);
     }
 
     public RecyclerClickListener(Context context, final RecyclerView recyclerView, OnItemClickListener listener) {
