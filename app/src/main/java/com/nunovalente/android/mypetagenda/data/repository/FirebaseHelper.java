@@ -88,9 +88,4 @@ public class FirebaseHelper {
         return owner;
     }
 
-    /*public static String getAccountId() {
-        FirebaseUser user = authentication.getCurrentUser();
-        String accountId = user.getUid().substring(0, 8);
-        return accountId;
-    }*/
 }

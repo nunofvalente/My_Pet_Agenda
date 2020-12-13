@@ -211,8 +211,8 @@ public class FirebaseRepository {
                 Owner owner = snapshot.getValue(Owner.class);
                 assert owner != null;
                 DatabaseReference path = databaseReference.child(Constants.PETS).child(owner.getAccountId()).child(pet.getId());
-                path.setValue(pet);
                 pet.setAccountId(owner.getAccountId());
+                path.setValue(pet);
                 pet.setImagePath(imageUrl);
                 roomViewModel.insertPet(pet);
             }

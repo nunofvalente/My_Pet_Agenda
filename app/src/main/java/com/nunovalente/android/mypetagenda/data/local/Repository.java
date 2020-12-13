@@ -1,6 +1,7 @@
 package com.nunovalente.android.mypetagenda.data.local;
 
 import android.app.Application;
+import android.content.Context;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
@@ -28,6 +29,17 @@ public class Repository {
         PetDatabase petDatabase = PetDatabase.getInstance(application);
         ReminderDatabase reminderDatabase = ReminderDatabase.getInstance(application);
         NoteDatabase noteDatabase = NoteDatabase.getInstance(application);
+        ownerDao = ownerDatabase.ownerDao();
+        petDao = petDatabase.petDao();
+        reminderDao = reminderDatabase.reminderDao();
+        noteDao = noteDatabase.noteDao();
+    }
+
+    public Repository(Context context) {
+        OwnerDatabase ownerDatabase = OwnerDatabase.getInstance(context);
+        PetDatabase petDatabase = PetDatabase.getInstance(context);
+        ReminderDatabase reminderDatabase = ReminderDatabase.getInstance(context);
+        NoteDatabase noteDatabase = NoteDatabase.getInstance(context);
         ownerDao = ownerDatabase.ownerDao();
         petDao = petDatabase.petDao();
         reminderDao = reminderDatabase.reminderDao();

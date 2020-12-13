@@ -101,4 +101,18 @@
     <string name="kg">Kg</string>
     <string name="_22_04_2013">22/04/2013</string>
 
+    <string name="channel_name">Alarm Channel</string>
+    <string name="channel_description">Notification description</string>
+    <string name="channel_id">"My_pet_agenda_channel"</string>
+    <string name="notify_alarm_set">"reminder_alarm"</string>
+    <string name="confirm">Confirm</string>
+
+
+    <string name="CHANNEL_ID">"channel_id"</string>
+    <string name="delete_note">Delete Note</string>
+    <string name="are_you_sure_delete_note">Are you sure you want to delete this note?</string>
+    <string name="delete">Delete</string>
+    <string name="are_you_sure_delete_reminder">Are you sure you want to delete this reminder?</string>
+    <string name="take_photo">Take Photo</string>
+
 </resources>

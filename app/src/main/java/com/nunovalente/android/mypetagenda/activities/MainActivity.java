@@ -37,8 +37,6 @@ public class MainActivity extends AppCompatActivity {
 
         configureToolbar();
         setBottomNavigationBar();
-
-
     }
 
     private void configureToolbar() {
@@ -96,5 +94,10 @@ public class MainActivity extends AppCompatActivity {
             finish();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 }

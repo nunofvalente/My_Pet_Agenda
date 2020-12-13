@@ -1,5 +1,7 @@
 package com.nunovalente.android.mypetagenda.util;
 
+import android.annotation.SuppressLint;
+
 import java.util.Random;
 
 public class StringGenerator {
@@ -19,8 +21,9 @@ public class StringGenerator {
         return ("Account Code: " + text);
     }
 
+    @SuppressLint("DefaultLocale")
     public static String getReminderTimeStringBuilder(int hours, int minutes) {
-        return (hours + ":" + minutes);
+        return (String.format("%02d:%02d", hours, minutes));
     }
 
     public static String getPetWeightBuilder(String weight) {

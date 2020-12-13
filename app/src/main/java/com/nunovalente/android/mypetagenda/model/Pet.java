@@ -131,12 +131,10 @@ public class Pet implements Serializable {
         this.imagePath = imagePath;
     }
 
-    @Exclude
     public String getAccountId() {
         return accountId;
     }
 
-    @Exclude
     public void setAccountId(String accountId) {
         this.accountId = accountId;
     }

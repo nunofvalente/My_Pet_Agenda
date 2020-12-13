@@ -141,5 +141,6 @@ public class DialogRegister extends AppCompatDialogFragment implements View.OnCl
                 break;
         }
     }
+
 }
 

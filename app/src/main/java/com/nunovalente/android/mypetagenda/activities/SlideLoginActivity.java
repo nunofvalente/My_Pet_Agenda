@@ -13,7 +13,7 @@ import com.nunovalente.android.mypetagenda.activities.dialog.DialogResetPassword
 import com.nunovalente.android.mypetagenda.databinding.ActivityLoginBinding;
 import com.nunovalente.android.mypetagenda.viewmodel.FirebaseViewModel;
 
-public class SlideLoginActivity extends AppCompatActivity implements View.OnClickListener{
+public class SlideLoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = SlideLoginActivity.class.getSimpleName();
 
@@ -37,7 +37,7 @@ public class SlideLoginActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void onClick(View v) {
-        if(v.getId() == R.id.button_login_sign_in) {
+        if (v.getId() == R.id.button_login_sign_in) {
             signIn();
         } else if (v.getId() == R.id.login_forgot_password) {
             openDialogResetPassword();

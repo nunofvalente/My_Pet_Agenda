@@ -6,8 +6,6 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-import com.google.firebase.database.Exclude;
-
 import org.jetbrains.annotations.NotNull;
 
 @Entity(tableName = "note_database")
@@ -16,7 +14,7 @@ public class Note {
     @NonNull
     @PrimaryKey
     @ColumnInfo(name = "id")
-    private final String id;
+    private String noteId;
 
     @ColumnInfo(name = "accountId")
     private String accountId;
@@ -29,23 +27,15 @@ public class Note {
 
     @Ignore
     public Note() {
-        id = "";
     }
 
-    @Ignore
-    public Note(@NotNull String id, String text) {
-        this.id = id;
-        this.text = text;
-    }
-
-    public Note(@NonNull String id, String accountId, String petId, String text) {
-        this.id = id;
+    public Note(@NotNull String noteId, String accountId, String petId, String text) {
+        this.noteId = noteId;
         this.accountId = accountId;
         this.petId = petId;
         this.text = text;
     }
 
-    @Exclude
     public String getAccountId() {
         return accountId;
     }
@@ -62,7 +52,6 @@ public class Note {
         this.text = text;
     }
 
-    @Exclude
     public String getPetId() {
         return petId;
     }
@@ -72,13 +61,12 @@ public class Note {
     }
 
     @NonNull
-    public String getId() {
-        return id;
+    public String getNoteId() {
+        return noteId;
     }
 
     public void setAccountId(String accountId) {
         this.accountId = accountId;
     }
-
 
 }

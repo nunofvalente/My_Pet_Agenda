@@ -24,10 +24,10 @@ public interface ReminderDao {
     @Delete
     void deleteReminder(Reminder reminder);
 
-    @Query("SELECT * FROM reminder_database WHERE accountId = :accountId")
+    @Query("SELECT * FROM reminder_database WHERE accountId = :accountId ORDER BY id ASC")
     LiveData<List<Reminder>> getAllReminders(String accountId);
 
-    @Query("SELECT * FROM reminder_database WHERE petId = :petId")
+    @Query("SELECT * FROM reminder_database WHERE petId = :petId ORDER BY id ASC")
     LiveData<List<Reminder>> getPetReminders(String petId);
 
     @Query("SELECT * FROM reminder_database WHERE id = :id")

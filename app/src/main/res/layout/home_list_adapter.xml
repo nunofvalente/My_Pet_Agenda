@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <import type="com.nunovalente.android.mypetagenda.util.StringGenerator"/>
+
+        <variable
+            name="reminder"
+            type="com.nunovalente.android.mypetagenda.model.Reminder" />
+    </data>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/margin_8">
+
+    <TextView
+        android:id="@+id/tv_home_reminder_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@{reminder.title}"
+        android:textSize="@dimen/text_size_16"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Reminder Title" />
+
+    <TextView
+        android:id="@+id/reminder_days"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:maxLines="2"
+        android:text="@{reminder.recurringDays}"
+        android:textSize="@dimen/text_size_14"
+        app:layout_constraintEnd_toStartOf="@+id/tv_reminder_time"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_home_reminder_title"
+        tools:text="Wednesday, Monday, Sunday" />
+
+    <TextView
+        android:id="@+id/tv_reminder_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        android:text="@{StringGenerator.getReminderTimeStringBuilder(reminder.hour, reminder.minutes)}"
+        android:textSize="@dimen/text_size_24"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/textView9"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="11:45" />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        android:text="@{reminder.petName}"
+        android:textSize="@dimen/text_size_20"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Balto" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/app_primary_light"
+        app:layout_constraintTop_toBottomOf="@id/reminder_days"
+        android:layout_marginTop="@dimen/margin_16"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

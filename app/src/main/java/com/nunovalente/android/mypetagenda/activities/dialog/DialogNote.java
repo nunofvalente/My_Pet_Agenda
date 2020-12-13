@@ -36,7 +36,7 @@ public class DialogNote extends AppCompatDialogFragment implements View.OnClickL
 
     private TextView mCancel, mAddNote, mError;
     private EditText mNote;
-    private String petId;
+    private String petId, accountId;
 
     @NonNull
     @Override
@@ -60,7 +60,7 @@ public class DialogNote extends AppCompatDialogFragment implements View.OnClickL
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(requireActivity());
         petId = preferences.getString(getString(R.string.selected_pet_id), "");
-
+        accountId = preferences.getString(getString(R.string.pref_account_id), "");
 
         setListeners();
 
@@ -107,15 +107,14 @@ public class DialogNote extends AppCompatDialogFragment implements View.OnClickL
     private void validateNote(String accountId) {
         String noteText = mNote.getText().toString();
         if (!noteText.isEmpty()) {
-            Note note = new Note("", noteText);
             DatabaseReference path = databaseReference.child(Constants.NOTES).child(accountId).child(petId).push();
             String key = path.getKey();
-            note.setId(key);
+            assert key != null;
+            Note note = new Note(key, accountId, petId, noteText);
             path.setValue(note);
 
-            assert key != null;
-            Note roomNote = new Note(key, accountId, petId, noteText);
-            roomViewModel.insertNote(roomNote);
+
+            roomViewModel.insertNote(note);
         } else {
             mError.setVisibility(View.VISIBLE);
         }
@@ -124,7 +123,7 @@ public class DialogNote extends AppCompatDialogFragment implements View.OnClickL
     @Override
     public void onStop() {
         super.onStop();
-        if(valueEventListener != null) {
+        if (valueEventListener != null) {
             databaseReference.removeEventListener(valueEventListener);
         }
     }

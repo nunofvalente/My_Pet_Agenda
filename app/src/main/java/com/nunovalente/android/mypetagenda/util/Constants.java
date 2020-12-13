@@ -20,4 +20,16 @@ public class Constants {
     //fileName
     public static final String PROFILE_PIC_NAME = "profile.jpeg";
 
+    //days of week
+    public static final String MONDAY = "monday";
+    public static final String TUESDAY = "tuesday";
+    public static final String WEDNESDAY = "wednesday";
+    public static final String THURSDAY = "thursday";
+    public static final String FRIDAY = "friday";
+    public static final String SATURDAY = "saturday";
+    public static final String SUNDAY = "sunday";
+    public static final String RECURRING = "recurring";
+    public static final String TITLE = "title";
+    public static final String PET_REMINDER = "pet_reminder";
+
 }

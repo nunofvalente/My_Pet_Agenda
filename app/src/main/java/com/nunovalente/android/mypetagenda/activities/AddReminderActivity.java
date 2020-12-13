@@ -15,23 +15,24 @@ import android.widget.CheckBox;
 import com.nunovalente.android.mypetagenda.R;
 import com.nunovalente.android.mypetagenda.databinding.ActivityAddReminderBinding;
 import com.nunovalente.android.mypetagenda.fragments.PetProfileFragment;
+import com.nunovalente.android.mypetagenda.fragments.PetRemindersFragment;
 import com.nunovalente.android.mypetagenda.model.Pet;
 import com.nunovalente.android.mypetagenda.model.Reminder;
 import com.nunovalente.android.mypetagenda.viewmodel.RoomViewModel;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Locale;
 
 public class AddReminderActivity extends AppCompatActivity {
 
+    public static final String KEY_ID = "reminder_id";
+
     private ActivityAddReminderBinding mBinding;
 
     private final Calendar mCalendar = Calendar.getInstance();
-    private final Reminder reminder = new Reminder();
-    private final List<String> mDaysList = new ArrayList<>();
+    private Reminder reminder = new Reminder();
+    private CheckBox mon, tue, wed, thu, fri, sat, sun;
 
     private RoomViewModel roomViewModel;
 
@@ -47,13 +48,89 @@ public class AddReminderActivity extends AppCompatActivity {
         AddReminderClickHandler mHandler = new AddReminderClickHandler();
         mBinding.setClickHandler(mHandler);
 
+        initializeComponents();
+
         Bundle bundle = getIntent().getExtras();
         if (bundle.containsKey(PetProfileFragment.PET)) {
             pet = (Pet) bundle.getSerializable(PetProfileFragment.PET);
+        } else if (bundle.containsKey(PetRemindersFragment.REMINDER)) {
+            reminder = (Reminder) bundle.getSerializable(PetRemindersFragment.REMINDER);
+            loadReminderData(reminder);
         }
 
         mBinding.reminderTimePicker.setIs24HourView(true);
         mBinding.toolbarReminder.setNavigationOnClickListener(v -> finish());
+    }
+
+    private void initializeComponents() {
+        mon = findViewById(R.id.checkbox_monday);
+        tue = findViewById(R.id.checkbox_tuesday);
+        wed = findViewById(R.id.checkbox_wednesday);
+        thu = findViewById(R.id.checkbox_thursday);
+        fri = findViewById(R.id.checkbox_friday);
+        sat = findViewById(R.id.checkbox_saturday);
+        sun = findViewById(R.id.checkbox_sunday);
+    }
+
+    private void loadReminderData(Reminder reminder) {
+        if (Build.VERSION.SDK_INT < 23) {
+            mBinding.reminderTimePicker.setCurrentHour(reminder.getHour());
+            mBinding.reminderTimePicker.setCurrentMinute(reminder.getMinutes());
+        } else {
+            mBinding.reminderTimePicker.setHour(reminder.getHour());
+            mBinding.reminderTimePicker.setMinute(reminder.getMinutes());
+        }
+
+        mBinding.editReminderTitle.setText(reminder.getTitle());
+
+        addCheckboxes(reminder);
+    }
+
+    private void addCheckboxes(Reminder reminder) {
+        String checkedDays = reminder.getRecurringDays();
+
+        if (checkedDays != null) {
+            String[] daysArray = checkedDays.split(" ");
+            for (String day : daysArray) {
+                switch (day) {
+                    case "Monday":
+                        mon.setChecked(true);
+                        break;
+                    case "Tuesday":
+                        tue.setChecked(true);
+                        break;
+                    case "Wednesday":
+                        wed.setChecked(true);
+                        break;
+                    case "Thursday":
+                        thu.setChecked(true);
+                        break;
+                    case "Friday":
+                        fri.setChecked(true);
+                        break;
+                    case "Saturday":
+                        sat.setChecked(true);
+                        break;
+                    case "Sunday":
+                        sun.setChecked(true);
+                        break;
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        finish();
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        return false;
     }
 
     public class AddReminderClickHandler {
@@ -68,80 +145,37 @@ public class AddReminderActivity extends AppCompatActivity {
             SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
             String accountId = sharedPreferences.getString(getString(R.string.pref_account_id), "");
 
-            reminder.setPetId(pet.getId());
-            reminder.setAccountId(accountId);
             reminder.setTitle(mBinding.editReminderTitle.getText().toString());
-            reminder.setIsActive("false");
+            reminder.setStarted(true);
 
-            roomViewModel.insertReminder(reminder);
+            Bundle bundle = getIntent().getExtras();
+            if(bundle.containsKey(PetRemindersFragment.REMINDER)) {
+                reminder.cancelAlarm(AddReminderActivity.this);
+                reminder.setStarted(true);
+                roomViewModel.updateReminder(reminder);
+            } else {
+                String petId = pet.getId();
+                String petName = pet.getName();
+                reminder.setPetName(petName);
+                reminder.setAccountId(accountId);
+                reminder.setPetId(petId);
+                roomViewModel.insertReminder(reminder);
+            }
+
+            reminder.schedule(AddReminderActivity.this);
             finish();
         }
 
-        public void chooseReminderDate(View view) {
-
-            DatePickerDialog.OnDateSetListener date = (view1, year, month, dayOfMonth) -> {
-                mCalendar.set(Calendar.YEAR, year);
-                mCalendar.set(Calendar.MONTH, month);
-                mCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateLabel();
-            };
-
-            new DatePickerDialog(AddReminderActivity.this, date, mCalendar
-                    .get(Calendar.YEAR), mCalendar.get(Calendar.MONTH),
-                    mCalendar.get(Calendar.DAY_OF_MONTH)).show();
-        }
-
-        private void updateLabel() {
-            String format = "dd/MM/yyyy";
-            SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.UK);
-
-            String date = sdf.format(mCalendar.getTime());
-            mBinding.buttonDate.setText(date);
-            reminder.setDate(date);
-        }
-
         private void validateCheckboxes() {
-            CheckBox mondayCheckBox = findViewById(R.id.checkbox_monday);
-            CheckBox tuesdayCheckBox = findViewById(R.id.checkbox_tuesday);
-            CheckBox wednesdayCheckBox = findViewById(R.id.checkbox_wednesday);
-            CheckBox thursdayCheckBox = findViewById(R.id.checkbox_thursday);
-            CheckBox fridayCheckBox = findViewById(R.id.checkbox_friday);
-            CheckBox saturdayCheckBox = findViewById(R.id.checkbox_saturday);
-            CheckBox sundayCheckBox = findViewById(R.id.checkbox_sunday);
+            reminder.setMonday(mon.isChecked());
+            reminder.setTuesday(tue.isChecked());
+            reminder.setWednesday(wed.isChecked());
+            reminder.setThursday(thu.isChecked());
+            reminder.setFriday(fri.isChecked());
+            reminder.setSaturday(sat.isChecked());
+            reminder.setSunday(sun.isChecked());
 
-            if (mondayCheckBox.isChecked()) {
-                mDaysList.add(mondayCheckBox.getText().toString());
-            }
-
-            if (tuesdayCheckBox.isChecked()) {
-                mDaysList.add(tuesdayCheckBox.getText().toString());
-            }
-
-            if (wednesdayCheckBox.isChecked()) {
-                mDaysList.add(wednesdayCheckBox.getText().toString());
-            }
-
-            if (thursdayCheckBox.isChecked()) {
-                mDaysList.add(thursdayCheckBox.getText().toString());
-            }
-
-            if (fridayCheckBox.isChecked()) {
-                mDaysList.add(fridayCheckBox.getText().toString());
-            }
-
-            if (saturdayCheckBox.isChecked()) {
-                mDaysList.add(saturdayCheckBox.getText().toString());
-            }
-
-            if (sundayCheckBox.isChecked()) {
-                mDaysList.add(sundayCheckBox.getText().toString());
-            }
-
-            StringBuilder days = new StringBuilder();
-            for(String day: mDaysList) {
-                days.append(day).append(" ");
-            }
-            reminder.setDays(days.toString());
+            reminder.setRecurring(mon.isChecked() || tue.isChecked() || wed.isChecked() || thu.isChecked() || fri.isChecked() || sat.isChecked() || sun.isChecked());
         }
 
         private void validateTime() {
@@ -157,11 +191,6 @@ public class AddReminderActivity extends AppCompatActivity {
             reminder.setHour(hour);
             reminder.setMinutes(minute);
         }
-    }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        finish();
     }
 }

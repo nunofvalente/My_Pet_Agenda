@@ -6,16 +6,29 @@
     android:layout_height="match_parent"
     tools:context=".fragments.HomeFragment"
     android:orientation="vertical"
-    android:gravity="center">
+    android:layout_marginBottom="?actionBarSize"
+    android:layout_marginTop="?actionBarSize">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
     <TextView
-        android:id="@+id/text_no_network"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_16"
-        android:text="@string/no_network_connection"
-        android:layout_gravity="center"
-        android:visibility="invisible"
-        android:textSize="20sp"/>
+        android:text="@string/reminders"
+        style="@style/SlideText"
+        android:textSize="@dimen/text_size_18"
+        android:layout_margin="@dimen/margin_16"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_home"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginRight="@dimen/margin_16"
+        android:layout_marginLeft="@dimen/margin_16" />
+
+    </LinearLayout>
 </FrameLayout>
 </layout>

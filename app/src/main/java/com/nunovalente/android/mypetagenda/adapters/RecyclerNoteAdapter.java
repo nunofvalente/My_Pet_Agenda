@@ -16,9 +16,11 @@ import java.util.List;
 public class RecyclerNoteAdapter extends RecyclerView.Adapter<RecyclerNoteAdapter.MyNotesViewHolder> {
 
     private final List<Note> mNoteList;
+    private final RecyclerItemClickListener listener;
 
-    public RecyclerNoteAdapter(List<Note> mNoteList) {
+    public RecyclerNoteAdapter(List<Note> mNoteList, RecyclerItemClickListener listener) {
         this.mNoteList = mNoteList;
+        this.listener = listener;
     }
 
     @NonNull
@@ -39,7 +41,7 @@ public class RecyclerNoteAdapter extends RecyclerView.Adapter<RecyclerNoteAdapte
         return mNoteList.size();
     }
 
-    public static class MyNotesViewHolder extends RecyclerView.ViewHolder {
+    public class MyNotesViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
 
         private final TextView mNoteText;
 
@@ -47,6 +49,14 @@ public class RecyclerNoteAdapter extends RecyclerView.Adapter<RecyclerNoteAdapte
             super(itemView);
 
             mNoteText = itemView.findViewById(R.id.tv_note_adapter);
+            itemView.setOnLongClickListener(this);
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            int position = getAdapterPosition();
+            listener.onLongClicked(position);
+            return true;
         }
     }
 }

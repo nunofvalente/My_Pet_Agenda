@@ -11,8 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -114,7 +116,8 @@ public class MyPetsFragment extends Fragment {
 
             @Override
             public void onLongItemClick(View view, int position) {
-
+                Pet pet = mPetList.get(position);
+                showDeleteDialog(pet);
             }
 
             @Override
@@ -122,6 +125,28 @@ public class MyPetsFragment extends Fragment {
 
             }
         }));
+    }
+
+    private void showDeleteDialog(Pet pet) {
+        String accountId = pet.getAccountId();
+        String petId = pet.getId();
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(
+                requireActivity());
+        alert.setTitle(R.string.delete_note);
+        alert.setMessage(R.string.are_you_sure_delete_note);
+        alert.setPositiveButton(R.string.confirm, (dialog, which) -> {
+            DatabaseReference path = databaseReference.child(Constants.PETS).child(accountId).child(petId);
+            path.removeValue();
+            roomViewModel.deletePet(pet);
+            mPetList.remove(pet);
+            if (mBinding.recyclerMyPets.getAdapter() != null) {
+                mBinding.recyclerMyPets.getAdapter().notifyDataSetChanged();
+            }
+            dialog.dismiss();
+        });
+        alert.setNegativeButton(getString(R.string.cancel), (dialog, which) -> dialog.dismiss());
+        alert.show();
     }
 
     private void getPets() {
@@ -151,12 +176,12 @@ public class MyPetsFragment extends Fragment {
                     mPetList.add(pet);
                 }
                 setRecyclerView(mPetList);
+                mBinding.progressMyPets.setVisibility(View.GONE);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
-        mBinding.progressMyPets.setVisibility(View.GONE);
     }
 
     private void setRecyclerView(List<Pet> list) {
