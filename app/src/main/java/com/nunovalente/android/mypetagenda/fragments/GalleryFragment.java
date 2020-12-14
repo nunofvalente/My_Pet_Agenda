@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,9 +30,13 @@ import androidx.core.app.ActivityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.google.android.material.transition.MaterialFadeThrough;
 import com.nunovalente.android.mypetagenda.R;
+import com.nunovalente.android.mypetagenda.activities.PreviewActivity;
+import com.nunovalente.android.mypetagenda.adapters.RecyclerGalleryAdapter;
+import com.nunovalente.android.mypetagenda.adapters.RecyclerItemClickListener;
 import com.nunovalente.android.mypetagenda.data.repository.FirebaseHelper;
 import com.nunovalente.android.mypetagenda.databinding.FragmentGalleryBinding;
 import com.nunovalente.android.mypetagenda.util.Constants;
@@ -48,10 +53,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 
-public class GalleryFragment extends Fragment {
+public class GalleryFragment extends Fragment implements RecyclerItemClickListener {
 
+    private static final String FILE_PATH = "/My Pet Agenda/images";
+    private final static String TAG = PreviewActivity.class.getSimpleName();
+
+    private final List<Bitmap> mImagesList = new ArrayList<>();
     private File output = null;
 
     private final String[] permissions = {
@@ -71,87 +81,57 @@ public class GalleryFragment extends Fragment {
         Permission.validatePermissions(new ArrayList<>(Arrays.asList(permissions)), requireActivity(), 2);
         ActivityCompat.requestPermissions(requireActivity(), permissions, 2);
 
-        if (!NetworkUtils.checkConnectivity(requireActivity().getApplication()) || FirebaseHelper.getCurrentOwner() == null) {
-            mBinding.textNoNetworkGallery.setVisibility(View.VISIBLE);
-            // loadImages();
-        } else {
-            mBinding.textNoNetworkGallery.setVisibility(View.INVISIBLE);
-            loadImagesFromDb();
-        }
-
-        mBinding.fabGalleryCamera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openCamera();
-            }
-        });
+        mBinding.fabGalleryCamera.setOnClickListener(v -> openCamera());
 
 
         this.setExitTransition(new MaterialFadeThrough().setDuration(getResources().getInteger(R.integer.reply_motion_duration_large)));
         return root;
     }
 
-    private void loadImagesFromDb() {
+    private void loadImagesFromDCIM() {
+        mImagesList.clear();
 
-    }
+        File imagesPath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM) + FILE_PATH);
+        if (imagesPath.exists()) {
+            File[] files = imagesPath.listFiles();
+            if (files != null) {
+                for (File file : files) {
+                    Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+                    mImagesList.add(bitmap);
+                }
 
-    private String saveToInternalStorage(Bitmap bitmapImage) {
-        ContextWrapper cw = new ContextWrapper(getContext());
-        // path to /data/data/yourapp/app_data/imageDir
-        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
-        // Create imageDir
-        File mypath = new File(directory, StringGenerator.getRandomString());
-
-        FileOutputStream fos = null;
-        try {
-            fos = new FileOutputStream(mypath);
-            // Use the compress method on the BitMap object to write image to the OutputStream
-            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                fos.close();
-            } catch (IOException e) {
-                e.printStackTrace();
+                setRecyclerView();
+                mBinding.textNoImages.setVisibility(View.INVISIBLE);
+            } else {
+                mBinding.textNoImages.setVisibility(View.VISIBLE);
             }
         }
-        return directory.getAbsolutePath();
     }
 
-    public void saveImage(Context context, Bitmap bitmap, String name, String extension) {
-        name = name + "." + extension;
-        FileOutputStream fileOutputStream;
-        try {
-            fileOutputStream = context.openFileOutput(name, Context.MODE_PRIVATE);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fileOutputStream);
-            fileOutputStream.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    private void setRecyclerView() {
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(requireActivity(), 3);
+        RecyclerGalleryAdapter adapter = new RecyclerGalleryAdapter(getContext(), mImagesList, this);
+        mBinding.recyclerGallery.setLayoutManager(gridLayoutManager);
+        mBinding.recyclerGallery.setAdapter(adapter);
+        mBinding.recyclerGallery.setHasFixedSize(true);
     }
-
-  /*  private void loadImageFromStorage(String path) {
-        try {
-            File f = new File(path, "profile.jpg");
-            Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
-            ImageView img=(ImageView)findViewById(R.id.imgPicker);
-            img.setImageBitmap(b);
-        }
-        catch (FileNotFoundException e)
-        {
-            e.printStackTrace();
-        }
-    }*/
 
     public void openCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-        File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
-        output = new File(dir, "image.jpeg");
-        output.mkdir();
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(output));
+        File dir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "My Pet Agenda/images");
+        if (!dir.exists()) {
+            Log.d(TAG, "Folder doesn't exist, creating it...");
+            boolean wasSuccessful = dir.mkdir();
+            Log.d(TAG, "Folder creation " + (wasSuccessful ? "success" : "failed"));
+        } else {
+            Log.d(TAG, "Folder already exists.");
+        }
 
+        String fileName = StringGenerator.getRandomString();
+        output = new File(dir, fileName + ".jpeg");
+
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(output));
         startActivityForResult(intent, Constants.REQUEST_CODE_CAMERA);
     }
 
@@ -159,45 +139,39 @@ public class GalleryFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
-            if(requestCode == Constants.REQUEST_CODE_CAMERA) {
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-
-                intent.setDataAndType(Uri.fromFile(output), "image/jpeg");
-                startActivity(intent);
-                requireActivity().finish();
+            if (requestCode == Constants.REQUEST_CODE_CAMERA) {
+                requireActivity().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + output.getAbsolutePath())));
             }
-
-
-
-           /* try {
-                if (requestCode == Constants.REQUEST_CODE_CAMERA) {
-                    Bitmap image = (Bitmap) data.getExtras().get("data");
-
-                    if (image != null) {
-
-
-                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                        image.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                        byte[] byteArray = stream.toByteArray();
-
-                        // convert byte array to Bitmap
-                        Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0,
-                                byteArray.length);
-
-                        saveImage(getContext(), bitmap, "Test", ".png");
-
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }*/
         }
     }
 
-    public class GalleryClickHandler {
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadImagesFromDCIM();
+    }
 
-        public GalleryClickHandler() {
+    @Override
+    public void onItemClickListener(int id) {
+        Bitmap bitmap = mImagesList.get(id);
+        try {
+            String filename = "bitmap.png";
+            FileOutputStream stream = requireActivity().openFileOutput(filename, Context.MODE_PRIVATE);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+
+            stream.close();
+            bitmap.recycle();
+
+            Intent intent = new Intent(getContext(), PreviewActivity.class);
+            intent.putExtra(getString(R.string.selected_photo), filename);
+            startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onLongClicked(int id) {
 
     }
 }

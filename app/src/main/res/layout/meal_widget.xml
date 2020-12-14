@@ -1,0 +1,46 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/app_primary_light"
+    android:orientation="vertical"
+    android:padding="@dimen/widget_margin"
+    android:theme="@style/ThemeOverlay.MyPetAgenda.AppWidgetContainer">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_8"
+       android:layout_gravity="center"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_18"
+        android:textStyle="bold"
+        tools:text="Balto" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center">
+
+        <ImageButton
+            android:id="@+id/widget_lunch_image"
+            android:layout_width="@dimen/widget_bowl_image_width"
+            android:layout_height="@dimen/widget_bowl_image_height"
+            android:layout_marginEnd="@dimen/margin_8"
+            android:layout_marginStart="@dimen/margin_8"
+            android:src="@drawable/empty_image"
+            android:contentDescription="@string/lunch_image"/>
+
+        <ImageButton
+            android:id="@+id/widget_dinner_image"
+            android:layout_width="@dimen/widget_bowl_image_width"
+            android:layout_height="@dimen/widget_bowl_image_height"
+            android:layout_marginEnd="@dimen/margin_8"
+            android:layout_marginStart="@dimen/margin_8"
+            android:src="@drawable/empty_image"
+            android:contentDescription="@string/dinner_image"/>
+
+    </LinearLayout>
+
+</LinearLayout>

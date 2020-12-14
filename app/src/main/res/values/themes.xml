@@ -16,4 +16,8 @@
         <item name="colorSurface">@color/white</item>
         <item name="android:windowActivityTransitions">true</item>
     </style>
+    <style name="ThemeOverlay.MyPetAgenda.AppWidgetContainer" parent="">
+        <item name="appWidgetBackgroundColor">@color/light_blue_600</item>
+        <item name="appWidgetTextColor">@color/light_blue_50</item>
+    </style>
 </resources>

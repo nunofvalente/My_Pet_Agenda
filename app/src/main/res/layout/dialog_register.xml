@@ -123,6 +123,7 @@
             />
 
         <EditText
+            android:id="@+id/edit_join_account"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:hint="@string/code"

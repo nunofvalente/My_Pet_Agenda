@@ -35,7 +35,7 @@ public class GlideBindingAdapter {
 
         GlideApp.with(context)
                 .load(imageUrl)
-                .placeholder(R.drawable.default_image)
+                .placeholder(R.drawable.default_image_pet)
                 .into(view);
     }
 }

@@ -5,11 +5,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import com.heinrichreimersoftware.materialintro.app.IntroActivity;
 import com.heinrichreimersoftware.materialintro.slide.FragmentSlide;
 import com.nunovalente.android.mypetagenda.R;
 import com.nunovalente.android.mypetagenda.activities.dialog.DialogRegister;
+import com.nunovalente.android.mypetagenda.activities.dialog.DialogRegisterJoinAccount;
 
 public class MainIntroActivity extends IntroActivity {
 
@@ -64,7 +66,9 @@ public class MainIntroActivity extends IntroActivity {
     }
 
     public void openDialogJoinAccount(View view) {
-        //TODO
+        DialogRegisterJoinAccount dialogRegisterJoinAccount = new DialogRegisterJoinAccount();
+        dialogRegisterJoinAccount.setCancelable(false);
+        dialogRegisterJoinAccount.show(getSupportFragmentManager(), TAG);
     }
 
     public void openLoginActivity(View view) {

@@ -46,7 +46,7 @@
                 android:layout_marginTop="@dimen/margin_16"
                 android:transitionName="@string/pet_image"
                 app:imageUrlPet="@{pet.imagePath}"
-                tools:src="@drawable/default_image" />
+                tools:src="@drawable/default_image_pet" />
 
             <TextView
                 android:id="@+id/pet_profile_name"

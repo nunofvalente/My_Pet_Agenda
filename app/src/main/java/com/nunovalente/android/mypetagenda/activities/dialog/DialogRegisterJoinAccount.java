@@ -5,19 +5,20 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;;
 import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -28,7 +29,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.nunovalente.android.mypetagenda.R;
-import com.nunovalente.android.mypetagenda.data.repository.FirebaseHelper;
 import com.nunovalente.android.mypetagenda.model.Owner;
 import com.nunovalente.android.mypetagenda.util.Base64Custom;
 import com.nunovalente.android.mypetagenda.util.Constants;
@@ -39,11 +39,11 @@ import com.nunovalente.android.mypetagenda.viewmodel.RoomViewModel;
 import static com.nunovalente.android.mypetagenda.R.id.button_register;
 import static com.nunovalente.android.mypetagenda.R.id.tv_cancel_register;
 
-
-public class DialogRegister extends AppCompatDialogFragment implements View.OnClickListener {
+public class DialogRegisterJoinAccount extends AppCompatDialogFragment implements View.OnClickListener {
 
     private TextInputEditText mName, mEmail, mPassword, mConfirmPassword;
     private Button mRegisterButton;
+    private EditText mCode;
     private TextView mCancel, mTermsAndConditions;
     private ProgressBar mProgressBar;
     private CheckBox mCheckBox;
@@ -76,6 +76,9 @@ public class DialogRegister extends AppCompatDialogFragment implements View.OnCl
         mCheckBox = view.findViewById(R.id.checkbox_terms_conditions);
         mTermsAndConditions = view.findViewById(R.id.tv_terms_conditions);
         mProgressBar = view.findViewById(R.id.progress_dialog_register);
+        mCode = view.findViewById(R.id.edit_join_account);
+        LinearLayout mLinearLayout = view.findViewById(R.id.linear_join_account);
+        mLinearLayout.setVisibility(View.VISIBLE);
 
         setListeners();
 
@@ -89,7 +92,7 @@ public class DialogRegister extends AppCompatDialogFragment implements View.OnCl
         mCancel.setOnClickListener(this);
     }
 
-    private void register() {
+    private void registerForJoinAccount(String accountId) {
         String name = mName.getText().toString();
         String email = mEmail.getText().toString();
         String password = mPassword.getText().toString();
@@ -103,7 +106,6 @@ public class DialogRegister extends AppCompatDialogFragment implements View.OnCl
                         if (mCheckBox.isChecked()) {
 
                             Owner owner = new Owner("", name, email, password, "", "");
-                            String accountId = StringGenerator.getRandomString();
                             owner.setAccountId(accountId);
                             owner.setId(Base64Custom.encodeString(email));
                             firebaseViewModel.registerOwner(owner, getActivity(), mProgressBar);
@@ -130,16 +132,15 @@ public class DialogRegister extends AppCompatDialogFragment implements View.OnCl
         } else {
             Toast.makeText(requireActivity().getApplicationContext(), "Please fill your name!", Toast.LENGTH_SHORT).show();
         }
-
     }
 
 
     @SuppressLint("NonConstantResourceId")
     @Override
-    public void onClick(View view) {
+    public void onClick (View view){
         switch (view.getId()) {
             case button_register:
-                register();
+                validateAccount();
                 break;
             case tv_cancel_register:
                 if (getDialog() != null) {
@@ -148,7 +149,35 @@ public class DialogRegister extends AppCompatDialogFragment implements View.OnCl
                 break;
         }
     }
+
+    private void validateAccount() {
+        String accountId = mCode.getText().toString();
+
+        if (!accountId.isEmpty()) {
+            DatabaseReference databaseReference = firebaseViewModel.getDatabase();
+            databaseReference.child(Constants.ACCOUNT).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    for (DataSnapshot data : snapshot.getChildren()) {
+                        String key = data.getKey();
+                        assert key != null;
+                        if (key.equals(accountId)) {
+                            registerForJoinAccount(accountId);
+                        } else {
+                            Toast.makeText(getContext(), requireActivity().getString(R.string.please_insert_valid_code), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Log.d("Dialog", error.getMessage());
+                }
+            });
+        } else {
+            Toast.makeText(getContext(), requireActivity().getString(R.string.please_insert_valid_code), Toast.LENGTH_SHORT).show();
+        }
+    }
 }
 
-
-
+//fAKY4rdX_6

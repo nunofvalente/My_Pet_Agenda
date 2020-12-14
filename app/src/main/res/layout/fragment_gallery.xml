@@ -3,47 +3,42 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-        <variable
-            name="clickHandler"
-            type="com.nunovalente.android.mypetagenda.fragments.GalleryFragment.GalleryClickHandler" />
-    </data>
-
-<FrameLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".fragments.GalleryFragment"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:layout_marginBottom="?actionBarSize">
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_gallery"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="@dimen/margin_16"
-        />
+        tools:context=".fragments.GalleryFragment"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_marginBottom="?actionBarSize"
+        android:layout_marginTop="?actionBarSize">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_gallery_camera"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:fab_size="normal"
-        android:layout_gravity="end|bottom"
-        android:layout_marginBottom="@dimen/margin_16"
-        android:layout_marginEnd="@dimen/margin_16"
-        android:src="@drawable/ic_camera"
-        android:contentDescription="@string/take_photo" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_gallery"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/margin_16"
+            />
 
-    <TextView
-        android:id="@+id/text_no_network_gallery"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_16"
-        android:text="@string/no_network_connection"
-        android:layout_gravity="center"
-        android:visibility="invisible"
-        android:textSize="20sp"/>
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_gallery_camera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_size="normal"
+            android:layout_gravity="end|bottom"
+            android:layout_marginBottom="@dimen/margin_16"
+            android:layout_marginEnd="@dimen/margin_16"
+            android:src="@drawable/ic_camera"
+            android:contentDescription="@string/take_photo" />
 
-</FrameLayout>
+        <TextView
+            android:id="@+id/text_no_images"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_16"
+            android:text="@string/no_images_to_display"
+            android:layout_gravity="center"
+            android:visibility="invisible"
+            android:textSize="20sp"/>
+
+    </FrameLayout>
 </layout>

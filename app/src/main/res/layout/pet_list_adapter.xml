@@ -25,7 +25,7 @@
             android:padding="10dp"
             android:transitionName="@string/pet_image"
             app:imageUrlPet="@{pet.imagePath}"
-            tools:src="@drawable/default_image" />
+            tools:src="@drawable/default_image_pet" />
 
         <TextView
             android:id="@+id/recycler_pet_name"
