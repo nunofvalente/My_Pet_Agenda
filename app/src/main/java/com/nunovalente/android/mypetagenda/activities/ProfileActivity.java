@@ -184,8 +184,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-       // super.onBackPressed();
-        startActivity(new Intent(this, MainActivity.class));
+        super.onBackPressed();
         overridePendingTransition(R.anim.slide_right, R.anim.slide_left);
     }
 

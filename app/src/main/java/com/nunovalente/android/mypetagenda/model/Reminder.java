@@ -273,7 +273,7 @@ public class Reminder implements Serializable {
         alarmManager.cancel(pendingIntent);
         this.started = false;
 
-        Toast.makeText(context, "Alarm has been canceled!", Toast.LENGTH_SHORT).show();
+    //    Toast.makeText(context, "Alarm has been canceled!", Toast.LENGTH_SHORT).show();
     }
 
     public void cancelRecurringAlarm(Context context) {

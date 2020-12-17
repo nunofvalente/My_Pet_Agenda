@@ -16,6 +16,8 @@
     <dimen name="text_size_24">24sp</dimen>
 
     <dimen name="logo_image_height">215dp</dimen>
+    <dimen name="welcome_image_height">150dp</dimen>
+    <dimen name="welcome_image_width">150dp</dimen>
     <dimen name="profile_picture_height">100dp</dimen>
     <dimen name="profile_picture_width">100dp</dimen>
     <dimen name="widget_bowl_image_height">25dp</dimen>

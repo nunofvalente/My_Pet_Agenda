@@ -21,13 +21,16 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.google.android.material.transition.MaterialFadeThrough;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.nunovalente.android.mypetagenda.R;
+import com.nunovalente.android.mypetagenda.activities.AboutActivity;
 import com.nunovalente.android.mypetagenda.activities.ProfileActivity;
+import com.nunovalente.android.mypetagenda.activities.SettingsActivity;
 import com.nunovalente.android.mypetagenda.adapters.RecyclerAccountAdapter;
 import com.nunovalente.android.mypetagenda.data.repository.FirebaseHelper;
 import com.nunovalente.android.mypetagenda.databinding.FragmentAccountBinding;
@@ -61,13 +64,12 @@ public class AccountFragment extends Fragment {
         AccountFragmentClickHandler mHandlers = new AccountFragmentClickHandler(getContext());
         mBinding.setClickHandler(mHandlers);
 
-       if(NetworkUtils.checkConnectivity(requireActivity().getApplication()) && FirebaseHelper.getCurrentOwner() != null) {
-           databaseReference = firebaseViewModel.getDatabase();
-           getUserInformation();
-       }
-       else {
-           getOfflineUserInformation();
-       }
+        if (NetworkUtils.checkConnectivity(requireActivity().getApplication()) && FirebaseHelper.getCurrentOwner() != null) {
+            databaseReference = firebaseViewModel.getDatabase();
+            getUserInformation();
+        } else {
+            getOfflineUserInformation();
+        }
 
 
         this.setExitTransition(new MaterialFadeThrough().setDuration(getResources().getInteger(R.integer.reply_motion_duration_large)));
@@ -79,7 +81,7 @@ public class AccountFragment extends Fragment {
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         String userId = sharedPreferences.getString(getString(R.string.pref_user_id), "");
 
-        AsyncTask<String , Void, Owner> task = new AsyncTask<String, Void, Owner>() {
+        AsyncTask<String, Void, Owner> task = new AsyncTask<String, Void, Owner>() {
             @Override
             protected Owner doInBackground(String... strings) {
                 return roomViewModel.getOwner(strings[0]);
@@ -171,13 +173,29 @@ public class AccountFragment extends Fragment {
         }
 
         public void openEditProfileActivity(View view) {
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-                Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle();
-                Intent intent = new Intent(getContext(), ProfileActivity.class);
-                startActivity(intent, bundle);
-            }
+            Intent intent = new Intent(getContext(), ProfileActivity.class);
+            startActivity(intent);
+        }
+
+        public void openSettings(View view) {
+            Intent intent = new Intent(requireActivity(), SettingsActivity.class);
+            startActivity(intent);
+        }
+
+        public void openAbout(View view) {
+            Intent intent = new Intent(requireActivity(), AboutActivity.class);
+            startActivity(intent);
+        }
+
+        public void sendHelp(View view) {
+            Intent intent = new Intent(Intent.ACTION_SENDTO);
+            intent.setType("message/rfc822");
+            intent.putExtra(Intent.EXTRA_EMAIL, "mypetagendaapp@gmail.com");
+            intent.putExtra(Intent.EXTRA_SUBJECT, "Help");
+            startActivity(Intent.createChooser(intent, "Send Email"));
         }
     }
+
 
     @Override
     public void onResume() {

@@ -191,6 +191,7 @@
                             android:padding="@dimen/padding_10dp"
                             android:text="@string/settings"
                             android:textColor="@color/icon_gray"
+                            android:onClick="@{clickHandler::openSettings}"
                             android:textSize="@dimen/text_size_16"
                             app:drawableLeftCompat="@drawable/ic_settings" />
 
@@ -201,6 +202,7 @@
                             android:gravity="center_vertical"
                             android:padding="@dimen/padding_10dp"
                             android:text="@string/support_service"
+                            android:onClick="@{clickHandler::sendHelp}"
                             android:textColor="@color/icon_gray"
                             android:textSize="@dimen/text_size_16"
                             app:drawableLeftCompat="@drawable/ic_customer_service"
@@ -213,6 +215,7 @@
                             android:gravity="center_vertical"
                             android:padding="@dimen/padding_10dp"
                             android:text="@string/about_us"
+                            android:onClick="@{clickHandler::openAbout}"
                             android:textColor="@color/icon_gray"
                             android:textSize="@dimen/text_size_16"
                             app:drawableLeftCompat="@drawable/ic_info" />

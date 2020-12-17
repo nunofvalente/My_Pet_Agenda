@@ -2,19 +2,28 @@
 <resources>
     <dimen name="toolbar_elevation">4dp</dimen>
 
-    <dimen name="margin_8">16dp</dimen>
-    <dimen name="margin_16">24dp</dimen>
-    <dimen name="margin_32">40dp</dimen>
+    <dimen name="margin_8">8dp</dimen>
+    <dimen name="margin_16">16dp</dimen>
+    <dimen name="margin_32">32dp</dimen>
 
-    <dimen name="padding_10dp">20dp</dimen>
+    <dimen name="padding_10dp">10dp</dimen>
 
+    <dimen name="text_size_12">12sp</dimen>
+    <dimen name="text_size_14">14sp</dimen>
+    <dimen name="text_size_16">16sp</dimen>
+    <dimen name="text_size_18">18sp</dimen>
+    <dimen name="text_size_20">20sp</dimen>
+    <dimen name="text_size_24">24sp</dimen>
 
-    <dimen name="text_size_14">20sp</dimen>
-    <dimen name="text_size_16">22sp</dimen>
-    <dimen name="text_size_18">24sp</dimen>
-    <dimen name="text_size_20">26sp</dimen>
-    <dimen name="text_size_24">30sp</dimen>
+    <dimen name="logo_image_height">215dp</dimen>
+    <dimen name="welcome_image_height">150dp</dimen>
+    <dimen name="welcome_image_width">150dp</dimen>
+    <dimen name="profile_picture_height">100dp</dimen>
+    <dimen name="profile_picture_width">100dp</dimen>
+    <dimen name="widget_bowl_image_height">25dp</dimen>
+    <dimen name="widget_bowl_image_width">25dp</dimen>
+    <dimen name="profile_picture_width_adapter">50dp</dimen>
+    <dimen name="profile_picture_height_adapter">50dp</dimen>
 
-    <dimen name="profile_picture_height">160dp</dimen>
-    <dimen name="profile_picture_width">155dp</dimen>
+    <dimen name="account_recycler_height">100dp</dimen>
 </resources>

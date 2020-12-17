@@ -15,7 +15,7 @@ import java.util.List;
 @Dao
 public interface PetDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insertPet(Pet pet);
 
     @Update

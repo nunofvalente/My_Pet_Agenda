@@ -26,6 +26,9 @@ public interface NoteDao {
     @Query("SELECT * FROM note_database WHERE petId = :petId")
     LiveData<List<Note>> getAllNotes(String petId);
 
+    @Query("SELECT * FROM note_database WHERE petId = :petId")
+    List<Note> getAllNotesValue(String petId);
+
     @Query("SELECT * FROM note_database WHERE accountId = :accountId")
     LiveData<List<Note>> getAccountAllNotes(String accountId);
 

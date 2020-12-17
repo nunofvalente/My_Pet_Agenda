@@ -61,7 +61,7 @@
     <string name="save">Save</string>
     <string name="weight">Weight</string>
     <string name="breed_if_applicable">Breed (If Applicable)</string>
-    <string name="reminders">Reminders</string>
+    <string name="reminders">Reminders:</string>
     <string name="title">Title</string>
     <string name="date">Date</string>
     <string name="select_date">Select a date</string>
@@ -121,5 +121,18 @@
     <string name="lunch_image">Lunch Image</string>
     <string name="dinner_image">Dinner Image</string>
     <string name="please_insert_valid_code">Please insert a valid account code!</string>
+    <string name="widget_pet_id">Widget Pet Id</string>
+    <string name="widget_pet_name">Widget Pet name</string>
+    <string name="please_select_a_pet_to_display_notes">Select pet to display notes!</string>
+    <string name="add_to_widget">Add to Widget</string>
+
+    <string name="about_me">
+        This application was born from the love for animals and as a final project for a course. I had this idea when I was looking at my dog and was sort of pushed into it.\n\n
+        This application is not only for dogs or cats but for any pet in general, initially was meant to have more functionality which I will most likely implement in the future.\n\n
+        For pet lovers it is good to sometimes keep a note or a reminder to not forget important details that may slip from our heads, our pets deserve all the attention we can give them as I know they will give us theirs.
+    </string>
+    <string name="your_pet_needs_attention">Your pet need attention!</string>
+    <string name="delete_account">Delete Account</string>
+    <string name="delete_account_confirmation">Are you sure you want to delete your account? All data will be lost!</string>
 
 </resources>

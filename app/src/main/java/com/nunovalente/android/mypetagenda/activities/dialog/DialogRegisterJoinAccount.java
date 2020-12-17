@@ -158,7 +158,7 @@ public class DialogRegisterJoinAccount extends AppCompatDialogFragment implement
             databaseReference.child(Constants.ACCOUNT).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    for (DataSnapshot data : snapshot.getChildren()) {
+                    for(DataSnapshot data : snapshot.getChildren()) {
                         String key = data.getKey();
                         assert key != null;
                         if (key.equals(accountId)) {

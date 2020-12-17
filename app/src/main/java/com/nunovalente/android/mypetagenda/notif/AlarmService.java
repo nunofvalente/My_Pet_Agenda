@@ -47,7 +47,7 @@ public class AlarmService extends Service {
 
         NotificationCompat.Builder notification = new NotificationCompat.Builder(this, App.CHANNEL_ID)
                 .setContentTitle(reminderTitle)
-                .setContentText("Hello I'm ringing")
+                .setContentText(getString(R.string.your_pet_needs_attention))
                 .setSmallIcon(R.drawable.ic_pets)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)

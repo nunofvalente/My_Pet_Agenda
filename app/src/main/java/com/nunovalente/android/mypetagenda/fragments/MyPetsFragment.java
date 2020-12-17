@@ -6,7 +6,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.util.Pair;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -14,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
@@ -40,6 +45,7 @@ import com.nunovalente.android.mypetagenda.util.Constants;
 import com.nunovalente.android.mypetagenda.util.NetworkUtils;
 import com.nunovalente.android.mypetagenda.viewmodel.FirebaseViewModel;
 import com.nunovalente.android.mypetagenda.viewmodel.RoomViewModel;
+import com.nunovalente.android.mypetagenda.widget.NoteService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +57,7 @@ public class MyPetsFragment extends Fragment {
     private RoomViewModel roomViewModel;
 
     private FirebaseAuth auth;
+    private Pet pet;
 
     private DatabaseReference databaseReference;
     private FragmentMyPetsBinding mBinding;
@@ -91,6 +98,16 @@ public class MyPetsFragment extends Fragment {
         });
     }
 
+    public static int calculateNoOfColumns(Context context) {
+        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        float dpWidth = metrics.widthPixels / metrics.density;
+        int scalingFactor = 200;
+        int noOfColumns = (int) (dpWidth / scalingFactor);
+        if (noOfColumns < 2)
+            noOfColumns = 2;
+        return noOfColumns;
+    }
+
     private void setListeners() {
         mBinding.recyclerMyPets.addOnItemTouchListener(new RecyclerClickListener(getContext(), mBinding.recyclerMyPets, new RecyclerClickListener.OnItemClickListener() {
             @Override
@@ -99,8 +116,8 @@ public class MyPetsFragment extends Fragment {
                 Intent intent = new Intent(getContext(), PetProfileActivity.class);
                 intent.putExtra(PET, pet);
 
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireActivity());
-                SharedPreferences.Editor editor = sharedPreferences.edit();
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(requireActivity());
+                SharedPreferences.Editor editor = preferences.edit();
                 editor.putString(getString(R.string.selected_pet_id), pet.getId());
                 editor.apply();
 
@@ -116,8 +133,9 @@ public class MyPetsFragment extends Fragment {
 
             @Override
             public void onLongItemClick(View view, int position) {
-                Pet pet = mPetList.get(position);
-                showDeleteDialog(pet);
+                pet = mPetList.get(position);
+                //showDeleteDialog(pet);
+                registerForContextMenu(view);
             }
 
             @Override
@@ -185,25 +203,38 @@ public class MyPetsFragment extends Fragment {
     }
 
     private void setRecyclerView(List<Pet> list) {
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 3);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), calculateNoOfColumns(requireActivity()));
         mBinding.recyclerMyPets.setLayoutManager(gridLayoutManager);
         mBinding.recyclerMyPets.setHasFixedSize(true);
         RecyclerPetAdapter adapter = new RecyclerPetAdapter(getContext(), list);
         mBinding.recyclerMyPets.setAdapter(adapter);
     }
 
-    public class MyPetFragmentClickHandler {
+    @Override
+    public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View v, @Nullable ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        menu.add(0, v.getId(), 0, R.string.add_to_widget);
+        menu.add(0, v.getId(), 0, getString(R.string.delete));
+    }
 
-        final Context context;
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        if(item.getTitle().equals(getString(R.string.add_to_widget))) {
 
-        public MyPetFragmentClickHandler(Context context) {
-            this.context = context;
+            SharedPreferences prefs = requireActivity().getApplicationContext().getSharedPreferences(requireActivity().getApplicationContext().getString(R.string.app_name), Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString(getString(R.string.widget_pet_name), pet.getName());
+            editor.putString(getString(R.string.widget_pet_id), pet.getId());
+            editor.apply();
+
+            NoteService.startActionUpdateNotes(requireActivity());
+
+
+        } else if(item.getTitle().equals(getString(R.string.delete))) {
+            showDeleteDialog(pet);
         }
 
-        public void addPet(View view) {
-            Intent intent = new Intent(getContext(), AddPetActivity.class);
-            startActivity(intent);
-        }
+        return true;
     }
 
     @Override
@@ -219,6 +250,20 @@ public class MyPetsFragment extends Fragment {
         super.onStop();
         if(valueEventListener != null) {
             databaseReference.removeEventListener(valueEventListener);
+        }
+    }
+
+    public class MyPetFragmentClickHandler {
+
+        final Context context;
+
+        public MyPetFragmentClickHandler(Context context) {
+            this.context = context;
+        }
+
+        public void addPet(View view) {
+            Intent intent = new Intent(getContext(), AddPetActivity.class);
+            startActivity(intent);
         }
     }
 }
