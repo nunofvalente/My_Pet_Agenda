@@ -18,31 +18,15 @@
             android:contentDescription="@string/app_logo"/>
 
         <Button
-            android:id="@+id/button_ringtone_snooze"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_16"
-            android:layout_marginBottom="@dimen/margin_16"
-            android:text="@string/snooze"
-            android:textColor="@color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/button_ringtone_dismiss"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/image_ringtone" />
-
-        <Button
             android:id="@+id/button_ringtone_dismiss"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/margin_16"
             android:layout_marginBottom="@dimen/margin_16"
             android:text="@string/dismiss"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/button_ringtone_snooze"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/image_ringtone" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

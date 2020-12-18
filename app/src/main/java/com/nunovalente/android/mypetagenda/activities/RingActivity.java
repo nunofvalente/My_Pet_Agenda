@@ -12,8 +12,6 @@ import com.nunovalente.android.mypetagenda.R;
 import com.nunovalente.android.mypetagenda.databinding.ActivityRingtoneBinding;
 import com.nunovalente.android.mypetagenda.notif.AlarmService;
 
-import java.util.Calendar;
-
 public class RingActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ActivityRingtoneBinding mBinding;
@@ -29,7 +27,6 @@ public class RingActivity extends AppCompatActivity implements View.OnClickListe
 
     private void setListeners() {
         mBinding.buttonRingtoneDismiss.setOnClickListener(this);
-        mBinding.buttonRingtoneSnooze.setOnClickListener(this);
     }
 
     @Override
@@ -38,38 +35,6 @@ public class RingActivity extends AppCompatActivity implements View.OnClickListe
             Intent intentService = new Intent(getApplicationContext(), AlarmService.class);
             getApplicationContext().stopService(intentService);
             finish();
-        } else if (v.getId() == mBinding.buttonRingtoneSnooze.getId()) {
-            Calendar c = Calendar.getInstance();
-            c.setTimeInMillis(System.currentTimeMillis());
-            c.add(Calendar.MINUTE, 10);
-
-/*
-            //TODO need pet and account info
-            Reminder reminder = new Reminder(new Random().nextInt(Integer.MAX_VALUE),
-                    petId,
-                    accountId,
-                    petName,
-                    "Snooze",
-                    c.get(Calendar.HOUR_OF_DAY),
-                    c.get(Calendar.MINUTE),
-                    true,
-                    false,
-                    false,
-                    false,
-                    false,
-                    false,
-                    false,
-                    false,
-                    false);
-
-            reminder.schedule(getApplicationContext());
-
-            Intent intentService = new Intent(getApplicationContext(), AlarmService.class);
-            getApplicationContext().stopService(intentService);
-            finish();
-        }*/
         }
-
-        //TODO add animation and better layout
     }
 }
