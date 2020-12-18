@@ -10,11 +10,9 @@ import androidx.databinding.DataBindingUtil;
 
 import com.nunovalente.android.mypetagenda.R;
 import com.nunovalente.android.mypetagenda.databinding.ActivityRingtoneBinding;
-import com.nunovalente.android.mypetagenda.model.Reminder;
 import com.nunovalente.android.mypetagenda.notif.AlarmService;
 
 import java.util.Calendar;
-import java.util.Random;
 
 public class RingActivity extends AppCompatActivity implements View.OnClickListener {
 

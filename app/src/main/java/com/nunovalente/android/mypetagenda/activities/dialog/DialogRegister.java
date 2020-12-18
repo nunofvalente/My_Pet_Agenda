@@ -10,7 +10,6 @@ import android.view.View;
 
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,15 +22,9 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.transition.MaterialFadeThrough;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
 import com.nunovalente.android.mypetagenda.R;
-import com.nunovalente.android.mypetagenda.data.repository.FirebaseHelper;
 import com.nunovalente.android.mypetagenda.model.Owner;
 import com.nunovalente.android.mypetagenda.util.Base64Custom;
-import com.nunovalente.android.mypetagenda.util.Constants;
 import com.nunovalente.android.mypetagenda.util.StringGenerator;
 import com.nunovalente.android.mypetagenda.viewmodel.FirebaseViewModel;
 import com.nunovalente.android.mypetagenda.viewmodel.RoomViewModel;

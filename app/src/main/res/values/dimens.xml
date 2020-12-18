@@ -20,8 +20,6 @@
     <dimen name="welcome_image_width">150dp</dimen>
     <dimen name="profile_picture_height">100dp</dimen>
     <dimen name="profile_picture_width">100dp</dimen>
-    <dimen name="widget_bowl_image_height">25dp</dimen>
-    <dimen name="widget_bowl_image_width">25dp</dimen>
     <dimen name="profile_picture_width_adapter">50dp</dimen>
     <dimen name="profile_picture_height_adapter">50dp</dimen>
 

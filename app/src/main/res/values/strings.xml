@@ -63,8 +63,6 @@
     <string name="breed_if_applicable">Breed (If Applicable)</string>
     <string name="reminders">Reminders:</string>
     <string name="title">Title</string>
-    <string name="date">Date</string>
-    <string name="select_date">Select a date</string>
     <string name="day_s">Day(s)</string>
     <string name="add_reminder">Add reminder</string>
     <string name="add_note">Add Note</string>
@@ -84,7 +82,6 @@
     <string name="saturday">Saturday</string>
     <string name="sunday">Sunday</string>
     <string name="not_recurring">Not recurring</string>
-    <string name="all_days">All Days</string>
     <string name="age">Age</string>
     <string name="breed">Breed</string>
     <string name="change_picture">Change Picture</string>
@@ -103,12 +100,8 @@
 
     <string name="channel_name">Alarm Channel</string>
     <string name="channel_description">Notification description</string>
-    <string name="channel_id">"My_pet_agenda_channel"</string>
-    <string name="notify_alarm_set">"reminder_alarm"</string>
     <string name="confirm">Confirm</string>
 
-
-    <string name="CHANNEL_ID">"channel_id"</string>
     <string name="delete_note">Delete Note</string>
     <string name="are_you_sure_delete_note">Are you sure you want to delete this note?</string>
     <string name="delete">Delete</string>
@@ -116,10 +109,6 @@
     <string name="take_photo">Take Photo</string>
     <string name="selected_photo">selectedPhoto</string>
     <string name="no_images_to_display">No images to display!</string>
-    <string name="appwidget_text">EXAMPLE</string>
-    <string name="add_widget">Add widget</string>
-    <string name="lunch_image">Lunch Image</string>
-    <string name="dinner_image">Dinner Image</string>
     <string name="please_insert_valid_code">Please insert a valid account code!</string>
     <string name="widget_pet_id">Widget Pet Id</string>
     <string name="widget_pet_name">Widget Pet name</string>
@@ -134,5 +123,10 @@
     <string name="your_pet_needs_attention">Your pet needs attention!</string>
     <string name="delete_account">Delete Account</string>
     <string name="delete_account_confirmation">Are you sure you want to delete your account? All data will be lost!</string>
+    <string name="selected_image_preview">Selected Image</string>
+    <string name="app_logo">App Logo</string>
+    <string name="camera_image">Camera Image</string>
+    <string name="snooze">Snooze</string>
+    <string name="dismiss">Dismiss</string>
 
 </resources>

@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.nunovalente.android.mypetagenda.R;
 import com.nunovalente.android.mypetagenda.activities.AddReminderActivity;
@@ -95,9 +94,7 @@ public class PetRemindersFragment extends Fragment implements RecyclerItemClickL
             }
             dialog.dismiss();
         });
-        alert.setNegativeButton(getString(R.string.cancel), (dialog, which) -> {
-            dialog.dismiss();
-        });
+        alert.setNegativeButton(getString(R.string.cancel), (dialog, which) -> dialog.dismiss());
         alert.show();
     }
 

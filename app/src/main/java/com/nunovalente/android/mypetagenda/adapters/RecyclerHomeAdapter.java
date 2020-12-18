@@ -47,7 +47,7 @@ public class RecyclerHomeAdapter extends RecyclerView.Adapter<RecyclerHomeAdapte
         return mReminderList.size();
     }
 
-    public class MyHomeViewHolder extends RecyclerView.ViewHolder {
+    public static class MyHomeViewHolder extends RecyclerView.ViewHolder {
 
         public MyHomeViewHolder(@NonNull View itemView) {
             super(itemView);

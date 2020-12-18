@@ -1,17 +1,13 @@
 package com.nunovalente.android.mypetagenda.activities;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.view.View;
 import android.widget.CheckBox;
 
@@ -23,9 +19,7 @@ import com.nunovalente.android.mypetagenda.model.Pet;
 import com.nunovalente.android.mypetagenda.model.Reminder;
 import com.nunovalente.android.mypetagenda.viewmodel.RoomViewModel;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Locale;
 
 public class AddReminderActivity extends AppCompatActivity {
 

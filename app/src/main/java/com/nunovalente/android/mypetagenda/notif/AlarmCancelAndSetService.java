@@ -43,14 +43,4 @@ public class AlarmCancelAndSetService extends LifecycleService {
 
         return START_STICKY;
     }
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
 }

@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.preference.PreferenceManager;
 
 import android.content.Context;
 import android.content.Intent;
@@ -19,9 +18,6 @@ import android.view.View;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.EmailAuthProvider;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -31,7 +27,6 @@ import com.nunovalente.android.mypetagenda.R;
 import com.nunovalente.android.mypetagenda.data.repository.FirebaseHelper;
 import com.nunovalente.android.mypetagenda.databinding.ActivitySettingsBinding;
 import com.nunovalente.android.mypetagenda.model.Owner;
-import com.nunovalente.android.mypetagenda.model.Pet;
 import com.nunovalente.android.mypetagenda.util.Base64Custom;
 import com.nunovalente.android.mypetagenda.util.Constants;
 import com.nunovalente.android.mypetagenda.util.NetworkUtils;
@@ -62,9 +57,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     private void setListeners() {
         if (NetworkUtils.checkConnectivity(getApplication()) && FirebaseHelper.getCurrentOwner() != null) {
-            mBinding.tvDeleteAccount.setOnClickListener(v -> {
-                showDialog();
-            });
+            mBinding.tvDeleteAccount.setOnClickListener(v -> showDialog());
         }
     }
 
@@ -108,12 +101,9 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             });
 
-            owner.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if (task.isSuccessful()) {
-                        Log.d("TAG", "Account deleted");
-                    }
+            owner.delete().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    Log.d("TAG", "Account deleted");
                 }
             });
         }

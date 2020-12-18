@@ -17,7 +17,8 @@
             android:src="@drawable/welcome_owner"
             android:layout_gravity="center"
             android:layout_marginBottom="@dimen/margin_8"
-            android:layout_marginTop="@dimen/margin_8"/>
+            android:layout_marginTop="@dimen/margin_8"
+            android:contentDescription="@string/welcome_to_my_pet_agenda"/>
 
 
         <TextView

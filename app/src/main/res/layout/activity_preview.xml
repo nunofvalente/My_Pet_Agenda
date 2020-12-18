@@ -14,7 +14,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/default_account" />
+        app:srcCompat="@drawable/default_account"
+        android:contentDescription="@string/selected_image_preview"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,7 +2,6 @@ package com.nunovalente.android.mypetagenda.fragments;
 
 
 import android.annotation.SuppressLint;
-import android.app.ActivityOptions;
 import android.content.ClipboardManager;
 import android.content.Context;
 

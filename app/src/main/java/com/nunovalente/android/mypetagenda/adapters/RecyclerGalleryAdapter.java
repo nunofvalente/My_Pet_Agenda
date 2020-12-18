@@ -50,7 +50,7 @@ public class RecyclerGalleryAdapter extends RecyclerView.Adapter<RecyclerGallery
 
     public class MyGalleryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        ImageView mImageView;
+        final ImageView mImageView;
 
         public MyGalleryViewHolder(@NonNull View itemView) {
             super(itemView);

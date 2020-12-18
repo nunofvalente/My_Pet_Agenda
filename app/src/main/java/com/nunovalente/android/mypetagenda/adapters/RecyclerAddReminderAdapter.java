@@ -3,7 +3,6 @@ package com.nunovalente.android.mypetagenda.adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
@@ -63,7 +62,7 @@ public class RecyclerAddReminderAdapter extends RecyclerView.Adapter<RecyclerAdd
 
     public class AddReminderViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
-        SwitchMaterial reminderSwitch;
+        private final SwitchMaterial reminderSwitch;
         private final OnToggleAlarmListener alarmListener;
 
         public AddReminderViewHolder(@NonNull View itemView, OnToggleAlarmListener alarmListener) {

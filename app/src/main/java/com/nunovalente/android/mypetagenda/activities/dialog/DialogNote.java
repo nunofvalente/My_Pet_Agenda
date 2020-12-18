@@ -36,7 +36,7 @@ public class DialogNote extends AppCompatDialogFragment implements View.OnClickL
 
     private TextView mCancel, mAddNote, mError;
     private EditText mNote;
-    private String petId, accountId;
+    private String petId;
 
     @NonNull
     @Override
@@ -60,7 +60,6 @@ public class DialogNote extends AppCompatDialogFragment implements View.OnClickL
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(requireActivity());
         petId = preferences.getString(getString(R.string.selected_pet_id), "");
-        accountId = preferences.getString(getString(R.string.pref_account_id), "");
 
         setListeners();
 

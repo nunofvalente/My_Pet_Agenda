@@ -18,7 +18,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -32,7 +32,6 @@ import com.nunovalente.android.mypetagenda.R;
 import com.nunovalente.android.mypetagenda.model.Owner;
 import com.nunovalente.android.mypetagenda.util.Base64Custom;
 import com.nunovalente.android.mypetagenda.util.Constants;
-import com.nunovalente.android.mypetagenda.util.StringGenerator;
 import com.nunovalente.android.mypetagenda.viewmodel.FirebaseViewModel;
 import com.nunovalente.android.mypetagenda.viewmodel.RoomViewModel;
 
