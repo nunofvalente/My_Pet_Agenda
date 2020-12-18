@@ -134,7 +134,6 @@ public class MyPetsFragment extends Fragment {
             @Override
             public void onLongItemClick(View view, int position) {
                 pet = mPetList.get(position);
-                //showDeleteDialog(pet);
                 registerForContextMenu(view);
             }
 

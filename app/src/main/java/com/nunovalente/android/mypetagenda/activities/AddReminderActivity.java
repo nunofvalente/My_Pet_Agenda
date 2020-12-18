@@ -1,5 +1,7 @@
 package com.nunovalente.android.mypetagenda.activities;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
@@ -9,6 +11,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.view.View;
 import android.widget.CheckBox;
 
@@ -26,13 +29,16 @@ import java.util.Locale;
 
 public class AddReminderActivity extends AppCompatActivity {
 
-    public static final String KEY_ID = "reminder_id";
+    private static final String HOUR = "hour";
+    private static final String MINUTE = "minute";
 
     private ActivityAddReminderBinding mBinding;
 
     private final Calendar mCalendar = Calendar.getInstance();
     private Reminder reminder = new Reminder();
     private CheckBox mon, tue, wed, thu, fri, sat, sun;
+    private int hour;
+    private int minute;
 
     private RoomViewModel roomViewModel;
 
@@ -167,6 +173,7 @@ public class AddReminderActivity extends AppCompatActivity {
         }
 
         private void validateCheckboxes() {
+            reminder.setRecurring(false);
             reminder.setMonday(mon.isChecked());
             reminder.setTuesday(tue.isChecked());
             reminder.setWednesday(wed.isChecked());
@@ -191,6 +198,5 @@ public class AddReminderActivity extends AppCompatActivity {
             reminder.setHour(hour);
             reminder.setMinutes(minute);
         }
-
     }
 }

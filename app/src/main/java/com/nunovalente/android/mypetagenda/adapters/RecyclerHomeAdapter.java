@@ -37,6 +37,9 @@ public class RecyclerHomeAdapter extends RecyclerView.Adapter<RecyclerHomeAdapte
     public void onBindViewHolder(@NonNull MyHomeViewHolder holder, int position) {
         Reminder reminder = mReminderList.get(position);
         mBinding.setReminder(reminder);
+        if (!reminder.isRecurring()) {
+            mBinding.reminderDays.setText(R.string.not_recurring);
+        }
     }
 
     @Override

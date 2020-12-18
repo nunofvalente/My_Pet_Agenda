@@ -131,7 +131,7 @@
         This application is not only for dogs or cats but for any pet in general, initially was meant to have more functionality which I will most likely implement in the future.\n\n
         For pet lovers it is good to sometimes keep a note or a reminder to not forget important details that may slip from our heads, our pets deserve all the attention we can give them as I know they will give us theirs.
     </string>
-    <string name="your_pet_needs_attention">Your pet need attention!</string>
+    <string name="your_pet_needs_attention">Your pet needs attention!</string>
     <string name="delete_account">Delete Account</string>
     <string name="delete_account_confirmation">Are you sure you want to delete your account? All data will be lost!</string>
 

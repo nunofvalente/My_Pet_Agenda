@@ -1,7 +1,5 @@
 package com.nunovalente.android.mypetagenda.fragments;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,7 +10,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,34 +67,13 @@ public class PetNotesFragment extends Fragment implements RecyclerItemClickListe
 
         roomViewModel = new ViewModelProvider(requireActivity()).get(RoomViewModel.class);
 
-
         return mBinding.getRoot();
-    }
-
-    private void performSyncNotes(Pet pet) {
-        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(requireActivity().getString(R.string.app_name), Context.MODE_PRIVATE);
-        String accountId = sharedPreferences.getString(getString(R.string.pref_account_id), "");
-        databaseReference.child(Constants.NOTES).child(accountId).child(pet.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot dataSnapshot: snapshot.getChildren()) {
-                    Note note = dataSnapshot.getValue(Note.class);
-                    roomViewModel.insertNote(note);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.d("SYNC", error.getMessage());
-            }
-        });
     }
 
 
     private void getNotes(Pet pet) {
         if (NetworkUtils.checkConnectivity(requireActivity().getApplication()) && FirebaseHelper.getCurrentOwner() != null) {
             loadOnlineNotes(pet);
-            performSyncNotes(pet);
         } else {
             loadOfflineNotes(pet);
         }
