@@ -13,11 +13,9 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -97,13 +95,14 @@ public class SettingsActivity extends AppCompatActivity {
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
-                    Log.d(TAG, "Account deleted");
+                  //  Log.d(TAG, "Account deleted");
                 }
             });
 
             owner.delete().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-                    Log.d("TAG", "Account deleted");
+                    Toast.makeText(this, "Account Deleted", Toast.LENGTH_SHORT).show();
+                   // Log.d("TAG", "Account deleted");
                 }
             });
         }
